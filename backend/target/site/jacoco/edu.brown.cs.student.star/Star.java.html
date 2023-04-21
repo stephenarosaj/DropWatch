@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Star.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.star</a> &gt; <span class="el_source">Star.java</span></div><h1>Star.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.star;
+
+/** A wrapper for the info in the stardata.csv rows, which represents a Star. */
+public class Star {
+  private Integer starID;
+  private String properName;
+  private Double x;
+  private Double y;
+  private Double z;
+
+  /**
+   * Constructs a Star.
+   *
+   * @param inputStarID String representing StarID
+   * @param inputProperName String representing the star's name
+   * @param inputX Double representing the star's x coordinate
+   * @param inputY Double representing the star's y coordinate
+   * @param inputZ Double representing the star's z coordinate
+   */
+  public Star(
+<span class="fc" id="L21">      Integer inputStarID, String inputProperName, Double inputX, Double inputY, Double inputZ) {</span>
+<span class="fc" id="L22">    starID = inputStarID;</span>
+<span class="fc" id="L23">    properName = inputProperName;</span>
+<span class="fc" id="L24">    x = inputX;</span>
+<span class="fc" id="L25">    y = inputY;</span>
+<span class="fc" id="L26">    z = inputZ;</span>
+<span class="fc" id="L27">  }</span>
+
+  /**
+   * Accessor for the Star's star ID.
+   *
+   * @return Integer star ID.
+   */
+  public int getStarID() {
+<span class="fc" id="L35">    return starID;</span>
+  }
+
+  /**
+   * Accessor for the Star's proper name.
+   *
+   * @return String representing proper name.
+   */
+  public String getProperName() {
+<span class="fc" id="L44">    return properName;</span>
+  }
+
+  /**
+   * Accessor for the Star's Z coordinate.
+   *
+   * @return Double representing Star's x coordinate.
+   */
+  public Double getZ() {
+<span class="fc" id="L53">    return z;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

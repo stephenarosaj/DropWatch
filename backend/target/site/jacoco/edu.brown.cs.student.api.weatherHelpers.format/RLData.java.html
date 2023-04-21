@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RLData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.weatherHelpers.format</a> &gt; <span class="el_source">RLData.java</span></div><h1>RLData.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api.weatherHelpers.format;
+
+import com.squareup.moshi.Json;
+import java.util.List;
+import java.util.Map;
+
+<span class="pc" id="L7">public record RLData(</span>
+    @Json(name = &quot;type&quot;) String type, @Json(name = &quot;features&quot;) List&lt;Feature&gt; features) {
+<span class="fc" id="L9">  public record Feature(</span>
+      @Json(name = &quot;type&quot;) String type,
+      @Json(name = &quot;geometry&quot;) Geometry geometry,
+      @Json(name = &quot;properties&quot;) Properties properties) {
+
+<span class="fc" id="L14">    public record Geometry(</span>
+        @Json(name = &quot;type&quot;) String type,
+        @Json(name = &quot;coordinates&quot;) List&lt;List&lt;List&lt;List&lt;Double&gt;&gt;&gt;&gt; coordinates) {}
+
+<span class="fc" id="L18">    public record Properties(</span>
+        @Json(name = &quot;state&quot;) String state,
+        @Json(name = &quot;city&quot;) String city,
+        @Json(name = &quot;name&quot;) String name,
+        @Json(name = &quot;holc_id&quot;) String holc_id,
+        @Json(name = &quot;holc_grade&quot;) String holc_grade,
+        @Json(name = &quot;neighborhood_id&quot;) Integer neighborhood_id,
+        @Json(name = &quot;isTarget&quot;) String isTarget,
+        @Json(name = &quot;area_description_data&quot;) Map&lt;String, String&gt; area_description_data) {}
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,7 @@
+{
+  "CSV_Name": "pets",
+  "henry": ["fido", "spot"],
+  "camila": ["waggy", "barker"],
+  "richard": ["doggy", "doggy_2"],
+  "pet_types": {"dog": ["beagle", "german_shepherd"], "cat": ["maine_coon", "tabby"]}
+}

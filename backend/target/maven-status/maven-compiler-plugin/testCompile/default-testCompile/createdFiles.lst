@@ -1,0 +1,13 @@
+edu/brown/cs/student/api/weatherHelpers/WeatherRequestProxyTest.class
+edu/brown/cs/student/api/weatherHelpers/CoordinatesTest.class
+edu/brown/cs/student/api/weatherHelpers/RequestAPITest.class
+edu/brown/cs/student/api/JSONDeserializerTest.class
+edu/brown/cs/student/CSVsearch/SearcherTest.class
+edu/brown/cs/student/api/endpointHandlers/GeoHandlerIntegrationTest.class
+edu/brown/cs/student/api/endpointHandlers/LoadHandlerTest.class
+edu/brown/cs/student/CSVparser/SentenceCreator.class
+edu/brown/cs/student/api/endpointHandlers/WeatherHandlerTest.class
+edu/brown/cs/student/api/MoshiUtilTest.class
+edu/brown/cs/student/api/endpointHandlers/GeoHandlerUnitTest.class
+edu/brown/cs/student/CSVparser/ParserTest.class
+edu/brown/cs/student/api/endpointHandlers/GeoHandlerFuzzHelpers/FuzzHelpers.class

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GeoHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.endpointHandlers</a> &gt; <span class="el_source">GeoHandler.java</span></div><h1>GeoHandler.java</h1><pre class="source lang-java linenums">/**
+ * This class handles the /geo endpoint for the web API, which returns geoJSON data based on
+ * user-specified latitude and longitude parameters. The returned data contains all geoJSON features
+ * that fall within the specified latitude and longitude bounds. It also provides an optional
+ * keyword parameter to filter features by a keyword contained in the feature's properties.
+ */
+package edu.brown.cs.student.api.endpointHandlers;
+
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Moshi.Builder;
+import com.squareup.moshi.Types;
+import edu.brown.cs.student.api.JSONDeserializer;
+import edu.brown.cs.student.api.MoshiUtil;
+import edu.brown.cs.student.api.weatherHelpers.format.RLData;
+import edu.brown.cs.student.api.weatherHelpers.format.RLData.Feature;
+import edu.brown.cs.student.api.weatherHelpers.format.RLData.Feature.Geometry;
+import edu.brown.cs.student.api.weatherHelpers.format.RLData.Feature.Properties;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import okio.Buffer;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+
+public class GeoHandler implements Route {
+
+  private RLData rawData;
+  private List&lt;String&gt; history;
+
+  /**
+   * Initializes a GeoHandler object by reading in geoJSON data from a file and initializing an
+   * empty search history list.
+   *
+   * @throws IOException if there is an issue reading in the geoJSON file
+   */
+<span class="fc" id="L44">  public GeoHandler(String filepath) throws IOException {</span>
+<span class="fc" id="L45">    JSONDeserializer&lt;RLData&gt; geoDeserializer =</span>
+        new JSONDeserializer&lt;&gt;(
+            RLData.class, new Class[] {Feature.class, Geometry.class, Properties.class});
+<span class="fc" id="L48">    String RLString = new String(Files.readAllBytes(Paths.get(filepath)));</span>
+<span class="fc" id="L49">    this.rawData =</span>
+<span class="fc" id="L50">        geoDeserializer.deserialize(</span>
+<span class="fc" id="L51">            new Buffer().readFrom(new ByteArrayInputStream(RLString.getBytes())));</span>
+<span class="fc" id="L52">    this.history = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L53">  }</span>
+
+  /**
+   * Handles GET requests to the /geo endpoint by filtering the raw geoJSON data based on
+   * user-specified latitude and longitude bounds, and returns the filtered data in JSON format.
+   * Also provides an optional keyword parameter to filter features by a keyword contained in the
+   * feature's properties.
+   *
+   * @param request the HTTP request sent to the server
+   * @param response the HTTP response sent from the server
+   * @return a JSON object containing filtered geoJSON data
+   * @throws Exception if there is an issue handling the request
+   */
+  @Override
+  public Object handle(Request request, Response response) throws Exception {
+<span class="fc" id="L68">    Map&lt;String, Object&gt; responseMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L69">    String queryLatMin = request.queryParams(&quot;latMin&quot;);</span>
+<span class="fc" id="L70">    String queryLatMax = request.queryParams(&quot;latMax&quot;);</span>
+<span class="fc" id="L71">    String queryLonMin = request.queryParams(&quot;lonMin&quot;);</span>
+<span class="fc" id="L72">    String queryLonMax = request.queryParams(&quot;lonMax&quot;);</span>
+
+    // map representing the geoJSON object
+<span class="fc" id="L75">    Map&lt;String, Object&gt; geoMap = new HashMap&lt;&gt;();</span>
+
+    // list of final features to be included
+<span class="fc" id="L78">    List&lt;Feature&gt; filteredFeatures = new ArrayList&lt;&gt;();</span>
+
+    try {
+<span class="fc" id="L81">      Double latMin = Double.parseDouble(queryLatMin);</span>
+<span class="fc" id="L82">      Double latMax = Double.parseDouble(queryLatMax);</span>
+<span class="fc" id="L83">      Double lonMin = Double.parseDouble(queryLonMin);</span>
+<span class="fc" id="L84">      Double lonMax = Double.parseDouble(queryLonMax);</span>
+<span class="fc" id="L85">      filteredFeatures = this.filter(latMin, latMax, lonMin, lonMax);</span>
+<span class="nc" id="L86">    } catch (NullPointerException e) {</span>
+<span class="nc" id="L87">      responseMap.put(&quot;details&quot;, &quot;Must have a min/max latitude and min/max longitude&quot;);</span>
+<span class="nc" id="L88">      return MoshiUtil.serialize(responseMap, &quot;error_bad_request&quot;);</span>
+<span class="fc" id="L89">    } catch (NumberFormatException e) {</span>
+<span class="fc" id="L90">      responseMap.put(&quot;details&quot;, &quot;Can only have numbers in latitude and longitude&quot;);</span>
+<span class="fc" id="L91">      return MoshiUtil.serialize(responseMap, &quot;error_bad_request&quot;);</span>
+<span class="fc" id="L92">    }</span>
+
+<span class="fc" id="L94">    String keyword = request.queryParams(&quot;keyword&quot;);</span>
+<span class="pc bpc" id="L95" title="1 of 4 branches missed.">    if (keyword != null &amp;&amp; !keyword.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L96">      filteredFeatures = this.searchFilter(filteredFeatures, keyword);</span>
+<span class="fc" id="L97">      this.history.add(keyword);</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">      if (this.history.size() &gt; 10) {</span>
+<span class="nc" id="L99">        this.history.remove(0);</span>
+      }
+    }
+<span class="fc" id="L102">    geoMap.put(&quot;features&quot;, filteredFeatures);</span>
+<span class="fc" id="L103">    geoMap.put(&quot;type&quot;, &quot;FeatureCollection&quot;);</span>
+<span class="fc" id="L104">    responseMap.put(&quot;data&quot;, geoMap);</span>
+<span class="fc" id="L105">    responseMap.put(&quot;history&quot;, this.getHistory());</span>
+<span class="fc" id="L106">    Moshi moshi = new Builder().build();</span>
+<span class="fc" id="L107">    Type responseMapType = Types.newParameterizedType(Map.class, String.class, Object.class);</span>
+<span class="fc" id="L108">    JsonAdapter&lt;Map&lt;String, Object&gt;&gt; adapter = moshi.adapter(responseMapType);</span>
+
+<span class="fc" id="L110">    return MoshiUtil.serialize(responseMap, &quot;success&quot;);</span>
+  }
+
+  /**
+   * Filters features based on latitude and longitude ranges.
+   *
+   * @param latMin the minimum latitude value of the range.
+   * @param latMax the maximum latitude value of the range.
+   * @param lonMin the minimum longitude value of the range.
+   * @param lonMax the maximum longitude value of the range.
+   * @return a list of filtered features.
+   */
+  public List&lt;Feature&gt; filter(double latMin, double latMax, double lonMin, double lonMax) {
+    // instantiate holders for filtered data
+<span class="fc" id="L124">    ArrayList&lt;Feature&gt; filteredFeatureList = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L126" title="All 2 branches covered.">    for (Feature feature : this.rawData.features()) {</span>
+<span class="fc" id="L127">      Geometry geometry = feature.geometry();</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">      if (geometry != null) {</span>
+<span class="fc" id="L129">        List&lt;List&lt;List&lt;List&lt;Double&gt;&gt;&gt;&gt; coordinates = geometry.coordinates();</span>
+<span class="fc" id="L130">        boolean inBounds = true;</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        for (List&lt;Double&gt; coordinate : coordinates.get(0).get(0)) {</span>
+          // switched in the GeoJSON for some reason
+<span class="fc" id="L133">          double lat = coordinate.get(1);</span>
+<span class="fc" id="L134">          double lon = coordinate.get(0);</span>
+<span class="fc bfc" id="L135" title="All 8 branches covered.">          if (lat &lt; latMin || lat &gt; latMax || lon &lt; lonMin || lon &gt; lonMax) {</span>
+<span class="fc" id="L136">            inBounds = false;</span>
+<span class="fc" id="L137">            break;</span>
+          }
+<span class="fc" id="L139">        }</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (inBounds) {</span>
+<span class="fc" id="L141">          filteredFeatureList.add(feature);</span>
+        }
+      }
+<span class="fc" id="L144">    }</span>
+
+<span class="fc" id="L146">    return filteredFeatureList;</span>
+  }
+
+  /**
+   * Filters features based on a keyword search.
+   *
+   * @param locFilteredFeatures the features to be searched.
+   * @param keyword the keyword to search for.
+   * @return a list of filtered features.
+   */
+  public List&lt;Feature&gt; searchFilter(List&lt;Feature&gt; locFilteredFeatures, String keyword) {
+    // example test query - first result should be true
+    // http://localhost:3232/geo?latMin=33&amp;latMax=34&amp;lonMin=-87&amp;lonMax=-86&amp;keyword=Brook
+
+<span class="fc" id="L160">    keyword = keyword.toLowerCase();</span>
+
+<span class="fc" id="L162">    List&lt;Feature&gt; searchFilteredFeatures = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">    for (Feature feature : locFilteredFeatures) {</span>
+<span class="fc" id="L164">      String isTarget = &quot;false&quot;;</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">      for (String description : feature.properties().area_description_data().values()) {</span>
+<span class="fc" id="L166">        String[] words = description.replaceAll(&quot;[^a-zA-Z ]&quot;, &quot;&quot;).toLowerCase().split(&quot; &quot;);</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        for (String word : words) {</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">          if (keyword.equals(word)) {</span>
+<span class="fc" id="L169">            isTarget = &quot;true&quot;;</span>
+<span class="fc" id="L170">            break;</span>
+          }
+        }
+<span class="fc" id="L173">      }</span>
+<span class="fc" id="L174">      Properties newProps =</span>
+          new Properties(
+<span class="fc" id="L176">              feature.properties().state(),</span>
+<span class="fc" id="L177">              feature.properties().city(),</span>
+<span class="fc" id="L178">              feature.properties().name(),</span>
+<span class="fc" id="L179">              feature.properties().holc_id(),</span>
+<span class="fc" id="L180">              feature.properties().holc_grade(),</span>
+<span class="fc" id="L181">              feature.properties().neighborhood_id(),</span>
+              isTarget,
+<span class="fc" id="L183">              feature.properties().area_description_data());</span>
+<span class="fc" id="L184">      Feature toAdd = new Feature(feature.type(), feature.geometry(), newProps);</span>
+<span class="fc" id="L185">      searchFilteredFeatures.add(toAdd);</span>
+<span class="fc" id="L186">    }</span>
+<span class="fc" id="L187">    return searchFilteredFeatures;</span>
+  }
+
+  /**
+   * Returns a defensive copy of the history of filtered features.
+   *
+   * @return an ArrayList of strings representing the history of filtered features.
+   */
+  public ArrayList&lt;String&gt; getHistory() {
+    // defensive copying
+<span class="fc" id="L197">    return new ArrayList&lt;&gt;(this.history);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

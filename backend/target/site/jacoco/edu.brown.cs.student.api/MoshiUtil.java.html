@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MoshiUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api</a> &gt; <span class="el_source">MoshiUtil.java</span></div><h1>MoshiUtil.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api;
+
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Moshi.Builder;
+import com.squareup.moshi.Types;
+import edu.brown.cs.student.api.exceptions.DeserializeException;
+import edu.brown.cs.student.api.weatherHelpers.format.HourlyForecast;
+import edu.brown.cs.student.api.weatherHelpers.format.HourlyForecast.HourlyProperty;
+import edu.brown.cs.student.api.weatherHelpers.format.HourlyForecast.HourlyProperty.Period;
+import edu.brown.cs.student.api.weatherHelpers.format.Location;
+import edu.brown.cs.student.api.weatherHelpers.format.Location.LocationProperty;
+import java.lang.reflect.Type;
+import java.util.Map;
+import okio.Buffer;
+
+/** Util class for moshi serializing and deserializing. */
+<span class="nc" id="L18">public class MoshiUtil {</span>
+
+  /**
+   * Serializes a given map with a response code.
+   *
+   * @param responseMap Map to populate.
+   * @param responseCode Code to put in the &quot;result&quot; field.
+   * @return String representation of the response map.
+   */
+  public static String serialize(Map&lt;String, Object&gt; responseMap, String responseCode) {
+<span class="fc" id="L28">    responseMap.put(&quot;result&quot;, responseCode);</span>
+<span class="fc" id="L29">    Moshi moshi = new Builder().build();</span>
+<span class="fc" id="L30">    Type responseMapType = Types.newParameterizedType(Map.class, String.class, Object.class);</span>
+<span class="fc" id="L31">    JsonAdapter&lt;Map&lt;String, Object&gt;&gt; adapter = moshi.adapter(responseMapType);</span>
+<span class="fc" id="L32">    return adapter.toJson(responseMap);</span>
+  }
+
+  /**
+   * Deserializes a buffer JSON into a Location record.
+   *
+   * @param JSON A Buffer representing the JSON of the NWS location endpoint.
+   * @return A Location record storing this JSON's attributes.
+   * @throws DeserializeException If an exception has occurred in moshi's methods.
+   */
+  public static Location deserializeLocation(Buffer JSON) throws DeserializeException {
+    try {
+<span class="fc" id="L44">      Moshi moshi = new Builder().build();</span>
+<span class="fc" id="L45">      Type locationType = Types.newParameterizedType(Location.class, LocationProperty.class);</span>
+<span class="fc" id="L46">      JsonAdapter&lt;Location&gt; locationDeserializer = moshi.adapter(locationType);</span>
+<span class="fc" id="L47">      return locationDeserializer.fromJson(JSON);</span>
+<span class="fc" id="L48">    } catch (Exception e) {</span>
+<span class="fc" id="L49">      throw new DeserializeException(&quot;Location deserialization problem: &quot; + e.getMessage());</span>
+    }
+  }
+
+  /**
+   * Deserializes an hourly forecast JSON into an HourlyForecast record.
+   *
+   * @param JSON A Buffer representing the JSON of the NWS hourly forecast endpoint.
+   * @return An HourlyForecast record storing this JSON's attributes.
+   * @throws DeserializeException If an exception has occurred in moshi's methods.
+   */
+  public static HourlyForecast deserializeForecast(Buffer JSON) throws DeserializeException {
+    try {
+<span class="fc" id="L62">      Moshi moshi = new Builder().build();</span>
+<span class="fc" id="L63">      Type forecastType =</span>
+<span class="fc" id="L64">          Types.newParameterizedType(HourlyForecast.class, HourlyProperty.class, Period.class);</span>
+<span class="fc" id="L65">      JsonAdapter&lt;HourlyForecast&gt; forecastDeserializer = moshi.adapter(forecastType);</span>
+<span class="fc" id="L66">      return forecastDeserializer.fromJson(JSON);</span>
+<span class="fc" id="L67">    } catch (Exception e) {</span>
+<span class="fc" id="L68">      throw new DeserializeException(&quot;Forecast deserialization problem: &quot; + e.getMessage());</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

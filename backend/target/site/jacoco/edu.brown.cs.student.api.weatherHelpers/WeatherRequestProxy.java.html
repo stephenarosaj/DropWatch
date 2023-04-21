@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WeatherRequestProxy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.weatherHelpers</a> &gt; <span class="el_source">WeatherRequestProxy.java</span></div><h1>WeatherRequestProxy.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api.weatherHelpers;
+
+import com.google.common.cache.*;
+import edu.brown.cs.student.api.MoshiUtil;
+import edu.brown.cs.student.api.exceptions.APIRequestException;
+import edu.brown.cs.student.api.exceptions.DeserializeException;
+import edu.brown.cs.student.api.weatherHelpers.format.HourlyForecast;
+import edu.brown.cs.student.api.weatherHelpers.format.Location;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
+
+/** Class that acts as a cache layer between requests to our API and the NWS/external APIs. */
+public class WeatherRequestProxy {
+  private LoadingCache&lt;Coordinates, HourlyForecast&gt; cache;
+  private double distance;
+
+  /**
+   * Creates a new cache layer.
+   *
+   * @param time Max amount of time a coordinate can live in the cache.
+   * @param size Max number of coordinates cached.
+   * @param distance Max distance between two coordinates for them to be considered close enough to
+   *     use the same cached forecast info.
+   */
+<span class="fc" id="L25">  public WeatherRequestProxy(int time, int size, double distance) {</span>
+<span class="fc" id="L26">    this.cache =</span>
+<span class="fc" id="L27">        CacheBuilder.newBuilder()</span>
+<span class="fc" id="L28">            .maximumSize(size)</span>
+<span class="fc" id="L29">            .recordStats()</span>
+<span class="fc" id="L30">            .expireAfterAccess(time, TimeUnit.MINUTES)</span>
+<span class="fc" id="L31">            .build(</span>
+<span class="fc" id="L32">                new CacheLoader&lt;Coordinates, HourlyForecast&gt;() {</span>
+                  @Override
+                  public HourlyForecast load(Coordinates newLoc) {
+<span class="fc" id="L35">                    return startRequest(newLoc);</span>
+                  }
+                });
+<span class="fc" id="L38">    this.distance = distance;</span>
+<span class="fc" id="L39">  }</span>
+
+  /**
+   * Called when there has been a cache miss - handles loading new info into the cache. It searches
+   * for close locations in the cache and then calls the NWS API if none have been found.
+   *
+   * @param newLoc Coordinates of new location to cache.
+   * @return HourlyForecast of new coordinates.
+   */
+  private HourlyForecast startRequest(Coordinates newLoc) {
+<span class="fc" id="L49">    ConcurrentMap&lt;Coordinates, HourlyForecast&gt; mapCache = cache.asMap();</span>
+
+    // search for close coordinates
+<span class="fc bfc" id="L52" title="All 2 branches covered.">    for (Coordinates cachedLoc : mapCache.keySet()) {</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">      if (newLoc.equals(cachedLoc)) {</span>
+<span class="nc" id="L54">        return mapCache.get(cachedLoc);</span>
+      }
+<span class="fc" id="L56">    }</span>
+    // else make an API call
+<span class="fc" id="L58">    return loadNewInfo(newLoc);</span>
+  }
+
+  /**
+   * Returns HourlyForecast from the NWS API for a location. If the location is invalid, the
+   * HourlyForecast contains more info about the error.
+   *
+   * @param newLoc Coordinates of new location to request API for.
+   * @return HourlyForecast from the API for this location.
+   */
+  private HourlyForecast loadNewInfo(Coordinates newLoc) {
+<span class="fc" id="L69">    String locationURL =</span>
+<span class="fc" id="L70">        &quot;https://api.weather.gov/points/&quot; + newLoc.getLat() + &quot;,&quot; + newLoc.getLon();</span>
+
+    RequestAPI locationRequest;
+    Location location;
+
+    try {
+<span class="fc" id="L76">      locationRequest = new RequestAPI(locationURL);</span>
+<span class="fc" id="L77">    } catch (APIRequestException e) {</span>
+<span class="fc" id="L78">      return new HourlyForecast(</span>
+<span class="fc" id="L79">          &quot;Error accessing location API: &quot; + String.valueOf(e.getResponseCode()), null);</span>
+<span class="fc" id="L80">    }</span>
+
+    try {
+<span class="fc" id="L83">      location = MoshiUtil.deserializeLocation(locationRequest.getJSON());</span>
+<span class="nc" id="L84">    } catch (DeserializeException e) {</span>
+<span class="nc" id="L85">      System.out.println(e.getMessage());</span>
+<span class="nc" id="L86">      return new HourlyForecast(&quot;Error deserializing location&quot;, null);</span>
+<span class="fc" id="L87">    }</span>
+
+    RequestAPI forecastRequest;
+    try {
+<span class="fc" id="L91">      forecastRequest = new RequestAPI(location.property().hourlyForecastURL());</span>
+<span class="nc" id="L92">    } catch (APIRequestException e) {</span>
+<span class="nc" id="L93">      return new HourlyForecast(</span>
+<span class="nc" id="L94">          &quot;Error accessing forecast API: &quot; + String.valueOf(e.getResponseCode()), null);</span>
+<span class="fc" id="L95">    }</span>
+
+    try {
+<span class="fc" id="L98">      return MoshiUtil.deserializeForecast(forecastRequest.getJSON());</span>
+<span class="nc" id="L99">    } catch (DeserializeException e) {</span>
+<span class="nc" id="L100">      return new HourlyForecast(&quot;Error deserializing forecast&quot;, null);</span>
+    }
+  }
+
+  /**
+   * Gets temperature and update time info for a latitude and longitude - handles cache checking and
+   * loading.
+   *
+   * @param lat Latitude double.
+   * @param lon Longitude double.
+   * @return An Hourly Forecast record for the latitude and longitude.
+   */
+  public HourlyForecast getTempAndTime(double lat, double lon) {
+<span class="fc" id="L113">    return cache.getUnchecked(new Coordinates(lat, lon, this.distance));</span>
+  }
+
+  /**
+   * Accessor for cache stats (used in testing).
+   *
+   * @return Stats for the weather cache.
+   */
+  public CacheStats cacheStats() {
+<span class="fc" id="L122">    return cache.stats();</span>
+  }
+
+  /**
+   * Accessor for cache size (used in testing).
+   *
+   * @return Long representing cache size.
+   */
+  public long getCacheSize() {
+<span class="fc" id="L131">    return cache.size();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.main</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.main;
+
+import edu.brown.cs.student.CSVparser.Parser;
+import edu.brown.cs.student.CSVsearch.Searcher;
+import edu.brown.cs.student.api.exceptions.BadColumnException;
+import edu.brown.cs.student.rowCreation.FactoryFailureException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.List;
+import java.util.Scanner;
+
+/** The Main class of our project. This is where execution begins. */
+public final class Main {
+  /**
+   * The initial method called when execution begins.
+   *
+   * @param args An array of command line arguments
+   */
+  public static void main(String[] args) {
+<span class="nc" id="L23">    new Main(args).run();</span>
+<span class="nc" id="L24">  }</span>
+
+<span class="nc" id="L26">  private Main(String[] args) {}</span>
+
+  /**
+   * The run method, which runs the program. It asks the user for input, checks its validity, and
+   * creates a file, parser, and searcher.
+   */
+  private void run() {
+<span class="nc" id="L33">    String[] args = this.getUserInput();</span>
+
+    // create reader from passed in file
+<span class="nc" id="L36">    Reader file = this.getFileReader(args[0]);</span>
+    // create Searcher for the string
+<span class="nc" id="L38">    Searcher searcher = new Searcher(args[1]);</span>
+
+    // set up parser depending on whether CSV has headers or not
+<span class="nc" id="L41">    Parser&lt;List&lt;String&gt;&gt; targetRowParser = null;</span>
+    try {
+<span class="nc" id="L43">      targetRowParser = this.getParser(file, args[2], searcher);</span>
+<span class="nc" id="L44">    } catch (IOException e) {</span>
+<span class="nc" id="L45">      System.err.println(&quot;Failed to read header line.&quot;);</span>
+<span class="nc" id="L46">    }</span>
+
+    // set up searcher if column was provided
+<span class="nc bnc" id="L49" title="All 2 branches missed.">    if (args.length == 4) {</span>
+      try {
+<span class="nc" id="L51">        searcher.setCol(args[3], targetRowParser.getHeaders());</span>
+<span class="nc" id="L52">      } catch (BadColumnException e) {</span>
+<span class="nc" id="L53">        System.out.print(e.getMessage());</span>
+<span class="nc" id="L54">        System.exit(1);</span>
+<span class="nc" id="L55">      }</span>
+    }
+
+    try {
+<span class="nc" id="L59">      targetRowParser.parse();</span>
+<span class="nc" id="L60">    } catch (IOException e) {</span>
+<span class="nc" id="L61">      System.err.println(&quot;Error occurred while reading lines during parsing&quot;);</span>
+<span class="nc" id="L62">      System.exit(1);</span>
+<span class="nc" id="L63">    } catch (FactoryFailureException e) {</span>
+<span class="nc" id="L64">      System.err.println(&quot;Factory failure occurred while parsing&quot;);</span>
+<span class="nc" id="L65">      System.exit(1);</span>
+<span class="nc" id="L66">    }</span>
+<span class="nc" id="L67">    this.printAppropriateMessage(args, searcher.getTargetRows());</span>
+<span class="nc" id="L68">  }</span>
+
+  /**
+   * Gives the user input format guidelines, asks for user input, and splits it. This method checks
+   * if the user has given enough arguments and exits the program with an error message if they have
+   * not.
+   *
+   * @return An array of strings (String[]) representing the user input arguments.
+   */
+  private String[] getUserInput() {
+
+<span class="nc" id="L79">    Scanner scanner = new Scanner(new InputStreamReader(System.in));</span>
+<span class="nc" id="L80">    System.out.println(</span>
+        &quot;Input: [Absolute File Path],[String to Search],[CSV Has Headers],&quot;
+            + &quot;[Col Idx or Name (Optional)]&quot;);
+<span class="nc" id="L83">    String[] args = scanner.nextLine().split(&quot;,&quot;);</span>
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">    if (args.length &lt; 3) {</span>
+<span class="nc" id="L86">      System.err.println(</span>
+          &quot;You must enter at least: [file path],[string to search],&quot;
+              + &quot;[boolean representing if the CSV &quot;
+              + &quot;has headers]&quot;);
+<span class="nc" id="L90">      System.exit(1);</span>
+    }
+<span class="nc" id="L92">    return args;</span>
+  }
+
+  /**
+   * Creates a new FileReader object if there is a valid file name given. If there is not, it
+   * returns an error message and exits from the program.
+   *
+   * @param fileName A string representing the absolute file path.
+   * @return A FileReader that contains the contents of the file.
+   */
+  private Reader getFileReader(String fileName) {
+    try {
+<span class="nc" id="L104">      return new FileReader(fileName);</span>
+<span class="nc" id="L105">    } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L106">      System.err.println(&quot;Couldn't find file &quot; + fileName + &quot;.&quot;);</span>
+<span class="nc" id="L107">      System.exit(1);</span>
+<span class="nc" id="L108">      return null;</span>
+    }
+  }
+
+  /**
+   * Returns the correct type of parser depending on whether the user indicated the CSV has headers
+   * or not.
+   *
+   * @param file The FileReader object created from the user-inputted file.
+   * @param hasHeadersString A string representing whether the CSV has headers (true/false).
+   * @param searcher The searcher whose CreatorFromRow will be used.
+   * @return A Parser set up with the Searcher's create method and CSV headers.
+   */
+  private Parser&lt;List&lt;String&gt;&gt; getParser(Reader file, String hasHeadersString, Searcher searcher)
+      throws IOException {
+<span class="nc bnc" id="L123" title="All 2 branches missed.">    if (hasHeadersString.equals(&quot;true&quot;)) {</span>
+<span class="nc" id="L124">      return new Parser&lt;&gt;(file, true, searcher);</span>
+    }
+<span class="nc bnc" id="L126" title="All 2 branches missed.">    if (hasHeadersString.equals(&quot;false&quot;)) {</span>
+<span class="nc" id="L127">      return new Parser&lt;&gt;(file, false, searcher);</span>
+    }
+    // if it has reached ths point, the string is not true/false
+<span class="nc" id="L130">    System.out.println(&quot;You must say 'true' if the CSV has headers and 'false' if not.&quot;);</span>
+<span class="nc" id="L131">    System.exit(0);</span>
+<span class="nc" id="L132">    return null;</span>
+  }
+
+  /**
+   * Prints the appropriate message to the user indicating whether the program has found their value
+   * and if so, the rows containing it.
+   *
+   * @param args String array representing the user inputted arguments.
+   * @param finalRows A list of lists representing the CSV rows containing the target value.
+   */
+  private void printAppropriateMessage(String[] args, List&lt;List&lt;String&gt;&gt; finalRows) {
+<span class="nc bnc" id="L143" title="All 2 branches missed.">    if (finalRows.size() == 0) {</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">      if (args.length &lt; 4) {</span>
+<span class="nc" id="L145">        System.out.println(&quot;'&quot; + args[1] + &quot;' was not found in the CSV.&quot;);</span>
+      } else {
+<span class="nc" id="L147">        System.out.println(&quot;'&quot; + args[1] + &quot;' was not found in the CSV at column &quot; + args[3] + &quot;.&quot;);</span>
+      }
+    } else {
+<span class="nc" id="L150">      System.out.println(&quot;'&quot; + args[1] + &quot;' was found in the following row(s):&quot;);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">      for (int i = 0; i &lt; finalRows.size(); i++) {</span>
+<span class="nc" id="L152">        System.out.println(finalRows.get(i));</span>
+      }
+    }
+<span class="nc" id="L155">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
