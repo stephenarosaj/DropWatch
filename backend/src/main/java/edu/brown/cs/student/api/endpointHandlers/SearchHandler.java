@@ -46,6 +46,7 @@ public class SearchHandler implements Route {
 ////      ioException.printStackTrace();
 //      System.out.println(ioException.getMessage());
 //    }
+    // https://stackoverflow.com/questions/65750837/how-to-use-this-curl-post-request-in-java-spotify-api
     try {
       URL url = new URL("https://accounts.spotify.com/api/token");
       URLConnection urlc = url.openConnection();
