@@ -2,6 +2,7 @@ package edu.brown.cs.student.api;
 
 import static spark.Spark.after;
 
+import edu.brown.cs.student.api.endpointHandlers.SearchHandler;
 import spark.Spark;
 
 /** Main class for the Server. */
@@ -20,6 +21,9 @@ public class Server {
           response.header("Access-Control-Allow-Origin", "*");
           response.header("Access-Control-Allow-Methods", "*");
         });
+
+
+    Spark.get("search", new SearchHandler());
 
 
 
