@@ -1,5 +1,5 @@
 package edu.brown.cs.student.api.endpointHandlers;
 
-public class SearchHandler {
+public class SuggestionHandler {
 
 }

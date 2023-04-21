@@ -5,11 +5,7 @@ import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Moshi.Builder;
 import com.squareup.moshi.Types;
 import edu.brown.cs.student.api.exceptions.DeserializeException;
-import edu.brown.cs.student.api.weatherHelpers.format.HourlyForecast;
-import edu.brown.cs.student.api.weatherHelpers.format.HourlyForecast.HourlyProperty;
-import edu.brown.cs.student.api.weatherHelpers.format.HourlyForecast.HourlyProperty.Period;
-import edu.brown.cs.student.api.weatherHelpers.format.Location;
-import edu.brown.cs.student.api.weatherHelpers.format.Location.LocationProperty;
+
 import java.lang.reflect.Type;
 import java.util.Map;
 import okio.Buffer;
@@ -39,16 +35,6 @@ public class MoshiUtil {
    * @return A Location record storing this JSON's attributes.
    * @throws DeserializeException If an exception has occurred in moshi's methods.
    */
-  public static Location deserializeLocation(Buffer JSON) throws DeserializeException {
-    try {
-      Moshi moshi = new Builder().build();
-      Type locationType = Types.newParameterizedType(Location.class, LocationProperty.class);
-      JsonAdapter<Location> locationDeserializer = moshi.adapter(locationType);
-      return locationDeserializer.fromJson(JSON);
-    } catch (Exception e) {
-      throw new DeserializeException("Location deserialization problem: " + e.getMessage());
-    }
-  }
 
   /**
    * Deserializes an hourly forecast JSON into an HourlyForecast record.
@@ -57,15 +43,4 @@ public class MoshiUtil {
    * @return An HourlyForecast record storing this JSON's attributes.
    * @throws DeserializeException If an exception has occurred in moshi's methods.
    */
-  public static HourlyForecast deserializeForecast(Buffer JSON) throws DeserializeException {
-    try {
-      Moshi moshi = new Builder().build();
-      Type forecastType =
-          Types.newParameterizedType(HourlyForecast.class, HourlyProperty.class, Period.class);
-      JsonAdapter<HourlyForecast> forecastDeserializer = moshi.adapter(forecastType);
-      return forecastDeserializer.fromJson(JSON);
-    } catch (Exception e) {
-      throw new DeserializeException("Forecast deserialization problem: " + e.getMessage());
-    }
-  }
 }
