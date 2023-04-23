@@ -25,7 +25,7 @@ async function generateCodeChallenge(codeVerifier) {
   return base64encode(digest);
 }
 
-const clientId = "1be4c1544f31438693f0c3b488f9ceee";
+const clientId = "secret";
 const redirectUri = "http://localhost:3232";
 
 let codeVerifier = generateRandomString(128);
