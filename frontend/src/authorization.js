@@ -1,3 +1,4 @@
+import { clientID } from "./private/tokens";
 function generateRandomString(length) {
   let text = "";
   let possible =
@@ -25,60 +26,66 @@ export async function generateCodeChallenge(codeVerifier) {
   return base64encode(digest);
 }
 
-let codeVerifier = generateRandomString(128);
+const codeVerifier = generateRandomString(128);
 
 
-const urlParams = new URLSearchParams(window.location.search);
-let code = urlParams.get("code");
+// const urlParams = new URLSearchParams(window.location.search);
+// let code = urlParams.get("code");
+
+export function fetchAccessToken(code, redirect_uri, client_id) {
+  // console.log(code)
+  // console.log(redirect_uri)
+  // console.log(client_id)
+  let body = new URLSearchParams({
+    grant_type: "authorization_code",
+    code: code,
+    redirect_uri: redirect_uri,
+    client_id: client_id,
+    code_verifier: codeVerifier,
+  });
+  
+  const response = fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: body,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        console.log(response)
+        throw new Error("HTTP status " + response.status);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      localStorage.setItem("access_token", data.access_token);
+      // console.log(data)
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
 
 
 
-// let body = new URLSearchParams({
-//   grant_type: "authorization_code",
-//   code: code,
-//   redirect_uri: redirectUri,
-//   client_id: clientId,
-//   code_verifier: codeVerifier,
-// });
+async function getProfile(accessToken) {
+  let access_Token = localStorage.getItem("access_token");
 
-// const response = fetch("https://accounts.spotify.com/api/token", {
-//   method: "POST",
-//   headers: {
-//     "Content-Type": "application/x-www-form-urlencoded",
-//   },
-//   body: body,
-// })
-//   .then((response) => {
-//     if (!response.ok) {
-//       throw new Error("HTTP status " + response.status);
-//     }
-//     return response.json();
-//   })
-//   .then((data) => {
-//     localStorage.setItem("access_token", data.access_token);
-//   })
-//   .catch((error) => {
-//     console.error("Error:", error);
-//   });
+  const response = await fetch("https://api.spotify.com/v1/me", {
+    headers: {
+      Authorization: "Bearer " + access_Token,
+    },
+  });
 
-// async function getProfile(accessToken) {
-//   let access_Token = localStorage.getItem("access_token");
-
-//   const response = await fetch("https://api.spotify.com/v1/me", {
-//     headers: {
-//       Authorization: "Bearer " + access_Token,
-//     },
-//   });
-
-//   const data = await response.json();
-// }
+  const data = await response.json();
+}
 
 export function requestAuthorization(client_id, redirect_uri) {
   const clientId = client_id;
   const redirectUri = redirect_uri;
 
-let codeVerifier = generateRandomString(128);
-
+//make the request to the spotify API for authorization
 generateCodeChallenge(codeVerifier).then(codeChallenge => {
   let state = generateRandomString(16);
   let scope = 'user-read-private user-read-email';
