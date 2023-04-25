@@ -16,6 +16,7 @@ public record SearchRecord(
     ) {
       public record Artist(
           @Json(name = "name") String name,
+          @Json(name = "id") String id,
           @Json(name = "popularity") String popularity
           // can also add images later
       ) {}
