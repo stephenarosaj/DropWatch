@@ -1,4 +1,6 @@
 import { clientID } from "./private/tokens";
+import { useState } from "react";
+
 function generateRandomString(length) {
   let text = "";
   let possible =
@@ -33,16 +35,17 @@ const codeVerifier = generateRandomString(128);
 // let code = urlParams.get("code");
 
 export function fetchAccessToken(code, redirect_uri, client_id) {
-  // console.log(code)
-  // console.log(redirect_uri)
-  // console.log(client_id)
+  console.log("CODE: " + code)
+  console.log("REDIRECT: " + redirect_uri)
+  console.log("CLIENT ID: " +client_id)
+  console.log("VERIFIER: " + codeVerifier)
   let body = new URLSearchParams({
     grant_type: "authorization_code",
     code: code,
     redirect_uri: redirect_uri,
     client_id: client_id,
     code_verifier: codeVerifier,
-  });
+  }).toString;
   
   const response = fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
@@ -82,8 +85,6 @@ async function getProfile(accessToken) {
 }
 
 export function requestAuthorization(client_id, redirect_uri) {
-  const clientId = client_id;
-  const redirectUri = redirect_uri;
 
 //make the request to the spotify API for authorization
 generateCodeChallenge(codeVerifier).then(codeChallenge => {
@@ -94,9 +95,9 @@ generateCodeChallenge(codeVerifier).then(codeChallenge => {
 
   let args = new URLSearchParams({
     response_type: 'code',
-    client_id: clientId,
+    client_id: client_id,
     scope: scope,
-    redirect_uri: redirectUri,
+    redirect_uri: redirect_uri,
     state: state,
     code_challenge_method: 'S256',
     code_challenge: codeChallenge
