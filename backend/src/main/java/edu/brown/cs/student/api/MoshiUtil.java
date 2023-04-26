@@ -12,6 +12,8 @@ import edu.brown.cs.student.api.formats.SearchRecord.Artists.Artist;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+
+import edu.brown.cs.student.api.formats.UpdateRecord;
 import okio.Buffer;
 
 /** Util class for moshi serializing and deserializing. */
@@ -43,6 +45,13 @@ public class MoshiUtil {
     Moshi moshi = new Moshi.Builder().build();
     JsonAdapter<SearchRecord> adapter = moshi.adapter(
         Types.newParameterizedType(SearchRecord.class, Artists.class, Artist.class));
+    return adapter.fromJson(buf);
+  }
+
+  public static UpdateRecord deserializeUpdate(Buffer buf) throws IOException {
+    Moshi moshi = new Moshi.Builder().build();
+    JsonAdapter<UpdateRecord> adapter = moshi.adapter(
+            Types.newParameterizedType(UpdateRecord.class, UpdateRecord.Album.class));
     return adapter.fromJson(buf);
   }
 

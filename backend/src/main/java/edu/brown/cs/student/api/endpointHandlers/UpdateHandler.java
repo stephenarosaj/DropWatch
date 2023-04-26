@@ -2,6 +2,7 @@ package edu.brown.cs.student.api.endpointHandlers;
 
 import edu.brown.cs.student.api.MoshiUtil;
 import edu.brown.cs.student.api.formats.SearchRecord;
+import edu.brown.cs.student.api.formats.UpdateRecord;
 import okio.Buffer;
 import spark.Request;
 import spark.Response;
@@ -64,13 +65,8 @@ public class UpdateHandler implements Route {
             String limit = request.queryParams("limit");
             String offset = request.queryParams("offset");
 
-            // process of updating (aka checking for new drops):
-                // indicate which artist to check for drops,
-                // get the artist using spotify api call
-                    // for this we need the artist's spotify id
-                        // question of where/how to retrieve the spotify id for artists
-
             String artist_id = ""; // needs to be instantiated properly, need to retrieve the artist id from somewhere
+
             // an idea is to make ArtistRecord.java? to externalize some code existing in SearchRecord
 
             URL url = new URL("https://api.spotify.com/v1/artists/"
@@ -86,13 +82,11 @@ public class UpdateHandler implements Route {
             urls.setRequestProperty("Authorization","Bearer  " +
                     "BQDjG5oaXU0UU7r3fOwU-vCt_72JHENSSDxnx2AJEMwG2M3tQelrxXaRr8FWqfrkXyDkg90035jQvzrPwAtAup4CHrxJnsG1zIU3PI3njcYdIY9qKxK3");
 
-            //SearchRecord.Artists.Artist a;
-//            SearchRecord searchResponse = MoshiUtil.deserializeSearch(
-//                    new Buffer().readFrom(urls.getInputStream()));
-//
-            // maybe instead of search response,
-//            ret.put("data", searchResponse);
 
+            UpdateRecord updateResponse = MoshiUtil.deserializeUpdate(
+                    new Buffer().readFrom(urls.getInputStream()));
+
+            ret.put("data", updateResponse);
 
             return MoshiUtil.serialize(ret, "success");
         } catch (Exception e) {
