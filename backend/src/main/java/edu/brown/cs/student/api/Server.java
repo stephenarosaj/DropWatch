@@ -3,6 +3,7 @@ package edu.brown.cs.student.api;
 import static spark.Spark.after;
 
 import edu.brown.cs.student.api.endpointHandlers.SearchHandler;
+import edu.brown.cs.student.api.endpointHandlers.UpdateHandler;
 import spark.Spark;
 
 /** Main class for the Server. */
@@ -24,7 +25,7 @@ public class Server {
 
 
     Spark.get("search", new SearchHandler());
-
+    Spark.get("update", new UpdateHandler());
 
 
     Spark.init();

@@ -49,12 +49,10 @@ public class UpdateHandler implements Route {
         }
     }
 
-    // still under construction!
     /***
-     * Handles calls to update.
-     * @param request -
+     * Handles calls to update endpoint.
+     * @param request - Request received from user.
      * @param response -
-     * @return -
      */
     @Override
     public Object handle(Request request, Response response) {
