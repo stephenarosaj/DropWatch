@@ -51,18 +51,18 @@ export function fetchAccessToken(code, redirect_uri, client_id) {
     redirect_uri: redirect_uri,
     client_id: client_id,
     code_verifier: codeVerifier,
-  }).toString;
+  })
   
   const response = fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: body,
+    body: JSON.stringify(body),
   })
     .then((response) => {
       if (!response.ok) {
-        console.log(response)
+        console.log(response.json())
         throw new Error("HTTP status " + response.status);
       }
       return response.json();
