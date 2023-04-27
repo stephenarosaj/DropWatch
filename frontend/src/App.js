@@ -45,81 +45,117 @@
 // }
 
 // export default App;
+import React, { useState, useEffect } from "react";
+import queryString from "query-string";
+import { clientID } from "./private/tokens";
 
-import React, { useEffect, useState } from 'react';
-import { Button } from 'antd'; // Importing a button from Ant Design, you can use any UI library or HTML
+const client_id = clientID;
+const redirect_uri = "http://localhost:3000/callback";
 
-const CLIENT_ID = 'your_client_id'; // Replace with your client ID
-const REDIRECT_URI = 'http://localhost:3000/callback'; // Replace with your redirect URI
-const SPOTIFY_AUTH_URL = `https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=user-read-private%20user-read-email&code_challenge_method=S256&code_challenge=`; // Spotify authorization URL with PKCE parameters
-const BASE64URL_ENCODED_SHA256 = 'your_code_challenge'; // Replace with your code challenge
-
-const App = () => {
-  const [token, setToken] = useState('');
+function App() {
+  const [accessToken, setAccessToken] = useState("");
 
   useEffect(() => {
-    const getToken = async () => {
-      // Check if authorization code is present in URL params
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');
-      if (code) {
-        try {
-          // Request access token from Spotify API
-          const response = await fetch('https://accounts.spotify.com/api/token', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-              grant_type: 'authorization_code',
-              code,
-              redirect_uri: REDIRECT_URI,
-              client_id: CLIENT_ID,
-              code_verifier: BASE64URL_ENCODED_SHA256,
-            }),
-          });
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json();
-          setToken(data.access_token);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
-    getToken();
+    const parsed = queryString.parse(window.location.search);
+    const code = parsed.code;
+
+    if (code) {
+      requestAccessToken(code);
+    }
   }, []);
 
-  const handleAuthClick = () => {
-    // Generate code verifier and code challenge
-    const codeVerifier = base64URLEncode(crypto.getRandomValues(new Uint8Array(32)));
-    const codeChallenge = base64URLEncode(crypto.subtle.digest('SHA-256', new TextEncoder().encode(codeVerifier)));
+  const requestAuthorization = () => {
+    const state = generateRandomString(16);
+    const codeVerifier = generateRandomString(64);
+    const codeChallenge = base64URLEncode(sha256(codeVerifier));
+  
+    const authorizationUrl =
+      "https://accounts.spotify.com/authorize?" +
+      new URLSearchParams({
+        response_type: "code",
+        client_id: "YOUR_CLIENT_ID",
+        scope: "YOUR_SCOPES",
+        redirect_uri: "YOUR_REDIRECT_URI",
+        state: state,
+        code_challenge_method: "S256",
+        code_challenge: codeChallenge,
+      });
+  
+    window.location.href = authorizationUrl;
+  };
 
-    // Store code verifier in local storage for later use
-    localStorage.setItem('codeVerifier', codeVerifier);
+  const fetchAccessToken = (code, redirectUri, clientId, codeVerifier) => {
+    const requestBody = new URLSearchParams({
+      grant_type: "authorization_code",
+      code: code,
+      redirect_uri: redirectUri,
+      client_id: clientId,
+      code_verifier: codeVerifier,
+    });
+  
+    fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: requestBody,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((responseJson) => {
+        console.log(responseJson);
+        localStorage.setItem("access_token", responseJson.access_token);
+        localStorage.setItem("refresh_token", responseJson.refresh_token);
+        localStorage.setItem("token_expiration", Date.now() + responseJson.expires_in * 1000);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-    // Redirect user to Spotify authorization URL
-    window.location.href = `${SPOTIFY_AUTH_URL}${codeChallenge}`;
+  const generateRandomString = (length) => {
+    let text = "";
+    const possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (let i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    return text;
+  };
+
+  const base64URLEncode = (str) => {
+    return btoa(str)
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+  };
+
+  const sha256 = (buffer) => {
+    return crypto.subtle
+      .digest("SHA-256", new TextEncoder().encode(buffer))
+      .then((hash) => {
+        return base64URLEncode(String.fromCharCode(...new Uint8Array(hash)));
+      });
   };
 
   return (
     <div>
-      {token ? (
-        <p>Access token: {token}</p>
+      <h1>Spotify Authorization Example</h1>
+      {!accessToken ? (
+        <button onClick={requestAuthorization}>Authorize with Spotify</button>
       ) : (
-        <Button onClick={handleAuthClick}>Authorize with Spotify</Button>
+        <p>Access token: {accessToken}</p>
       )}
     </div>
   );
-};
-
-// Helper function to base64 URL encode a string
-const base64URLEncode = (str) => {
-  return btoa(String.fromCharCode.apply(null, str))
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
-};
+}
 
 export default App;
+
+

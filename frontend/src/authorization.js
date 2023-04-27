@@ -1,7 +1,7 @@
 import { clientID } from "./private/tokens";
 import { useState } from "react";
 
-function generateRandomString(length) {
+export function generateRandomString(length) {
   let text = "";
   let possible =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
