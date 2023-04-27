@@ -13,6 +13,7 @@ export function generateRandomString(length) {
 
 //export const digest = await window.crypto.subtle.digest("SHA-256", data);
 
+/** I thought the problem was the  encoding of the codeVerifier but i'm still getting the same errors */
 export async function generateCodeChallenge(codeVerifier) {
   function base64encode(string) {
     return btoa(String.fromCharCode.apply(null, new Uint8Array(string)))
@@ -21,14 +22,16 @@ export async function generateCodeChallenge(codeVerifier) {
       .replace(/=+$/, "");
   }
 
-  const encoder = new TextEncoder();
-  const data = encoder.encode(codeVerifier);
-  const digest = await window.crypto.subtle.digest("SHA-256", data);
+  // const encoder = new TextEncoder();
+  // const data = encoder.encode(codeVerifier);
+  const digest = await window.crypto.subtle.digest("SHA-256", codeVerifier);
 
   return base64encode(digest);
 }
 
-const codeVerifier = generateRandomString(128);
+const encoder = new TextEncoder();
+// const data = encoder.encode(codeVerifier);
+const codeVerifier = encoder.encode(generateRandomString(128));
 
 
 // const urlParams = new URLSearchParams(window.location.search);
@@ -39,6 +42,9 @@ export function fetchAccessToken(code, redirect_uri, client_id) {
   console.log("REDIRECT: " + redirect_uri)
   console.log("CLIENT ID: " +client_id)
   console.log("VERIFIER: " + codeVerifier)
+  // const encoder = new TextEncoder();
+  // const data = encoder.encode(codeVerifier);
+
   let body = new URLSearchParams({
     grant_type: "authorization_code",
     code: code,
