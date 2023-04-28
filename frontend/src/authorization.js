@@ -53,7 +53,7 @@ export function fetchAccessToken(code, redirect_uri, client_id) {
     code_verifier: codeVerifier,
   })
   
-  const response = fetch("https://accounts.spotify.com/api/token", {
+  const response = fetch("https://accounts.spotify.com/api/token?", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
