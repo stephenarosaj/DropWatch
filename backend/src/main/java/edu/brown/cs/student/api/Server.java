@@ -2,6 +2,7 @@ package edu.brown.cs.student.api;
 
 import static spark.Spark.after;
 
+import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyAPIRequester;
 import edu.brown.cs.student.api.endpointHandlers.SearchHandler;
 import edu.brown.cs.student.api.endpointHandlers.UpdateHandler;
 import spark.Spark;
@@ -24,7 +25,7 @@ public class Server {
         });
 
 
-    Spark.get("search", new SearchHandler());
+    Spark.get("search", new SearchHandler(new SpotifyAPIRequester()));
     Spark.get("update", new UpdateHandler());
 
 

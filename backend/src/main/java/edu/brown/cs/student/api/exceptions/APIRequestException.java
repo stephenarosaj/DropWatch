@@ -10,7 +10,7 @@ public class APIRequestException extends Exception {
    * @param message Message to be sent.
    * @param responseCode Response code that the request failed with.
    */
-  public APIRequestException(String message, int responseCode) {
+  public APIRequestException(String message) {
     super(message);
     this.responseCode = responseCode;
   }
