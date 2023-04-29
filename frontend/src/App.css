@@ -1,5 +1,17 @@
+/* inter-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/inter-v12-latin-regular.woff2') format('woff2'), /* Chrome 36+, Opera 23+, Firefox 39+ */
+       url('./fonts/inter-v12-latin-regular.woff') format('woff'); /* Chrome 5+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+
 .App {
   text-align: center;
+  background-color: #1e1e1e;
 }
 
 .App-logo {
@@ -36,3 +48,27 @@
     transform: rotate(360deg);
   }
 }
+* {
+  margin: 0px !important
+}
+.login-page {
+  background-color: #1e1e1e;
+  width: 100%;
+  color: #ffffff;
+  font-family: "Inter" !important; 
+  font-weight: bold;
+  /* margin-left: 0 !important; */
+  /* margin: 0 !important; */
+}
+
+.logo {
+  width: 100%
+}
+
+.auth-card {
+  background: #2A2A2A !important;
+}
+.middle-section {
+  font-size: 40px;
+}
+

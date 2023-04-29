@@ -1,6 +1,6 @@
 import { clientID, clientSecretID } from "./private/tokens";
 const redirectUri = 'http://localhost:3000/callback';
-const codeVerifier = generateRandomString(128);
+let codeVerifier = generateRandomString(128);
 
 function generateRandomString(length) {
   let text = '';
@@ -67,8 +67,8 @@ function base64urlencode(a) {
 }
 
 async function pkce_challenge_from_verifier(v) {
-  const hashed = await sha256(v)
-  return base64urlencode(hashed)
+  codeVerifier = await sha256(v)
+  return base64urlencode(codeVerifier)
 }
 
 
@@ -105,7 +105,7 @@ export async function requestAuthorization() {
     args += "&redirect_uri=" + redirectUri
     args += "&state=" + state
     args += "&code_challenge_method=S256"
-    args += "&code_challenge=" + codeChallenge
+    args += "&code_challenge=" + pkce_challenge_from_verifier(codeVerifier)
   
     window.location = 'https://accounts.spotify.com/authorize?' + args;
 }

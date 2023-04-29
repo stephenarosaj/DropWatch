@@ -5,6 +5,14 @@ import {clientID, clientSecretID } from './private/tokens';
 // import { requestAuthorization, fetchAccessToken } from './authorization';
 import { requestAuthorization, requestAccessToken } from './new_authorization';
 // import { requestAuthorization } from './new_authorization';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
+import Image from 'react-bootstrap/Image'
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const redirect_uri = "http://localhost:3000/callback"
 
@@ -34,15 +42,52 @@ function onLoad() {
   }
 }
 
-  React.useEffect(() => {
-    onLoad()
-  });
+  // React.useEffect(() => {
+  //   onLoad()
+  // });
 
   return (
     <div className="App">
-      <button className= "authorize" onClick={() => requestAuthorization()}>Request Authorization</button>
-      <p>{token}</p>
+      {/* <button className= "authorize" onClick={() => requestAuthorization()}>Request Authorization</button>
+      <p>{token}</p> */}
+
+      {/* <div className="home-page">
+
+      </div> */}
+
+      <Container className="login-page">
+        <Row>
+          <Col xs={1}>
+            <div>
+              <Image className="logo" src= {require("./images/placeholder.png")}/>
+            </div>
+          </Col>
+          <Col xs={8}>
+            <div className="middle-section">
+              <p> Welcome to <span style={{color: '#00C437'}}>DropWatch</span> &lt;3</p>
+            </div>
+          </Col>
+          <Col xs={4}>
+            <Card className="auth-card">
+              <Card.Body>
+                <Card.Title>Connect your Spotify account to get started</Card.Title>
+                <Button>Login with Spotify</Button>
+                <Card.Text>
+                  What data does DropWatch collect? <br/>
+
+                  DropWatch asks you to log into spotify so that... <br /> 
+                  We collect your...<br /> 
+                  We do not collect your...<br /> 
+                  We will never share your...
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
+
+    
     
   );
 }
