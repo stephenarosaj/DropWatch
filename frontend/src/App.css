@@ -53,12 +53,11 @@
 }
 .login-page {
   background-color: #1e1e1e;
-  width: 100%;
+  width: 100% !important;
   color: #ffffff;
   font-family: "Inter" !important; 
   font-weight: bold;
-  /* margin-left: 0 !important; */
-  /* margin: 0 !important; */
+  margin-right: 0 !important;
 }
 
 .logo {
