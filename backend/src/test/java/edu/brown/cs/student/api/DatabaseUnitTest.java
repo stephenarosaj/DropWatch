@@ -2,7 +2,6 @@ package edu.brown.cs.student.api;
 
 import edu.brown.cs.student.api.database.sqliteDB;
 import org.junit.jupiter.api.*;
-import spark.Spark;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -22,7 +21,7 @@ public class DatabaseUnitTest {
   /**
    * Path to our testing DB!
    */
-  static String dbFilepath = "test.db";
+  static String dbFilepath = "src/test/java/edu/brown/cs/student/api/testDB.db";
 
 
   /**
@@ -33,75 +32,126 @@ public class DatabaseUnitTest {
     db = new sqliteDB();
   }
 
-//  /**
-//   * Before each test, refresh connection to the database
-//   */
-//  @AfterEach
-//  public void teardown() {
-//    try {
-//      db.checkConn();
-//      if (!db.clearDB()) {
-//          fail("failed to clear db!");
-//        }
-//      } catch (SQLException e) {
-//      fail("failed to clear db!: " + e.getMessage());
-//    }
-//  }
-//
-//  @AfterAll
-//  public static void cleanup() {
-//    try {
-//      db.checkConn();
-//      if (!db.deleteDB()) {
-//        fail("failed to delete db!");
-//      }
-//    } catch (SQLException e) {
-//      fail("failed to delete db!: " + e.getMessage());
-//    }
-//  }
+  @AfterEach
+  public void teardown() {
+    try {
+      // clear DB if it exists
+      File file = new File(dbFilepath);
+      if (file.exists()) {
+        assertTrue(db.clearDB());
+      }
+    } catch (Exception e) {
+      // shouldn't error...
+      fail(e.getMessage());
+    }
+  }
 
-// Test creating a new DB (actually)
+  @AfterAll
+  public static void cleanup() {
+    try {
+      // clear DB if it exists
+      File file = new File(dbFilepath);
+      if (file.exists()) {
+        assertTrue(db.closeDB());
+        assertTrue(file.delete());
+      }
+    } catch (Exception e) {
+      // shouldn't error...
+      fail(e.getMessage());
+    }
+  }
+  // Test creating a new DB (actually)
   @Test
   void test_CreateDB_GoodInput() {
-    // verify a DB doesn't exist, then create it, then check if it's there now
-    assertFalse(new File(dbFilepath).exists());
-    assertTrue(db.createDB(dbFilepath));
-    assertTrue(new File(dbFilepath).exists());
     try {
+      // remove DB if it exists
+      File file = new File(dbFilepath);
+      if (file.exists()) {
+        assertTrue(db.closeDB());
+        assertTrue(file.delete());
+      }
+      // verify it doesn't exist anymore
+      assertFalse(new File(dbFilepath).exists());
+      // create DB, then check if it's there now
+      assertTrue(db.createDB(dbFilepath));
+      assertTrue(new File(dbFilepath).exists());
+      try {
+        db.checkConn();
+      } catch (SQLException e) {
+        fail("conn == null!!!");
+      }
+    } catch (Exception e) {
+      // shouldn't error...
+      fail(e.getMessage());
+    }
+  }
+
+  // Test creating a new DB (actually)
+  @Test
+  void test_CreateDB_BadInput() {
+    try {
+      // remove DB if it exists
+      File file = new File(dbFilepath);
+      if (file.exists()) {
+        assertTrue(file.delete());
+      }
+      // verify it doesn't exist anymore
+      assertFalse(new File(dbFilepath).exists());
+      // create DB, then check if it's there now
+      assertTrue(db.createDB(dbFilepath));
+      assertTrue(new File(dbFilepath).exists());
       db.checkConn();
-    } catch (SQLException e) {
-      fail("conn == null!!!");
+      // now, try to create same DB again
+      assertThrows(SQLException.class, () -> {
+        db.createDB(dbFilepath);
+      }, "ERROR: new SQLiteDB could not be created\n:" + "database '" + dbFilepath + "' already exists!");
+    } catch (Exception e) {
+      // shouldn't error...
+      fail(e.getMessage());
     }
   }
 
   // Test deleting a DB (actually)
   @Test
   void test_DeleteDB_GoodInput() {
-    // verify a DB doesn't exist, then create it, then check if it's there now
-    assertTrue(new File(dbFilepath).exists());
-    assertTrue(db.deleteDB()); // ERRORING HERE!!!
-    assertFalse(new File(dbFilepath).exists());
     try {
-      db.checkConn();
-      fail();
-    } catch (SQLException e) {
-      return;
+      // remove DB if it exists
+      File file = new File(dbFilepath);
+      if (file.exists()) {
+        assertTrue(file.delete());
+      }
+      // verify it doesn't exist anymore
+      assertFalse(new File(dbFilepath).exists());
+      // create DB, then delete it
+      assertTrue(db.createDB(dbFilepath));
+      assertTrue(db.deleteDB());
+      // verify it doesn't exist anymore!
+      assertFalse(new File(dbFilepath).exists());
+    } catch (Exception e) {
+      // shouldn't error...
+      fail(e.getMessage());
     }
   }
 
-
-  // Test creating a new DB (not actually, test bad inputs)
   @Test
-  void test_CreateDB_BadInput() {
-    // create db
-    assertTrue(db.createDB(dbFilepath));
+  void test_DeleteDB_BadInput() {
     try {
-      db.checkConn();
-    } catch (SQLException e) {
-      fail("conn == null!!!");
+      // remove DB if it exists
+      File file = new File(dbFilepath);
+      if (file.exists()) {
+        assertTrue(file.delete());
+      }
+      // verify it doesn't exist anymore
+      assertFalse(new File(dbFilepath).exists());
+      // delete non-existent DB
+      assertThrows(SQLException.class, () -> {
+        db.deleteDB();
+      }, "ERROR: Could not load SQLite JDBC driver:\n" + "File.delete() failed on '" + System.getProperty("user.dir") + "/" + dbFilepath + "'");
+      // verify it doesn't exist anymore!
+      assertFalse(new File(dbFilepath).exists());
+    } catch (Exception e) {
+      // shouldn't error...
+      fail(e.getMessage());
     }
-
-    // try to create same db, should error
-    assertFalse(db.createDB(dbFilepath));
   }
 }

@@ -28,80 +28,19 @@ public class sqliteDB {
   /**
    * The Connection to our database
    */
-  private Connection conn = null;
+  private Connection conn;
 
   /**
    * Relative filepath of our database
    */
-  private String relativeFilepath = null;
+  private String relativeFilepath;
 
   /**
    * Constructor for a Database object!
    */
   public sqliteDB() {
-  }
-
-  /**
-   * Method for committing manually. When used, commits staged changes to the DB
-   *
-   * @return boolean indicating success of commit
-   */
-  public boolean commit() {
-    try {
-      // check if we have an org.sqlite.JDBC class
-      // (throws ClassNotFoundException if no)
-      this.checkForSqliteDriver();
-
-      // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
-
-      // commit!
-      this.conn.commit();
-
-      // return success!
-      return true;
-    } catch (SQLException e) {
-      // error creating the new table!
-      SQLExceptionHandler(e, "ERROR: Couldn't this.conn.commit()");
-      return false;
-    } catch (ClassNotFoundException e) {
-      // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
-    }
-  }
-
-  /**
-   * Method for setting autocommit. If true, after each statement executed,
-   * the database will commit automatically
-   *
-   * @return a boolean indicating success of setting autocommit
-   */
-  public boolean setAutoCommit(boolean bool) {
-    try {
-      // check if we have an org.sqlite.JDBC class
-      // (throws ClassNotFoundException if no)
-      this.checkForSqliteDriver();
-
-      // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
-
-      // set autocommit!
-      this.conn.setAutoCommit(bool);
-
-      // return success!
-      return true;
-    } catch (SQLException e) {
-      // error creating the new table!
-      SQLExceptionHandler(e, "ERROR: Couldn't this.conn.setAutoCommit(" + (bool ? "TRUE" : "FALSE") + ")");
-      return false;
-    } catch (ClassNotFoundException e) {
-      // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
-    }
+    this.conn  = null;
+    this.relativeFilepath  = null;
   }
 
   /**
@@ -125,21 +64,11 @@ public class sqliteDB {
   }
 
   /**
-   * method to report class not found error!
-   *
-   * @param e the ClassNotFoundException that was thrown!
-   */
-  private void classNotFoundExceptionHandler(ClassNotFoundException e) {
-    // error! we don't have an org.sqlite.JDBC class!
-    System.err.println("ERROR: Could not load SQLite JDBC driver:");
-    System.out.println(e.getMessage());
-  }
-
-  /**
    * method to check if this.conn is null. returns nothing, but throws exception
    * if this.conn is null
    *
    * @throws SQLException if this.conn is null
+   * 
    */
   public void checkConn() throws SQLException {
     // verify that we actually have a conn
@@ -150,15 +79,70 @@ public class sqliteDB {
   }
 
   /**
-   * method to report sql error!
+   * Method for committing manually. When used, commits staged changes to the DB
    *
-   * @param e the SQLException that was thrown!
+   * @return boolean indicating success of commit
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully commit
+   * 
    */
-  private void SQLExceptionHandler(SQLException e, String message) {
-    // error!
-    System.out.println(message + ":");
-    System.out.println(e.getMessage());
+  public boolean commit() throws ClassNotFoundException, SQLException {
+    try {
+      // check if we have an org.sqlite.JDBC class
+      // (throws ClassNotFoundException if no)
+      this.checkForSqliteDriver();
+
+      // verify that we actually have a conn
+      // (throws exception if no)
+      this.checkConn();
+
+      // commit!
+      this.conn.commit();
+
+      // return success!
+      return true;
+    } catch (SQLException e) {
+      // error committing!
+      throw new SQLException("ERROR: Couldn't this.conn.commit():\n" + e.getMessage());
+    } catch (ClassNotFoundException e) {
+      // error! we don't have an org.sqlite.JDBC class!
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
+    }
   }
+
+  /**
+   * Method for setting autocommit. If true, after each statement executed,
+   * the database will commit automatically
+   *
+   * @return a boolean indicating success of setting autocommit
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully setAutoCommit
+   * 
+   */
+  public boolean setAutoCommit(boolean bool) throws ClassNotFoundException, SQLException {
+    try {
+      // check if we have an org.sqlite.JDBC class
+      // (throws ClassNotFoundException if no)
+      this.checkForSqliteDriver();
+
+      // verify that we actually have a conn
+      // (throws exception if no)
+      this.checkConn();
+
+      // set autocommit!
+      this.conn.setAutoCommit(bool);
+
+      // return success!
+      return true;
+    } catch (SQLException e) {
+      // error commiting!
+      throw new SQLException("ERROR: Couldn't this.conn.setAutoCommit(" + (bool ? "TRUE" : "FALSE") + "):\n" + e.getMessage());
+    } catch (ClassNotFoundException e) {
+      // error! we don't have an org.sqlite.JDBC class!
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
+    }
+  }
+
 
   /**
    * Create a new database file with a chosen filepath, returning boolean indicating success.
@@ -172,10 +156,13 @@ public class sqliteDB {
    * Source material: <a href="https://www.sqlitetutorial.net/sqlite-java/create-database/">...</a>
    * -----------------------------------------------------------------------------
    *
-   * @param filepath the filepath of the DB to be created
+   * @param relativeFilepath the filepath of the DB to be created
    * @return a boolean indicating success of creation
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully create SQLiteDB
+   * 
    */
-  public boolean createDB(String filepath) {
+  public boolean createDB(String relativeFilepath) throws ClassNotFoundException, SQLException {
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
@@ -185,32 +172,32 @@ public class sqliteDB {
       Connection conn = null;
 
       // check if database already exists
-      File f = new File(filepath);
+      File f = new File(relativeFilepath);
       if (f.exists()) {
         // if it already exists, throw error. We don't want to connect to an
         // existing database, we want to create a new one!
-        throw new SQLException("database '" + filepath + "' already exists!");
+        throw new SQLException("database '" + relativeFilepath + "' already exists!");
       }
 
       // calculate path to db (adding "jdbc:sqlite:" is required by the library)
-      String url = "jdbc:sqlite:" + filepath;
+      String url = "jdbc:sqlite:" + relativeFilepath;
       // create a connection to the database
       // (throws SQLException if can't connect to DB)
       conn = DriverManager.getConnection(url);
-      // update this.conn
+      // update this.conn and this.relativeFilepath
       this.conn = conn;
+      this.relativeFilepath = relativeFilepath;
+      this.setAutoCommit(false);
 
       // success!
       System.out.println("Success! New SQLite DB has been created");
       return true;
     } catch (SQLException e) {
-      // error! we couldn't create the new DB
-      SQLExceptionHandler(e, "ERROR: New SQLite DB could not be created");
-      return false;
+      // error creating the SQLiteDB!
+      throw new SQLException("ERROR: new SQLiteDB could not be created\n:" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
     }
   }
 
@@ -228,8 +215,11 @@ public class sqliteDB {
    *
    * @param relativeFilepath the relative filepath of the database, relative to the project root
    * @return a boolean indicating if we could connect or not
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully connect to SQLiteDB
+   * 
    */
-  public boolean connectDB(String relativeFilepath) {
+  public boolean connectDB(String relativeFilepath) throws ClassNotFoundException, SQLException {
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
@@ -243,13 +233,13 @@ public class sqliteDB {
       if (!f.exists()) {
         // if it already exists, throw error. We don't want to create a new database,
         // we want to connect to an existing one!
-        throw new SQLException("ERROR: database '" + System.getProperty("user.dir") + "/" + relativeFilepath + "' does not exist!");
+        throw new SQLException("SQLiteDB '" + System.getProperty("user.dir") + "/" + relativeFilepath + "' does not exist!");
       }
 
       // check if this.conn != null
       if (this.conn != null) {
-        throw new SQLException("Must disconnect from database '" + System.getProperty("user.dir") + "/" + relativeFilepath + "' " +
-          "with Database.close() before connecting to new Database!");
+        throw new SQLException("Already connected to another database '" + System.getProperty("user.dir") + "/" + this.relativeFilepath + "'," +
+        "must disconnect with sqliteDB.close() before connecting to new database!");
       }
 
       // calculate path to db (adding "jdbc:sqlite:" is required by the library)
@@ -260,20 +250,18 @@ public class sqliteDB {
       // update this.conn
       this.conn = conn;
       // set autocommit to false
-      conn.setAutoCommit(false);
+      this.setAutoCommit(false);
 
       // success!
-      System.out.println("Success! Connection to SQLite DB has been established");
+      System.out.println("Success! Connection to SSQLiteDB has been established");
       this.relativeFilepath = relativeFilepath;
       return true;
     } catch (SQLException e) {
-      // error! we couldn't connect to the specified DB
-      SQLExceptionHandler(e, "ERROR: Connection to SQLite DB could not be established");
-      return false;
+      // error connecting to the SQLiteDB!
+      throw new SQLException("ERROR: Connection to SQLiteDB could not be established:\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
     }
   }
 
@@ -281,8 +269,11 @@ public class sqliteDB {
    * Function to close this.conn
    *
    * @return boolean indicating success of closure
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully close SQLiteDB
+   * 
    */
-  public boolean closeDB() {
+  public boolean closeDB() throws ClassNotFoundException, SQLException {
     // try to close this.conn!
     try {
       // check if we have an org.sqlite.JDBC class
@@ -300,13 +291,11 @@ public class sqliteDB {
       // return success!
       return true;
     } catch (SQLException e) {
-      // error! we couldn't close connection to the DB (this.conn)
-      SQLExceptionHandler(e, "ERROR: Couldn't close this.conn");
-      return false;
+      // error creating the new table!
+      throw new SQLException("ERROR: Connection to SQLite DB couldn't be closed:\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
     }
   }
 
@@ -315,12 +304,14 @@ public class sqliteDB {
    *
    * @param name the name of the table to be checked
    * @return boolean indicating existence of table
-   * @throws SQLException if the existence of the table could not be determined
-   *                      -----------------------------------------------------------------------------
-   *                      <a href="https://stackoverflow.com/questions/27007931/java-check-table-existence-in-sqlite">...</a>
-   *                      -----------------------------------------------------------------------------
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully check if table exists
+   * 
+   * -----------------------------------------------------------------------------
+   * <a href="https://stackoverflow.com/questions/27007931/java-check-table-existence-in-sqlite">...</a>
+   * -----------------------------------------------------------------------------
    */
-  public boolean tableExists(String name) throws SQLException {
+  public boolean tableExists(String name) throws ClassNotFoundException, SQLException {
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
@@ -338,17 +329,11 @@ public class sqliteDB {
       // return if there are results in the ResultSet
       return rs.getRow() > 0;
     } catch (SQLException e) {
-      // error! we couldn't check for table's existence (this.conn)
-      SQLExceptionHandler(e, "ERROR: Couldn't check if table '" + name + "' exists");
-      if (this.conn == null) {
-        return false;
-      } else {
-        throw e;
-      }
+      // error checking if the table exists!
+      throw new SQLException("ERROR: Couldn't check if table '" + name + "' exists:\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
     }
   }
 
@@ -366,8 +351,11 @@ public class sqliteDB {
    *               + "name text NOT NULL,\n"
    *               + "capacity real";
    * @return a boolean indicating success of table creation
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully create new table
+   * 
    */
-  public boolean createNewTable(String name, String schema) {
+  public boolean createNewTable(String name, String schema) throws ClassNotFoundException, SQLException {
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
@@ -392,12 +380,10 @@ public class sqliteDB {
       return true;
     } catch (SQLException e) {
       // error creating the new table!
-      SQLExceptionHandler(e, "ERROR: Couldn't create new table '" + name + "'");
-      return false;
+      throw new SQLException("ERROR: Couldn't create new table '" + name + "':\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
     }
   }
 
@@ -406,8 +392,11 @@ public class sqliteDB {
    *
    * @param name the name of the table to clear
    * @return a boolean indicating success of clearing of DB
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully clear table
+   * 
    */
-  public boolean clearTable(String name) {
+  public boolean clearTable(String name) throws ClassNotFoundException, SQLException {
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
@@ -431,13 +420,11 @@ public class sqliteDB {
       // return success!
       return true;
     } catch (SQLException e) {
-      // error creating the new table!
-      SQLExceptionHandler(e, "ERROR: Couldn't clear table '" + name + "'");
-      return false;
+      // error clearing the table!
+      throw new SQLException("ERROR: Couldn't clear table '" + name + "':\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
     }
   }
 
@@ -446,8 +433,11 @@ public class sqliteDB {
    *
    * @param name the name of the table to drop
    * @return a boolean indicating if table was deleted successfully
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully drop table
+   * 
    */
-  public boolean dropTable(String name) {
+  public boolean dropTable(String name) throws ClassNotFoundException, SQLException {
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
@@ -471,13 +461,11 @@ public class sqliteDB {
       // return success!
       return true;
     } catch (SQLException e) {
-      // error creating the new table!
-      SQLExceptionHandler(e, "ERROR: Couldn't drop table '" + name + "'");
-      return false;
+      // error dropping the table!
+      throw new SQLException("ERROR: Couldn't drop table '" + name + "':\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
     }
   }
 
@@ -485,8 +473,11 @@ public class sqliteDB {
    * Method for clearing out a DB (all elements, all tables, all rows)
    *
    * @return a boolean indicating success of clearing of table
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully clear SQLiteDB
+   * 
    */
-  public boolean clearDB() {
+  public boolean clearDB() throws ClassNotFoundException, SQLException {
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
@@ -510,20 +501,18 @@ public class sqliteDB {
         String name = result.getString("name");
         if (!this.dropTable(name)) {
           // if drop table failed, report failure
-          throw new SQLException("ERROR: Couldn't drop table '" + name + "'");
+          throw new SQLException("ERROR: Couldn't clear SQLiteDB");
         }
       }
 
       // return success!
       return true;
     } catch (SQLException e) {
-      // error creating the new table!
-      SQLExceptionHandler(e, "ERROR: Couldn't clear DB");
-      return false;
+      // error clear the DB!
+      throw new SQLException("ERROR: Couldn't clear SQLiteDB:\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
     }
   }
 
@@ -531,8 +520,11 @@ public class sqliteDB {
    * Method for deleting a DB (the file itself)
    *
    * @return a boolean indicating success of deleting this DB!
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully delete SQLiteDB
+   * 
    */
-  public boolean deleteDB() {
+  public boolean deleteDB() throws ClassNotFoundException, SQLException {
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
@@ -542,25 +534,26 @@ public class sqliteDB {
       // (throws exception if no)
       this.checkConn();
 
+      // close conn to our file
+      if (!this.closeDB()) {
+        throw new SQLException("ERROR: Couldn't close this.conn");
+      }
+
       // grab our file, delete
       File f = new File(this.relativeFilepath);
       if (!f.delete()) {
-        throw new IOException("ERROR: Couldn't delete file '" + System.getProperty("user.dir") + "/" + this.relativeFilepath + "'");
+        System.out.println(f.exists());
+        throw new SQLException("File.delete() failed on '" + System.getProperty("user.dir") + "/" + this.relativeFilepath + "'");
       }
 
       // return success!
       return true;
     } catch (SQLException e) {
-      // error creating the new table!
-      SQLExceptionHandler(e, "ERROR: Couldn't clear DB");
-      return false;
+      // error deleting the DB!
+      throw new SQLException("ERROR: Couldn't delete SQLiteDB:\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
-    } catch (IOException e) {
-      System.out.println(e.getMessage());
-      return false;
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
     }
   }
   /**
@@ -568,8 +561,11 @@ public class sqliteDB {
    * flexibility :)
    * @param sqlQuery the query to be executed
    * @return a ResultSet with the results of the query
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully execute SQLQuery
+   * 
    */
-  public ResultSet executeSQLQuery(String sqlQuery){
+  public ResultSet executeSQLQuery(String sqlQuery) throws ClassNotFoundException, SQLException {
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
@@ -585,13 +581,11 @@ public class sqliteDB {
       // return success!
       return result;
     } catch (SQLException e) {
-      // error executing the sql query!
-      SQLExceptionHandler(e, "ERROR: Couldn't execute SQL query:\n" + sqlQuery + "");
-      return null;
+      // error executing the SQLQuery!
+      throw new SQLException("ERROR: Couldn't execute SQLQuery\n'" + sqlQuery + "':\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return null;
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
     }
   }
 
@@ -600,8 +594,11 @@ public class sqliteDB {
    * flexibility :)
    * @param sqlStatement the statement to be executed
    * @return a boolean indicating success of statement execution
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully execute SQLStatement
+   * 
    */
-  public boolean executeSQLStatement(String sqlStatement){
+  public boolean executeSQLStatement(String sqlStatement) throws ClassNotFoundException, SQLException {
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
@@ -617,13 +614,11 @@ public class sqliteDB {
       // return success!
       return true;
     } catch (SQLException e) {
-      // error executing the sql statement!
-      SQLExceptionHandler(e, "ERROR: Couldn't execute SQL statement:\n" + sqlStatement + "");
-      return false;
+      // error executing the SQLStatement!
+      throw new SQLException("ERROR: Couldn't execute SQLStatement\n'" + sqlStatement + "':\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
-      classNotFoundExceptionHandler(e);
-      return false;
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
     }
   }
 }
