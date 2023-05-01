@@ -42,9 +42,9 @@ function onLoad() {
   }
 }
 
-  // React.useEffect(() => {
-  //   onLoad()
-  // });
+  React.useEffect(() => {
+    onLoad()
+  });
 
   return (
     <div className="App">
@@ -66,12 +66,12 @@ function onLoad() {
             <div className='middle-section'>
               <h1 className='middle-section'> Welcome to <span style={{color: '#00C437'}}>DropWatch</span> &lt;3</h1>
               <div>
-                <p style={{'margin-bottom':0}}>You love music. We do too.</p>
-                <p>That's why we made DropWatch.</p>
+                <h3 style={{'margin-bottom':0}}>You love music. We do too.</h3>
+                <h3>That's why we made DropWatch.</h3>
                 <p className='subtitle' style={{'margin-bottom':0}}>No more checking your favorite artists' pages every day for new music.</p>
                 <p className='subtitle'>Let us do the checking for you ;&#41;</p>
                 <hr/>
-                <p>What is DropWatch?</p>
+                <h3>What is DropWatch?</h3>
                 <p className='subtitle'>DropWatch is a...</p>
               </div>
             </div>
@@ -79,8 +79,8 @@ function onLoad() {
           <Col xs={4}>
             <Card className="auth-card">
               <Card.Body>
-                <Card.Title style={{textAlign: 'center', 'font-weight': 'bold'}}>Connect your Spotify account to get started</Card.Title>
-                <Button >Login with Spotify</Button>
+                <Card.Title style={{textAlign: 'center', 'font-weight': 'bold', 'font-size': '32px'}}>Connect your Spotify account to get started</Card.Title>
+                <Button onClick={() => requestAuthorization}>Login with Spotify</Button>
                 <Card.Text>
                   What data does DropWatch collect? <br/>
 

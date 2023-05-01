@@ -95,7 +95,8 @@
   box-sizing:border-box; */
 }
 
-.subtitle {
+p {
+  font-size: 24px;
   font-weight: normal;
 }
 
@@ -110,5 +111,14 @@
   /* font-size: 40px; */
   font-weight: bold;
   border-color: #ffffff;
+}
+
+h1 {
+  font-size: 60px !important;
+}
+
+h3 {
+  font-weight: bold !important;
+  font-size: 32px !important
 }
 
