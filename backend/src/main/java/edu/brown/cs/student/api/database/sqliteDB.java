@@ -1,7 +1,8 @@
 package edu.brown.cs.student.api.database;
 import java.io.File;
-import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * A class for connecting to and interacting with the sqlite3 database for our
@@ -21,8 +22,7 @@ import java.sql.*;
  *    - almost (ALMOST) none of these methods throw exceptions. instead, they print to stdout. exceptions to this rule are:
  *      - tableExists(): this method returns true/false indicating if the table exists. if its existence cannot be determined,
  *        an exception is thrown.
- *    - you must commit your changes to the DB for them to take effect! autocommit is set to false by default, but this
- *      can be changed with Database.setAutoCommit(), or each commit can be done manually with Database.commit()
+ *    - autoCommit is on by default!
  */
 public class sqliteDB {
   /**
@@ -47,7 +47,11 @@ public class sqliteDB {
    * Get defensive copy of relativeFilepath
    */
   public String copyRelativeFilepath() {
-    return new String(relativeFilepath);
+    if (this.relativeFilepath == null) {
+      return null;
+    } else {
+      return new String(this.relativeFilepath);
+    }
   }
 
   /**
@@ -64,18 +68,13 @@ public class sqliteDB {
   }
 
   /**
-   * method to check if this.conn is null. returns nothing, but throws exception
-   * if this.conn is null
+   * method to check if this.conn is null. returns boolean indicating if null
+   * @return boolean indicating if this.conn == null
    *
-   * @throws SQLException if this.conn is null
-   * 
    */
-  public void checkConn() throws SQLException {
+  public boolean connIsNull() {
     // verify that we actually have a conn
-    if (this.conn == null) {
-      // there is no conn to close!
-      throw new SQLException("this.conn == null");
-    }
+    return this.conn == null;
   }
 
   /**
@@ -93,13 +92,16 @@ public class sqliteDB {
       this.checkForSqliteDriver();
 
       // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
+      // (throw exception if no)
+      if (this.connIsNull()) {
+        throw new SQLException("this.conn == null");
+      }
 
       // commit!
       this.conn.commit();
 
       // return success!
+      System.out.println("Success! Committed to DB!");
       return true;
     } catch (SQLException e) {
       // error committing!
@@ -126,13 +128,16 @@ public class sqliteDB {
       this.checkForSqliteDriver();
 
       // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
+      // (throw exception if no)
+      if (this.connIsNull()) {
+        throw new SQLException("this.conn == null");
+      }
 
       // set autocommit!
       this.conn.setAutoCommit(bool);
 
       // return success!
+      System.out.println("Success! AutoCommit succesfully changed for this.conn!");
       return true;
     } catch (SQLException e) {
       // error commiting!
@@ -225,9 +230,6 @@ public class sqliteDB {
       // (throws ClassNotFoundException if no)
       checkForSqliteDriver();
 
-      // conn represents our connection to the database itself
-      Connection conn = null;
-
       // check if database already exists
       File f = new File(relativeFilepath);
       if (!f.exists()) {
@@ -236,8 +238,9 @@ public class sqliteDB {
         throw new SQLException("SQLiteDB '" + System.getProperty("user.dir") + "/" + relativeFilepath + "' does not exist!");
       }
 
-      // check if this.conn != null
-      if (this.conn != null) {
+      // verify that we DO NOT have a conn
+      // (throw exception if yes)
+      if (!this.connIsNull()) {
         throw new SQLException("Already connected to another database '" + System.getProperty("user.dir") + "/" + this.relativeFilepath + "'," +
         "must disconnect with sqliteDB.close() before connecting to new database!");
       }
@@ -246,15 +249,15 @@ public class sqliteDB {
       String url = "jdbc:sqlite:" + relativeFilepath;
       // create a connection to the database
       // (throws SQLException if can't connect to DB)
-      conn = DriverManager.getConnection(url);
-      // update this.conn
-      this.conn = conn;
+      this.conn = DriverManager.getConnection(url);;
+      // update filepath and this.conn
+      this.relativeFilepath = relativeFilepath;
       // set autocommit to false
       this.setAutoCommit(false);
 
+
       // success!
       System.out.println("Success! Connection to SSQLiteDB has been established");
-      this.relativeFilepath = relativeFilepath;
       return true;
     } catch (SQLException e) {
       // error connecting to the SQLiteDB!
@@ -281,17 +284,21 @@ public class sqliteDB {
       this.checkForSqliteDriver();
 
       // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
+      // (throw exception if no)
+      if (this.connIsNull()) {
+        throw new SQLException("this.conn == null");
+      }
 
       // close, set this.conn to null
       this.conn.close();
       this.conn = null;
+      this.relativeFilepath = null;
 
       // return success!
+      System.out.println("Success! Connection to SSQLiteDB has been closed");
       return true;
     } catch (SQLException e) {
-      // error creating the new table!
+      // error closing connection!
       throw new SQLException("ERROR: Connection to SQLite DB couldn't be closed:\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
@@ -312,25 +319,104 @@ public class sqliteDB {
    * -----------------------------------------------------------------------------
    */
   public boolean tableExists(String name) throws ClassNotFoundException, SQLException {
+    ResultSet rs = null;
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
       this.checkForSqliteDriver();
 
       // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
+      // (throw exception if no)
+      if (this.connIsNull()) {
+        throw new SQLException("this.conn == null");
+      }
 
       // grab metadata of database
-      DatabaseMetaData md = conn.getMetaData();
+      DatabaseMetaData metadata = conn.getMetaData();
       // get tables that match our table's name
-      ResultSet rs = md.getTables(null, null, name, null);
-      rs.last();
-      // return if there are results in the ResultSet
-      return rs.getRow() > 0;
+      rs = metadata.getTables(null, null, name, null);
+      // move cursor to next row of result set - will return false if nothing there
+      boolean exists = rs.next();
+      // close our statement!
+      rs.close();
+      // return existence!
+      return exists;
     } catch (SQLException e) {
       // error checking if the table exists!
+      // close our statement!
+      if (rs != null) {
+        rs.close();
+      }
       throw new SQLException("ERROR: Couldn't check if table '" + name + "' exists:\n" + e.getMessage());
+    } catch (ClassNotFoundException e) {
+      // error! we don't have an org.sqlite.JDBC class!
+      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
+    }
+  }
+
+  /**
+   * method to grab schema of a table, returning a string describing the schema
+   *
+   * @param name the name of the table to be checked
+   * @return list representation of the schema as a string. each element is
+   *         of the form "[name] [type]", such as "ID INTEGER" or "name VARCHAR(10)"
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not succesfully check if table exists
+   *
+   * -----------------------------------------------------------------------------
+   * <a href="https://stackoverflow.com/questions/27007931/java-check-table-existence-in-sqlite">...</a>
+   * -----------------------------------------------------------------------------
+   */
+  public ArrayList<ColumnMetaData> grabTableSchema(String name) throws ClassNotFoundException, SQLException {
+    ResultSet rs = null;
+    try {
+      // check if we have an org.sqlite.JDBC class
+      // (throws ClassNotFoundException if no)
+      this.checkForSqliteDriver();
+
+      // verify that we actually have a conn
+      // (throw exception if no)
+      if (this.connIsNull()) {
+        throw new SQLException("this.conn == null");
+      }
+
+      // check if table exists
+      if (!this.tableExists(name)) {
+        throw new SQLException("table '" + name + "' does not exist!");
+      }
+
+      // grab metadata of database
+      DatabaseMetaData metadata = conn.getMetaData();
+      // get columns of tables that match our table's name
+      rs = metadata.getColumns(null, null, name, null);
+      // iterate through results for metadata query by tablename, adding to list
+      ArrayList<ColumnMetaData> schema =  new ArrayList<>();
+      while (rs.next()) {
+        // build record of metadata by grabbing from
+        String TABLE_NAME = rs.getString("TABLE_NAME");
+        String TABLE_SCHEM = rs.getString("TABLE_SCHEM");
+        String COLUMN_NAME = rs.getString("COLUMN_NAME");
+        String DATA_TYPE = rs.getString("DATA_TYPE");
+        String TYPE_NAME = rs.getString("TYPE_NAME");
+        int COLUMN_INDEX = rs.getInt("ORDINAL_POSITION");
+        String NULLABLE = rs.getString("IS_NULLABLE");
+        String COLUMN_DEFAULT = rs.getString("COLUMN_DEF");
+        int VARCHAR_LEN = rs.getInt("COLUMN_SIZE");
+        // build record and add to list
+        schema.add(new ColumnMetaData(TABLE_NAME, TABLE_SCHEM, COLUMN_NAME, DATA_TYPE, TYPE_NAME, COLUMN_INDEX, NULLABLE, COLUMN_DEFAULT, VARCHAR_LEN));
+      }
+
+      // close our statement!
+      rs.close();
+      // return schema!
+      return schema;
+    } catch (SQLException e) {
+      // close our statement!
+      if (rs != null) {
+        rs.close();
+      }
+      // error checking if the table exists!
+      throw new SQLException("ERROR: Couldn't grab schema of table '" + name + "':\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
       throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
@@ -356,14 +442,17 @@ public class sqliteDB {
    * 
    */
   public boolean createNewTable(String name, String schema) throws ClassNotFoundException, SQLException {
+    Statement statement = null;
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
       this.checkForSqliteDriver();
 
       // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
+      // (throw exception if no)
+      if (this.connIsNull()) {
+        throw new SQLException("this.conn == null");
+      }
 
       // check if table already exists
       if (tableExists(name)) {
@@ -374,12 +463,20 @@ public class sqliteDB {
       // make SQL statement for creating a new table
       String sqlStatment = "CREATE TABLE " + name + " (" + schema + ");";
       // execute the statement!
-      this.conn.createStatement().execute(sqlStatment);
+      statement = this.conn.createStatement();
+      statement.execute(sqlStatment);
+      // close statement!
+      statement.close();
 
       // return success!
+      System.out.println("Success! New table has been created");
       return true;
     } catch (SQLException e) {
       // error creating the new table!
+      // close our statement if its open!
+      if (statement != null) {
+        statement.close();
+      }
       throw new SQLException("ERROR: Couldn't create new table '" + name + "':\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
@@ -397,14 +494,17 @@ public class sqliteDB {
    * 
    */
   public boolean clearTable(String name) throws ClassNotFoundException, SQLException {
+    Statement statement = null;
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
       this.checkForSqliteDriver();
 
       // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
+      // (throw exception if no)
+      if (this.connIsNull()) {
+        throw new SQLException("this.conn == null");
+      }
 
       // check if table doesn't exist
       if (!tableExists(name)) {
@@ -415,12 +515,20 @@ public class sqliteDB {
       // make SQL statement for clearing a table
       String sqlStatment = "DELETE FROM " + name + ";";
       // execute the statement!
-      this.conn.createStatement().execute(sqlStatment);
+      statement = this.conn.createStatement();
+      statement.execute(sqlStatment);
+      // close statement!
+      statement.close();
 
       // return success!
+      System.out.println("Success! Table has been cleared in connected database");
       return true;
     } catch (SQLException e) {
       // error clearing the table!
+      // close our statement if its open!
+      if (statement != null) {
+        statement.close();
+      }
       throw new SQLException("ERROR: Couldn't clear table '" + name + "':\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
@@ -429,23 +537,25 @@ public class sqliteDB {
   }
 
   /**
-   * Method for dropping a table (delete table itself)
-   *
+   * Method for dropping a table (delete table itself).
    * @param name the name of the table to drop
    * @return a boolean indicating if table was deleted successfully
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not succesfully drop table
-   * 
+   *
    */
   public boolean dropTable(String name) throws ClassNotFoundException, SQLException {
+    Statement statement = null;
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
       this.checkForSqliteDriver();
 
       // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
+      // (throw exception if no)
+      if (this.connIsNull()) {
+        throw new SQLException("this.conn == null");
+      }
 
       // check if table doesn't exist
       if (!tableExists(name)) {
@@ -456,12 +566,20 @@ public class sqliteDB {
       // make SQL udpate for dropping a table
       String sqlUpdate = "DROP TABLE " + name + ";";
       // execute the statement!
-      this.conn.createStatement().executeUpdate(sqlUpdate);
+      statement = this.conn.createStatement();
+      statement.executeUpdate(sqlUpdate);
+      // close statement!
+      statement.close();
 
       // return success!
+      System.out.println("Success! Table has been dropped in connected database");
       return true;
     } catch (SQLException e) {
       // error dropping the table!
+      // close our statement if its open!
+      if (statement != null) {
+        statement.close();
+      }
       throw new SQLException("ERROR: Couldn't drop table '" + name + "':\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
@@ -469,52 +587,62 @@ public class sqliteDB {
     }
   }
 
-  /**
-   * Method for clearing out a DB (all elements, all tables, all rows)
-   *
-   * @return a boolean indicating success of clearing of table
-   * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully clear SQLiteDB
-   * 
-   */
-  public boolean clearDB() throws ClassNotFoundException, SQLException {
-    try {
-      // check if we have an org.sqlite.JDBC class
-      // (throws ClassNotFoundException if no)
-      this.checkForSqliteDriver();
 
-      // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
-
-      // make SQL statement object!
-      Statement statement = this.conn.createStatement();
-
-      // make SQL query for selecting all tables
-      String sqlQuery = "SELECT name FROM sqlite_master WHERE type='table'";
-      // execute the statement!
-      ResultSet result = statement.executeQuery(sqlQuery);
-
-      // Generate a series of "DROP TABLE" queries for each table name
-      while (result.next()) {
-        // drop tables!
-        String name = result.getString("name");
-        if (!this.dropTable(name)) {
-          // if drop table failed, report failure
-          throw new SQLException("ERROR: Couldn't clear SQLiteDB");
-        }
-      }
-
-      // return success!
-      return true;
-    } catch (SQLException e) {
-      // error clear the DB!
-      throw new SQLException("ERROR: Couldn't clear SQLiteDB:\n" + e.getMessage());
-    } catch (ClassNotFoundException e) {
-      // error! we don't have an org.sqlite.JDBC class!
-      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
-    }
-  }
+//  NOTE: THIS METHOD DID NOT SEEM USEFUL, SO I COMMENTED IT OUT
+//
+//  /**
+//   * Method for clearing out a DB (all elements, all tables, all rows)
+//   *
+//   * @return a boolean indicating success of clearing of table
+//   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+//   * @throws SQLException if could not succesfully clear SQLiteDB
+//   *
+//   */
+//  public boolean clearDB() throws ClassNotFoundException, SQLException {
+//    Statement statement = null;
+//    try {
+//      // check if we have an org.sqlite.JDBC class
+//      // (throws ClassNotFoundException if no)
+//      this.checkForSqliteDriver();
+//
+//      // verify that we actually have a conn
+//      // (throw exception if no)
+//      if (this.connIsNull()) {
+//        throw new SQLException("this.conn == null");
+//      }
+//
+//      // make SQL query for selecting all tables
+//      String sqlQuery = "SELECT name FROM sqlite_master WHERE type='table'";
+//      // execute the statement!
+//      statement = this.conn.createStatement();
+//      ResultSet result = statement.executeQuery(sqlQuery);
+//      // close statement!
+//      statement.close();
+//
+//      // Generate a series of "DROP TABLE" queries for each table name
+//      while (result.next()) {
+//        // drop tables!
+//        String name = result.getString("name");
+//        if (!this.dropTable(name)) {
+//          // if drop table failed, report failure
+//          throw new SQLException("ERROR: Couldn't clear SQLiteDB");
+//        }
+//      }
+//
+//      // return success!
+//      System.out.println("Success! All tables have been deleted in database");
+//      return true;
+//    } catch (SQLException e) {
+//      // error clear the DB!
+//      // close our statement if its open!
+//      if (statement != null) {
+//        statement.close();
+//      }      throw new SQLException("ERROR: Couldn't clear SQLiteDB:\n" + e.getMessage());
+//    } catch (ClassNotFoundException e) {
+//      // error! we don't have an org.sqlite.JDBC class!
+//      throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
+//    }
+//  }
 
   /**
    * Method for deleting a DB (the file itself)
@@ -531,22 +659,34 @@ public class sqliteDB {
       this.checkForSqliteDriver();
 
       // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
+      // (throw exception if no)
+      if (this.connIsNull()) {
+        throw new SQLException("this.conn == null");
+      }
 
+      String oldPath = this.relativeFilepath;
       // close conn to our file
       if (!this.closeDB()) {
         throw new SQLException("ERROR: Couldn't close this.conn");
       }
 
-      // grab our file, delete
-      File f = new File(this.relativeFilepath);
+      // grab our file, check if it exists
+      File f = new File(oldPath);
+      if (!f.exists()) {
+        throw new SQLException("File '" + System.getProperty("user.dir") + "/" + this.relativeFilepath + "' doesn't exist");
+      }
+
+      // try to delete our file
       if (!f.delete()) {
-        System.out.println(f.exists());
         throw new SQLException("File.delete() failed on '" + System.getProperty("user.dir") + "/" + this.relativeFilepath + "'");
       }
 
+      // set conn and filepath
+      this.conn = null;
+      this.relativeFilepath = null;
+
       // return success!
+      System.out.println("Success! Database has been deleted");
       return true;
     } catch (SQLException e) {
       // error deleting the DB!
@@ -559,6 +699,7 @@ public class sqliteDB {
   /**
    * Function for executing an SQL Query! Very open-ended for maximum
    * flexibility :)
+   * NOTE: DON'T FORGET TO CLOSE THE RETURNED ResultSet! You will encounter headaches later if you forget...
    * @param sqlQuery the query to be executed
    * @return a ResultSet with the results of the query
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
@@ -566,21 +707,30 @@ public class sqliteDB {
    * 
    */
   public ResultSet executeSQLQuery(String sqlQuery) throws ClassNotFoundException, SQLException {
+    Statement statement = null;
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
       this.checkForSqliteDriver();
 
       // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
+      // (throw exception if no)
+      if (this.connIsNull()) {
+        throw new SQLException("this.conn == null");
+      }
 
       // execute the statement!
-      ResultSet result = this.conn.createStatement().executeQuery(sqlQuery);
+      statement = this.conn.createStatement();
+      ResultSet result = statement.executeQuery(sqlQuery);
 
       // return success!
+      System.out.println("Success! SQL Query has been executed in connected database");
       return result;
     } catch (SQLException e) {
+      // close our statement if its open!
+      if (statement != null) {
+        statement.close();
+      }
       // error executing the SQLQuery!
       throw new SQLException("ERROR: Couldn't execute SQLQuery\n'" + sqlQuery + "':\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
@@ -599,26 +749,86 @@ public class sqliteDB {
    * 
    */
   public boolean executeSQLStatement(String sqlStatement) throws ClassNotFoundException, SQLException {
+    Statement statement = null;
     try {
       // check if we have an org.sqlite.JDBC class
       // (throws ClassNotFoundException if no)
       this.checkForSqliteDriver();
 
       // verify that we actually have a conn
-      // (throws exception if no)
-      this.checkConn();
+      // (throw exception if no)
+      if (this.connIsNull()) {
+        throw new SQLException("this.conn == null");
+      }
 
       // execute the statement!
-      this.conn.createStatement().execute(sqlStatement);
+      statement = this.conn.createStatement();
+      statement.execute(sqlStatement);
+      // close the statement
+      statement.close();
 
       // return success!
+      System.out.println("Success! SQL Statement has been executed in connected database");
       return true;
     } catch (SQLException e) {
       // error executing the SQLStatement!
+      // close our statement if its open!
+      if (statement != null) {
+        statement.close();
+      }
       throw new SQLException("ERROR: Couldn't execute SQLStatement\n'" + sqlStatement + "':\n" + e.getMessage());
     } catch (ClassNotFoundException e) {
       // error! we don't have an org.sqlite.JDBC class!
       throw new ClassNotFoundException("ERROR: Could not load SQLite JDBC driver:\n" + e.getMessage());
+    }
+  }
+
+  /**
+   * Record to hold metadata of a column from conn.getMetaData.getTables()
+   * The record's information is populated fromDatabaseMetaData.java, line 1573 and onwards
+   * @param TABLE_NAME name of table
+   * @param TABLE_SCHEM schema of table??? (may be null)
+   * @param COLUMN_NAME name of column
+   * @param DATA_TYPE type of column
+   * @param TYPE_NAME type name of column???
+   * @param COLUMN_INDEX index of column (starting at 1)
+   * @param NULLABLE is column nullable
+   * @param COLUMN_DEFAULT default value for column (may be null)
+   * @param VARCHAR_LEN if varchar, length of varchar
+   *                    "Note that numeric arguments in parentheses that following
+   *                    the type name (ex: "VARCHAR(255)") are ignored by SQLite.
+   *                    SQLite does not impose any length restrictions (other than
+   *                    the large global SQLITE_MAX_LENGTH limit) on the length
+   *                    of strings, BLOBs or numeric values."
+   *                    src = <a href="https://stackoverflow.com/questions/35413956/trying-to-get-the-column-size-of-a-column-using-jdbc-metadata">...</a>
+   */
+  public record ColumnMetaData(String TABLE_NAME, String TABLE_SCHEM,
+                        String COLUMN_NAME, String DATA_TYPE, String TYPE_NAME, int COLUMN_INDEX,
+                        String NULLABLE, String COLUMN_DEFAULT,
+                        int VARCHAR_LEN) {
+    /**
+     * equality checker for this record!
+     * @param that the object we want to compare this to for equality (generated by IntelliJ)
+     * @return boolean indicating equality of this and that
+     */
+    @Override
+    public boolean equals(Object that) {
+      // check equality methodically!
+      if (this == that) return true;
+      // if that == null or classes don't match...
+      if (that == null || this.getClass() != that.getClass()) return false;
+      // cast that as ColumnMetaData
+      ColumnMetaData thatCast = (ColumnMetaData) that;
+      return COLUMN_INDEX == thatCast.COLUMN_INDEX && VARCHAR_LEN == thatCast.VARCHAR_LEN && TABLE_NAME.equals(thatCast.TABLE_NAME) && Objects.equals(TABLE_SCHEM, thatCast.TABLE_SCHEM) && COLUMN_NAME.equals(thatCast.COLUMN_NAME) && DATA_TYPE.equals(thatCast.DATA_TYPE) && Objects.equals(TYPE_NAME, thatCast.TYPE_NAME) && NULLABLE.equals(thatCast.NULLABLE) && Objects.equals(COLUMN_DEFAULT, thatCast.COLUMN_DEFAULT);
+    }
+
+    /**
+     * Hasher for this record!
+     * @return an int that is the hashcode for this object
+     */
+    @Override
+    public int hashCode() {
+      return Objects.hash(TABLE_NAME, TABLE_SCHEM, COLUMN_NAME, DATA_TYPE, TYPE_NAME, COLUMN_INDEX, NULLABLE, COLUMN_DEFAULT, VARCHAR_LEN);
     }
   }
 }
