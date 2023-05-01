@@ -8,10 +8,41 @@
        url('./fonts/inter-v12-latin-regular.woff') format('woff'); /* Chrome 5+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
+/* inter-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./fonts/inter-v12-latin-700.eot'); /* IE9 Compat Modes */
+  src: url('./fonts/inter-v12-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/inter-v12-latin-700.woff2') format('woff2'), /* Super Modern Browsers */
+       url('./fonts/inter-v12-latin-700.woff') format('woff'), /* Modern Browsers */
+       url('./fonts/inter-v12-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('./fonts/inter-v12-latin-700.svg#Inter') format('svg'); /* Legacy iOS */
+}
+/* inter-800 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  src: url('./fonts/inter-v12-latin-800.eot'); /* IE9 Compat Modes */
+  src: url('./fonts/inter-v12-latin-800.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/inter-v12-latin-800.woff2') format('woff2'), /* Super Modern Browsers */
+       url('./fonts/inter-v12-latin-800.woff') format('woff'), /* Modern Browsers */
+       url('./fonts/inter-v12-latin-800.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('./fonts/inter-v12-latin-800.svg#Inter') format('svg'); /* Legacy iOS */
+}
+
+
+
 
 .App {
-  text-align: center;
+  /* text-align: center; */
   background-color: #1e1e1e;
+  width: 100%;
+  /* margin: 0; */
 }
 
 .App-logo {
@@ -48,16 +79,24 @@
     transform: rotate(360deg);
   }
 }
-* {
+/* * {
   margin: 0px !important
-}
+} */
 .login-page {
-  background-color: #1e1e1e;
-  width: 100% !important;
+  /* align-items: center; */
+  /* background-color: #1e1e1e; */
   color: #ffffff;
   font-family: "Inter" !important; 
-  font-weight: bold;
-  margin-right: 0 !important;
+  font-weight: bolder;
+  margin-top: 10px;
+  /* margin-right: 0 !important;
+  margin-left: 0 !important; */
+  /* width: 100%;
+  box-sizing:border-box; */
+}
+
+.subtitle {
+  font-weight: normal;
 }
 
 .logo {
@@ -68,6 +107,8 @@
   background: #2A2A2A !important;
 }
 .middle-section {
-  font-size: 40px;
+  /* font-size: 40px; */
+  font-weight: bold;
+  border-color: #ffffff;
 }
 
