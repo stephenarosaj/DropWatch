@@ -56,7 +56,7 @@ function App() {
         <Row>
           <Col>
             <div>
-              <Image className="logo" src= {require("./images/placeholder.png")} alt='Green and Black DropWatch logo'/>
+              <Image className="logo" src= {require("./images/dropwatch_logo.png")} alt='Green and Black DropWatch logo'/>
             </div>
           </Col>
           <Col xs={6}>
