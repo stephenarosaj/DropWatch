@@ -7,7 +7,8 @@ public record ArtistRecord() {
             @Json(name = "name") String name,
             @Json(name = "id") String id,
             @Json(name = "popularity") String popularity,
-            @Json(name = "genres") String[] genres
-            // image can be added here later
+            @Json(name = "genres") String[] genres,
+            @Json(name = "images") Object[] images
+            // array of ImageObjects: string url, int pixel height, int pixel width
     ) {}
 }

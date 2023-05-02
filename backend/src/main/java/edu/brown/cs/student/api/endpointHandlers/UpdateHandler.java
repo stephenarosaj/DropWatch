@@ -50,7 +50,7 @@ public class UpdateHandler implements Route {
     }
 
     /***
-     * Handles calls to update endpoint.
+     * Handles calls to update endpoint. Refreshes database to refer to most updated Spotify data.
      * @param request - Request received from user.
      * @param response -
      */

@@ -11,7 +11,8 @@ public record UpdateRecord(
             @Json(name = "id") String id,
             @Json(name = "release_date") String releaseDate,
             @Json(name = "release_date_precision") String releaseDatePrecision,
-            @Json(name = "genres") String[] genres
-            // image can be added here later
+            @Json(name = "genres") String[] genres,
+            @Json(name = "images") Object[] images
+            // array of ImageObjects: string url, int pixel height, int pixel width
             ) {}
 }
