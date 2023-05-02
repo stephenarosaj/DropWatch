@@ -82,7 +82,7 @@ public class sqliteDB {
    *
    * @return boolean indicating success of commit
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully commit
+   * @throws SQLException if could not successfully commit
    * 
    */
   public boolean commit() throws ClassNotFoundException, SQLException {
@@ -118,7 +118,7 @@ public class sqliteDB {
    *
    * @return a boolean indicating success of setting autocommit
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully setAutoCommit
+   * @throws SQLException if could not successfully setAutoCommit
    * 
    */
   public boolean setAutoCommit(boolean bool) throws ClassNotFoundException, SQLException {
@@ -137,7 +137,7 @@ public class sqliteDB {
       this.conn.setAutoCommit(bool);
 
       // return success!
-      System.out.println("Success! AutoCommit succesfully changed for this.conn!");
+      System.out.println("Success! AutoCommit successfully changed for this.conn!");
       return true;
     } catch (SQLException e) {
       // error commiting!
@@ -154,7 +154,7 @@ public class sqliteDB {
    * Also updates this.conn on success
    * NOTE: connecting to a database that does not exist CREATES A NEW DATABASE!
    * This method is used to deliberately connect to a database that does not exist,
-   * and therefore this method checks to see if the databse exists before connecting,
+   * and therefore this method checks to see if the database exists before connecting,
    * and if it DOES exist, it does not connect. If you want to connect to a DB
    * that already exists, use Database.connectDB()!
    * -----------------------------------------------------------------------------
@@ -164,7 +164,7 @@ public class sqliteDB {
    * @param relativeFilepath the filepath of the DB to be created
    * @return a boolean indicating success of creation
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully create SQLiteDB
+   * @throws SQLException if could not successfully create SQLiteDB
    * 
    */
   public boolean createDB(String relativeFilepath) throws ClassNotFoundException, SQLException {
@@ -213,7 +213,7 @@ public class sqliteDB {
    * NOTE: connecting to a database that does not exist CREATES A NEW DATABASE!
    * Therefore, this method checks to see if the database exists before connecting,
    * and if it DOES NOT exist, it does not connect (it does not create a new database).
-   * If you want to create a new databse, use Database.createDB()!
+   * If you want to create a new database, use Database.createDB()!
    * -----------------------------------------------------------------------------
    * Source material: <a href="https://www.sqlitetutorial.net/sqlite-java/sqlite-jdbc-driver/">...</a>
    * -----------------------------------------------------------------------------
@@ -221,7 +221,7 @@ public class sqliteDB {
    * @param relativeFilepath the relative filepath of the database, relative to the project root
    * @return a boolean indicating if we could connect or not
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully connect to SQLiteDB
+   * @throws SQLException if could not successfully connect to SQLiteDB
    * 
    */
   public boolean connectDB(String relativeFilepath) throws ClassNotFoundException, SQLException {
@@ -273,7 +273,7 @@ public class sqliteDB {
    *
    * @return boolean indicating success of closure
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully close SQLiteDB
+   * @throws SQLException if could not successfully close SQLiteDB
    * 
    */
   public boolean closeDB() throws ClassNotFoundException, SQLException {
@@ -312,7 +312,7 @@ public class sqliteDB {
    * @param name the name of the table to be checked
    * @return boolean indicating existence of table
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully check if table exists
+   * @throws SQLException if could not successfully check if table exists
    * 
    * -----------------------------------------------------------------------------
    * <a href="https://stackoverflow.com/questions/27007931/java-check-table-existence-in-sqlite">...</a>
@@ -361,7 +361,7 @@ public class sqliteDB {
    * @return list representation of the schema as a string. each element is
    *         of the form "[name] [type]", such as "ID INTEGER" or "name VARCHAR(10)"
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully check if table exists
+   * @throws SQLException if could not successfully check if table exists
    *
    * -----------------------------------------------------------------------------
    * <a href="https://stackoverflow.com/questions/27007931/java-check-table-existence-in-sqlite">...</a>
@@ -438,7 +438,7 @@ public class sqliteDB {
    *               + "capacity real";
    * @return a boolean indicating success of table creation
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully create new table
+   * @throws SQLException if could not successfully create new table
    * 
    */
   public boolean createNewTable(String name, String schema) throws ClassNotFoundException, SQLException {
@@ -490,7 +490,7 @@ public class sqliteDB {
    * @param name the name of the table to clear
    * @return a boolean indicating success of clearing of DB
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully clear table
+   * @throws SQLException if could not successfully clear table
    * 
    */
   public boolean clearTable(String name) throws ClassNotFoundException, SQLException {
@@ -541,7 +541,7 @@ public class sqliteDB {
    * @param name the name of the table to drop
    * @return a boolean indicating if table was deleted successfully
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully drop table
+   * @throws SQLException if could not successfully drop table
    *
    */
   public boolean dropTable(String name) throws ClassNotFoundException, SQLException {
@@ -595,7 +595,7 @@ public class sqliteDB {
 //   *
 //   * @return a boolean indicating success of clearing of table
 //   * @throws ClassNotFoundException if could not load SQLite JDBC driver
-//   * @throws SQLException if could not succesfully clear SQLiteDB
+//   * @throws SQLException if could not successfully clear SQLiteDB
 //   *
 //   */
 //  public boolean clearDB() throws ClassNotFoundException, SQLException {
@@ -649,7 +649,7 @@ public class sqliteDB {
    *
    * @return a boolean indicating success of deleting this DB!
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully delete SQLiteDB
+   * @throws SQLException if could not successfully delete SQLiteDB
    * 
    */
   public boolean deleteDB() throws ClassNotFoundException, SQLException {
@@ -703,7 +703,7 @@ public class sqliteDB {
    * @param sqlQuery the query to be executed
    * @return a ResultSet with the results of the query
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully execute SQLQuery
+   * @throws SQLException if could not successfully execute SQLQuery
    * 
    */
   public ResultSet executeSQLQuery(String sqlQuery) throws ClassNotFoundException, SQLException {
@@ -745,7 +745,7 @@ public class sqliteDB {
    * @param sqlStatement the statement to be executed
    * @return a boolean indicating success of statement execution
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not succesfully execute SQLStatement
+   * @throws SQLException if could not successfully execute SQLStatement
    * 
    */
   public boolean executeSQLStatement(String sqlStatement) throws ClassNotFoundException, SQLException {
