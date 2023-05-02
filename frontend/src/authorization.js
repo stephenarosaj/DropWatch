@@ -1,114 +1,70 @@
-import { clientID } from "./private/tokens";
-import { useState } from "react";
+import { clientID, clientSecretID} from "./private/tokens"
+const redirect_uri = "http://localhost:3000/callback"
+const client_id = clientID
+const client_secret = clientSecretID
+const AUTHORIZE = "https://accounts.spotify.com/authorize"
+const TOKEN = "https://accounts.spotify.com/api/token"
 
-export function generateRandomString(length) {
-  let text = "";
-  let possible =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (let i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
+export function requestAuthorization(){
+  console.log("clicked")
+  localStorage.setItem("client_id", client_id)
+  // here is where we change the permissions of what we want to know about the user
+  let scope = "user-read-private user-read-email"
+
+  let url = AUTHORIZE;
+  url += "?client_id="+client_id;
+  url += "&response_type=code";
+  url += "&redirect_uri="+redirect_uri;
+  url += "&show_dialog=true";
+  url += "&scope="+scope;
+
+  window.location.href = url //redirect to spotify authorization screen
 }
 
-//export const digest = await window.crypto.subtle.digest("SHA-256", data);
-
-/** I thought the problem was the  encoding of the codeVerifier but i'm still getting the same errors */
-export async function generateCodeChallenge(codeVerifier) {
-  function base64encode(string) {
-    return btoa(String.fromCharCode.apply(null, new Uint8Array(string)))
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/, "");
-  }
-
-  // const encoder = new TextEncoder();
-  // const data = encoder.encode(codeVerifier);
-  const digest = await window.crypto.subtle.digest("SHA-256", codeVerifier);
-
-  return base64encode(digest);
+/**
+ * Function to build the body of parameters to supply to get the access token
+ * @param {*} code - the authorization code provdied to us from requestAuthorization
+ */
+export function fetchAccessToken(code) {
+  let body = "grant_type=authorization_code";
+  body += "&code=" + code;
+  body += "&redirect_uri=" + redirect_uri;
+  body += "&client_id-=" + client_id;
+  body += "&client_secret=" + client_secret;
+  callAuthorizationApi(body);
 }
 
-const encoder = new TextEncoder();
-// const data = encoder.encode(codeVerifier);
-const codeVerifier = encoder.encode(generateRandomString(128));
+// callAuthorizationApi(body) {
+//   console.log("hi");
+// }
 
-
-// const urlParams = new URLSearchParams(window.location.search);
-// let code = urlParams.get("code");
-
-export function fetchAccessToken(code, redirect_uri, client_id) {
-  console.log("CODE: " + code)
-  console.log("REDIRECT: " + redirect_uri)
-  console.log("CLIENT ID: " +client_id)
-  console.log("VERIFIER: " + codeVerifier)
-  // const encoder = new TextEncoder();
-  // const data = encoder.encode(codeVerifier);
-
-  let body = new URLSearchParams({
-    grant_type: "authorization_code",
-    code: code,
-    redirect_uri: redirect_uri,
-    client_id: client_id,
-    code_verifier: codeVerifier,
-  })
-  
-  const response = fetch("https://accounts.spotify.com/api/token?", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: JSON.stringify(body),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        console.log(response.json())
-        throw new Error("HTTP status " + response.status);
+/**
+ * Function to call the spotify api to get the access token
+ * @param {*} body - the parameters to be provided to the api request
+ */
+function callAuthorizationApi(body) {
+  const requestOpts = {
+    method: 'POST',
+    headers: {'Content-Type' : 'application/x-www-form-urlencoded', 
+              'Authorization': 'Basic ' + btoa(client_id + ":" + client_secret)},
+    body: body
+  };
+  fetch(TOKEN, requestOpts)
+    .then(response => {
+      if(!response.ok) {
+        throw new Error('HTTP status' + response.status);
       }
       return response.json();
     })
-    .then((data) => {
-      localStorage.setItem("access_token", data.access_token);
-      // console.log(data)
+    .then(data => {
+      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem('refresh_token', data.refresh_token);
     })
-    .catch((error) => {
-      console.error("Error:", error);
+    .catch(error => {
+      console.error('Error:', error)
     });
 }
 
-
-
-async function getProfile(accessToken) {
-  let access_Token = localStorage.getItem("access_token");
-
-  const response = await fetch("https://api.spotify.com/v1/me", {
-    headers: {
-      Authorization: "Bearer " + access_Token,
-    },
-  });
-
-  const data = await response.json();
-}
-
-export function requestAuthorization(client_id, redirect_uri) {
-
-//make the request to the spotify API for authorization
-generateCodeChallenge(codeVerifier).then(codeChallenge => {
-  let state = generateRandomString(16);
-  let scope = 'user-read-private user-read-email';
-
-  localStorage.setItem('code_verifier', codeVerifier);
-
-  let args = new URLSearchParams({
-    response_type: 'code',
-    client_id: client_id,
-    scope: scope,
-    redirect_uri: redirect_uri,
-    state: state,
-    code_challenge_method: 'S256',
-    code_challenge: codeChallenge
-  });
-
-  window.location = 'https://accounts.spotify.com/authorize?' + args;
-});
+function handleAuthorizationResponse() {
+  
 }

@@ -1,10 +1,8 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
-import React from "react"
-import {clientID, clientSecretID } from './private/tokens';
-// import { requestAuthorization, fetchAccessToken } from './authorization';
-import { requestAuthorization, requestAccessToken } from './new_authorization';
-// import { requestAuthorization } from './new_authorization';
+import {useEffect} from "react"
+// import {clientID, clientSecretID } from './private/tokens';
+import { requestAuthorization, fetchAccessToken} from './authorization';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -12,9 +10,8 @@ import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
 
-const redirect_uri = "http://localhost:3000/callback"
+// const redirect_uri = "http://localhost:3000/callback"
 
 
 
@@ -26,23 +23,23 @@ function getCode(query) {
   return code
 }
 function App() {
-  const [token, setToken] = React.useState("No token yet")
-  async function handleRedirect(query) {
+  // const [token, setToken] = useState(null)
+  // const [profile, setProfile] = useState(null)
+  // const [artists, setArtists] = useState([])
+  // const [drops, setDrops] = useState([])
+  function handleRedirect(query) {
     let code = getCode(query)
-    // setToken(fetchAccessToken(code, redirect_uri, clientID))
-    let access_token = await requestAccessToken(code)
-    setToken(access_token)
-    // getAccessToken(code)
-    // window.history.pushState("", "", redirect_uri)
+    console.log("code: "+code)
+    fetchAccessToken(code)
   }
-function onLoad() {
+  function onLoad() {
   let query = window.location.search
   if (query.length > 0) {
     handleRedirect(query);
   }
 }
 
-  React.useEffect(() => {
+  useEffect(() => {
     onLoad()
   });
 
@@ -59,16 +56,16 @@ function onLoad() {
         <Row>
           <Col>
             <div>
-              <Image className="logo" src= {require("./images/placeholder.png")}/>
+              <Image className="logo" src= {require("./images/placeholder.png")} alt='Green and Black DropWatch logo'/>
             </div>
           </Col>
           <Col xs={6}>
             <div className='middle-section'>
               <h1 className='middle-section'> Welcome to <span style={{color: '#00C437'}}>DropWatch</span> &lt;3</h1>
               <div>
-                <h3 style={{'margin-bottom':0}}>You love music. We do too.</h3>
+                <h3 style={{marginBottom:0}}>You love music. We do too.</h3>
                 <h3>That's why we made DropWatch.</h3>
-                <p className='subtitle' style={{'margin-bottom':0}}>No more checking your favorite artists' pages every day for new music.</p>
+                <p className='subtitle' style={{marginBottom:0}}>No more checking your favorite artists' pages every day for new music.</p>
                 <p className='subtitle'>Let us do the checking for you ;&#41;</p>
                 <hr/>
                 <h3>What is DropWatch?</h3>
@@ -78,10 +75,10 @@ function onLoad() {
           </Col>
           <Col xs={4}>
             <Card className="auth-card">
-              <Card.Body>
-                <Card.Title style={{textAlign: 'center', 'font-weight': 'bold', 'font-size': '32px'}}>Connect your Spotify account to get started</Card.Title>
-                <Button onClick={() => requestAuthorization}>Login with Spotify</Button>
-                <Card.Text>
+              <Card.Body style={{textAlign: 'center'}}>
+                <Card.Title className='auth-card-title'>Connect your Spotify account to get started</Card.Title>
+                <Button className='auth-button' onClick={() => requestAuthorization()}>Login with Spotify</Button>
+                <Card.Text style={{textAlign: 'left'}}>
                   What data does DropWatch collect? <br/>
 
                   DropWatch asks you to log into spotify so that... <br /> 

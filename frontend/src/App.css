@@ -83,16 +83,10 @@
   margin: 0px !important
 } */
 .login-page {
-  /* align-items: center; */
-  /* background-color: #1e1e1e; */
   color: #ffffff;
   font-family: "Inter" !important; 
   font-weight: bolder;
-  margin-top: 10px;
-  /* margin-right: 0 !important;
-  margin-left: 0 !important; */
-  /* width: 100%;
-  box-sizing:border-box; */
+  margin-top: 30px;
 }
 
 p {
@@ -107,6 +101,21 @@ p {
 .auth-card {
   background: #2A2A2A !important;
 }
+
+.auth-card-title {
+  font-weight: 700 !important;
+  font-size: 32px !important;
+}
+
+.auth-button {
+  background-color: #00C437 !important;
+  border-color: #00C437 !important;
+  font-size: 36px !important;
+  font-weight: bold !important;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
 .middle-section {
   /* font-size: 40px; */
   font-weight: bold;
