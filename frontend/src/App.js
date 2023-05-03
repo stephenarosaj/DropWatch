@@ -1,6 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
-import {useEffect} from "react"
+import {useEffect, useState} from "react"
 // import {clientID, clientSecretID } from './private/tokens';
 import { requestAuthorization, fetchAccessToken} from './authorization';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,8 +10,9 @@ import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button';
+import Welcome from './components/Welcome';
 
-// const redirect_uri = "http://localhost:3000/callback"
+const redirect_uri = "http://localhost:3000/callback"
 
 
 
@@ -23,15 +24,16 @@ function getCode(query) {
   return code
 }
 function App() {
-  // const [token, setToken] = useState(null)
-  // const [profile, setProfile] = useState(null)
+  const [refreshToken, setRefreshToken] = useState(null)
+  const [username, setUsername] = useState(null)
   // const [artists, setArtists] = useState([])
   // const [drops, setDrops] = useState([])
   const [isLoggedIn, setLogin] = useState(false)
   function handleRedirect(query) {
     let code = getCode(query)
     console.log("code: "+code)
-    fetchAccessToken(code)
+    fetchAccessToken(code, setLogin, setRefreshToken, setUsername)
+    window.history.pushState("","", redirect_uri)
   }
   function onLoad() {
   let query = window.location.search
@@ -45,6 +47,7 @@ function App() {
   });
 
   return (
+    // need to turn this stuff into a component so we can have access to the state variables
     <div className="App">
       {/* <button className= "authorize" onClick={() => requestAuthorization()}>Request Authorization</button>
       <p>{token}</p> */}
@@ -52,7 +55,7 @@ function App() {
       {/* <div className="home-page">
 
       </div> */}
-
+      <div>
       <Container fluid className="login-page">
         <Row>
           <Col>
@@ -92,6 +95,10 @@ function App() {
           </Col>
         </Row>
       </Container>
+      </div>
+      <div>
+        <Welcome isLoggedIn={isLoggedIn} username={username}/>
+      </div>
     </div>
 
     

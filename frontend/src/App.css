@@ -124,7 +124,8 @@ p {
 }
 
 h1 {
-  font-size: 60px !important;
+  font-size: 64px !important;
+  font-weight: bold !important;
 }
 
 h3 {
@@ -132,3 +133,8 @@ h3 {
   font-size: 32px !important
 }
 
+.welcome-section {
+  color: #ffffff;
+  text-align: center;
+  margin-top: 50px;
+}

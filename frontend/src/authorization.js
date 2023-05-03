@@ -1,3 +1,5 @@
+
+
 import { clientID, clientSecretID} from "./private/tokens"
 const redirect_uri = "http://localhost:3000/callback"
 const client_id = clientID
@@ -25,13 +27,13 @@ export function requestAuthorization(){
  * Function to build the body of parameters to supply to get the access token
  * @param {*} code - the authorization code provdied to us from requestAuthorization
  */
-export function fetchAccessToken(code) {
+export function fetchAccessToken(code, setLogin, setRefreshToken, setUsername) {
   let body = "grant_type=authorization_code";
   body += "&code=" + code;
   body += "&redirect_uri=" + redirect_uri;
   body += "&client_id-=" + client_id;
   body += "&client_secret=" + client_secret;
-  callAuthorizationApi(body);
+  callAuthorizationApi(body, setLogin, setRefreshToken, setUsername);
 }
 
 // callAuthorizationApi(body) {
@@ -42,7 +44,7 @@ export function fetchAccessToken(code) {
  * Function to call the spotify api to get the access token
  * @param {*} body - the parameters to be provided to the api request
  */
-function callAuthorizationApi(body) {
+function callAuthorizationApi(body, setLogin, setRefreshToken, setUsername) {
   const requestOpts = {
     method: 'POST',
     headers: {'Content-Type' : 'application/x-www-form-urlencoded', 
@@ -57,14 +59,39 @@ function callAuthorizationApi(body) {
       return response.json();
     })
     .then(data => {
-      localStorage.setItem('access_token', data.access_token);
-      localStorage.setItem('refresh_token', data.refresh_token);
+      let refresh_token = data.refresh_token
+      let access_token = data.access_token
+      if(access_token !== undefined) {
+        localStorage.setItem('access_token', access_token);
+      }
+      if(refresh_token !== undefined) {
+        localStorage.setItem('refresh_token', refresh_token);
+        setRefreshToken(refresh_token)
+      }
+      setLogin(true)
+      getUsername(setUsername)
     })
     .catch(error => {
       console.error('Error:', error)
     });
 }
 
-function handleAuthorizationResponse() {
-  
+async function getUsername(setUsername) {
+  let access_token = localStorage.getItem('access_token')
+  console.log("access_token getUsername: " + access_token)
+  let headers = {headers : {Authorization: 'Bearer ' + access_token}}
+  fetch('https://api.spotify.com/v1/me', headers)
+    .then(response => {
+      if(!response.ok) {
+        throw new Error('HTTP status' + response.status);
+      }
+      return response.json();
+    })
+      .then(data => {
+        if(data.display_name !== undefined) {
+          setUsername(data.display_name)
+        } else {
+          console.log(data.json())
+        }
+      })
 }
