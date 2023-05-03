@@ -3,13 +3,8 @@ import './App.css';
 import {useEffect, useState} from "react"
 // import {clientID, clientSecretID } from './private/tokens';
 import { requestAuthorization, fetchAccessToken} from './authorization';
+import {Col, Row, Container, Image, Card, Button} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
-import Image from 'react-bootstrap/Image'
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button';
 import Welcome from './components/Welcome';
 import DropWatch from './components/DropWatch';
 

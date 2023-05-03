@@ -132,7 +132,8 @@ h3 {
 .welcome-section {
   color: #ffffff;
   text-align: center;
-  margin-top: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .artists {
@@ -140,15 +141,66 @@ h3 {
   align-items: center;
   justify-content: center;
   background-color: #E8DBAD !important;
-  max-width: 70%;
+  max-width: 90%;
   margin: auto;
   min-height: 480px;
+  margin-bottom: 50px;
 }
 
 .dropwatch {
   background-color: #FFF6D7 !important;
   text-align: center;
   align-items: center;
-  padding-bottom: 50px
+  padding-top: 20px;
+  padding-bottom: 50px;
   /* margin-bottom: 500px; */
+}
+
+.dropwatch-text {
+  padding-bottom: 20px;
+}
+
+.add-artists {
+  font-size: 36px !important;
+  font-weight: bold !important;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #E8DBAD !important;
+  max-width: 90%;
+  margin: auto;
+  margin-bottom: 50px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.search {
+  font-size: 36px !important;
+  font-weight: bold !important;
+  background-color: #BDE9FC !important;
+  border-color: #BDE9FC !important;
+  color: black !important;
+  max-width: 90%;
+}
+
+.saved {
+  font-size: 36px !important;
+  font-weight: bold !important;
+  background-color: #ECBDFC !important;
+  border-color: #ECBDFC !important;
+  color: black !important;
+  max-width: 90%;
+}
+
+.followed {
+  font-size: 36px !important;
+  font-weight: bold !important;
+  background-color: #FCB !important;
+  border-color: #FCB !important;
+  color: black !important;
+  max-width: 90%;
 }
