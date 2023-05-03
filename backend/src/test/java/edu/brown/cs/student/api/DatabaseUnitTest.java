@@ -24,6 +24,7 @@ public class DatabaseUnitTest {
    * Path to our testing DBs!
    */
   static String testDBFilepath = "src/test/java/edu/brown/cs/student/api/testDB.db";
+
   /**
    *   this one is DB with some simple mock data:
    *   TABLE "ageName": id INTEGER, name VARCHAR(10), age INTEGER
@@ -32,7 +33,7 @@ public class DatabaseUnitTest {
    *   2,aku,20
    *   3,maia,19
    */
-  static String mockDBFilePath = "src/test/java/edu/brown/cs/student/api/mockDB.db";
+  static String mockDBFilePath = "data/mockedData/mockDB.db";
 
   /**
    * Helper function to make a new empty test DB for testing

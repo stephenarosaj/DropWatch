@@ -14,6 +14,9 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ */
 public class UpdateHandler implements Route {
 
     public UpdateHandler() {}
@@ -79,7 +82,6 @@ public class UpdateHandler implements Route {
             //set access token before reading input stream
             urls.setRequestProperty("Authorization","Bearer  " +
                     "BQDjG5oaXU0UU7r3fOwU-vCt_72JHENSSDxnx2AJEMwG2M3tQelrxXaRr8FWqfrkXyDkg90035jQvzrPwAtAup4CHrxJnsG1zIU3PI3njcYdIY9qKxK3");
-
 
             UpdateRecord updateResponse = MoshiUtil.deserializeUpdate(
                     new Buffer().readFrom(urls.getInputStream()));

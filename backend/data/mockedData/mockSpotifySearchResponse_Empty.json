@@ -1,0 +1,37 @@
+{
+  "result": "success",
+  "data": {
+    "tracks": {
+      "total": 0,
+      "items": [
+
+      ],
+      "offset": 0,
+      "limit": 8
+    },
+    "artists": {
+      "total": 0,
+      "items": [
+
+      ],
+      "offset": 0,
+      "limit": 8
+    },
+    "albums": {
+      "total": 0,
+      "items": [
+
+      ],
+      "offset": 0,
+      "limit": 8
+    }
+  },
+  "params": {
+    "offset": [
+      "0"
+    ],
+    "query": [
+      "0000000000000000000000000000000000000000000000000000000000000000"
+    ]
+  }
+}

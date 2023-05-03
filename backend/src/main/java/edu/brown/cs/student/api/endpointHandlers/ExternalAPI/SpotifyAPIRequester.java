@@ -45,18 +45,16 @@ public class SpotifyAPIRequester implements SpotifyDataSource {
     @Override
     public Buffer getData(String urlString) throws APIRequestException {
         try {
-        URL url = new URL(urlString);
+            URL url = new URL(urlString);
 
-        URLConnection urls = url.openConnection();
+            URLConnection urls = url.openConnection();
 
-        urls.setDoOutput(true);
-        //set access token before reading input stream
-        urls.setRequestProperty("Authorization","Bearer  " +
-                this.getAccessMap().get("access_token"));
+            urls.setDoOutput(true);
+            //set access token before reading input stream
+            urls.setRequestProperty("Authorization","Bearer  " +
+                    this.getAccessMap().get("access_token"));
 
-        return new Buffer().readFrom(urls.getInputStream());
-        } catch (MalformedURLException e) {
-            throw new APIRequestException(e.getMessage());
+            return new Buffer().readFrom(urls.getInputStream());
         } catch (IOException e) {
             throw new APIRequestException(e.getMessage());
         }

@@ -1,0 +1,7 @@
+- look for repos using spotify oauth
+- look for open source spotify webapps
+
+- heavily mock spotify api responses - make real server api calls from frontend, but backend serves mocks!
+- randomize returned stuffs from mocks to show more realistic results
+
+- hide API key - simple record with final field that is gitignored

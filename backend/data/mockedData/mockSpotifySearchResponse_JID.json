@@ -1,0 +1,955 @@
+{
+  "result": "success",
+  "data": {
+    "tracks": {
+      "total": 127,
+      "items": [
+        {
+          "name": "Surround Sound (feat. 21 Savage & Baby Tate)",
+          "id": "1udwFobQ1JoOdWPQrp2b6u",
+          "popularity": "79",
+          "href": "https://api.spotify.com/v1/tracks/1udwFobQ1JoOdWPQrp2b6u",
+          "type": "track",
+          "artists": [
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            },
+            {
+              "name": "21 Savage",
+              "id": "1URnnhqYAYcrqrcwql10ft",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/1URnnhqYAYcrqrcwql10ft"
+            },
+            {
+              "name": "Baby Tate",
+              "id": "3IJ21966TwNZI24MwZHMu4",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/3IJ21966TwNZI24MwZHMu4"
+            }
+          ],
+          "album": {
+            "name": "The Forever Story (Extended Version)",
+            "id": "4rJDCELWL0fjdmN9Gn4f4g",
+            "type": "album",
+            "href": "https://api.spotify.com/v1/albums/4rJDCELWL0fjdmN9Gn4f4g",
+            "images": [
+              {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b273cae6e44dcc84e2035c3ad092",
+                "width": 640
+              },
+              {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e02cae6e44dcc84e2035c3ad092",
+                "width": 300
+              },
+              {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d00004851cae6e44dcc84e2035c3ad092",
+                "width": 64
+              }
+            ],
+            "total_tracks": 16,
+            "release_date": "2022-10-31",
+            "release_date_precision": "day",
+            "album_type": "album",
+            "artists": [
+              {
+                "name": "JID",
+                "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+                "type": "artist",
+                "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Enemy (with JID) - from the series Arcane League of Legends",
+          "id": "1r9xUipOqoNwggBpENDsvJ",
+          "popularity": "83",
+          "href": "https://api.spotify.com/v1/tracks/1r9xUipOqoNwggBpENDsvJ",
+          "type": "track",
+          "artists": [
+            {
+              "name": "Imagine Dragons",
+              "id": "53XhwfbYqKCa1cC15pYq2q",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/53XhwfbYqKCa1cC15pYq2q"
+            },
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            },
+            {
+              "name": "Arcane",
+              "id": "57nPqD7z62gDdq37US9XJR",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/57nPqD7z62gDdq37US9XJR"
+            },
+            {
+              "name": "League of Legends",
+              "id": "47mIJdHORyRerp4os813jD",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/47mIJdHORyRerp4os813jD"
+            }
+          ],
+          "album": {
+            "name": "Enemy (with JID) [from the series Arcane League of Legends]",
+            "id": "1bTgKomQYSkKYPD9UI9W4b",
+            "type": "album",
+            "href": "https://api.spotify.com/v1/albums/1bTgKomQYSkKYPD9UI9W4b",
+            "images": [
+              {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b273aa597e50829169e6994eb403",
+                "width": 640
+              },
+              {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e02aa597e50829169e6994eb403",
+                "width": 300
+              },
+              {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d00004851aa597e50829169e6994eb403",
+                "width": 64
+              }
+            ],
+            "total_tracks": 1,
+            "release_date": "2021-10-28",
+            "release_date_precision": "day",
+            "album_type": "single",
+            "artists": [
+              {
+                "name": "Imagine Dragons",
+                "id": "53XhwfbYqKCa1cC15pYq2q",
+                "type": "artist",
+                "href": "https://api.spotify.com/v1/artists/53XhwfbYqKCa1cC15pYq2q"
+              },
+              {
+                "name": "JID",
+                "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+                "type": "artist",
+                "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+              },
+              {
+                "name": "Arcane",
+                "id": "57nPqD7z62gDdq37US9XJR",
+                "type": "artist",
+                "href": "https://api.spotify.com/v1/artists/57nPqD7z62gDdq37US9XJR"
+              }
+            ]
+          }
+        },
+        {
+          "name": "151 Rum",
+          "id": "22WV03i2lBbwNVCE1g671p",
+          "popularity": "72",
+          "href": "https://api.spotify.com/v1/tracks/22WV03i2lBbwNVCE1g671p",
+          "type": "track",
+          "artists": [
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            }
+          ],
+          "album": {
+            "name": "DiCaprio 2",
+            "id": "2oI6gtIXrvNiL2VEMmj5kY",
+            "type": "album",
+            "href": "https://api.spotify.com/v1/albums/2oI6gtIXrvNiL2VEMmj5kY",
+            "images": [
+              {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b273f5991f6f1f0de2277bb8d948",
+                "width": 640
+              },
+              {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e02f5991f6f1f0de2277bb8d948",
+                "width": 300
+              },
+              {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d00004851f5991f6f1f0de2277bb8d948",
+                "width": 64
+              }
+            ],
+            "total_tracks": 14,
+            "release_date": "2018-11-26",
+            "release_date_precision": "day",
+            "album_type": "album",
+            "artists": [
+              {
+                "name": "JID",
+                "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+                "type": "artist",
+                "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Enemy (with JID) - from the series Arcane League of Legends",
+          "id": "3CIyK1V4JEJkg02E4EJnDl",
+          "popularity": "82",
+          "href": "https://api.spotify.com/v1/tracks/3CIyK1V4JEJkg02E4EJnDl",
+          "type": "track",
+          "artists": [
+            {
+              "name": "Imagine Dragons",
+              "id": "53XhwfbYqKCa1cC15pYq2q",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/53XhwfbYqKCa1cC15pYq2q"
+            },
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            },
+            {
+              "name": "Arcane",
+              "id": "57nPqD7z62gDdq37US9XJR",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/57nPqD7z62gDdq37US9XJR"
+            },
+            {
+              "name": "League of Legends",
+              "id": "47mIJdHORyRerp4os813jD",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/47mIJdHORyRerp4os813jD"
+            }
+          ],
+          "album": {
+            "name": "Mercury - Acts 1 & 2",
+            "id": "6yiXkzHvC0OTmhfDQOEWtS",
+            "type": "album",
+            "href": "https://api.spotify.com/v1/albums/6yiXkzHvC0OTmhfDQOEWtS",
+            "images": [
+              {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b273fc915b69600dce2991a61f13",
+                "width": 640
+              },
+              {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e02fc915b69600dce2991a61f13",
+                "width": 300
+              },
+              {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d00004851fc915b69600dce2991a61f13",
+                "width": 64
+              }
+            ],
+            "total_tracks": 32,
+            "release_date": "2022-07-01",
+            "release_date_precision": "day",
+            "album_type": "album",
+            "artists": [
+              {
+                "name": "Imagine Dragons",
+                "id": "53XhwfbYqKCa1cC15pYq2q",
+                "type": "artist",
+                "href": "https://api.spotify.com/v1/artists/53XhwfbYqKCa1cC15pYq2q"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Dance Now (feat. Kenny Mason)",
+          "id": "2WrldKXSBVbNNm3A9vJryi",
+          "popularity": "73",
+          "href": "https://api.spotify.com/v1/tracks/2WrldKXSBVbNNm3A9vJryi",
+          "type": "track",
+          "artists": [
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            },
+            {
+              "name": "Kenny Mason",
+              "id": "4mwdnO2jZrMmMVrjcHsZBv",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/4mwdnO2jZrMmMVrjcHsZBv"
+            }
+          ],
+          "album": {
+            "name": "The Forever Story (Extended Version)",
+            "id": "4rJDCELWL0fjdmN9Gn4f4g",
+            "type": "album",
+            "href": "https://api.spotify.com/v1/albums/4rJDCELWL0fjdmN9Gn4f4g",
+            "images": [
+              {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b273cae6e44dcc84e2035c3ad092",
+                "width": 640
+              },
+              {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e02cae6e44dcc84e2035c3ad092",
+                "width": 300
+              },
+              {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d00004851cae6e44dcc84e2035c3ad092",
+                "width": 64
+              }
+            ],
+            "total_tracks": 16,
+            "release_date": "2022-10-31",
+            "release_date_precision": "day",
+            "album_type": "album",
+            "artists": [
+              {
+                "name": "JID",
+                "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+                "type": "artist",
+                "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Off Deez (with J. Cole)",
+          "id": "3JAeYOjyJodI4PRs44lx2l",
+          "popularity": "65",
+          "href": "https://api.spotify.com/v1/tracks/3JAeYOjyJodI4PRs44lx2l",
+          "type": "track",
+          "artists": [
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            },
+            {
+              "name": "J. Cole",
+              "id": "6l3HvQ5sa6mXTsMTB19rO5",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6l3HvQ5sa6mXTsMTB19rO5"
+            }
+          ],
+          "album": {
+            "name": "DiCaprio 2",
+            "id": "2oI6gtIXrvNiL2VEMmj5kY",
+            "type": "album",
+            "href": "https://api.spotify.com/v1/albums/2oI6gtIXrvNiL2VEMmj5kY",
+            "images": [
+              {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b273f5991f6f1f0de2277bb8d948",
+                "width": 640
+              },
+              {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e02f5991f6f1f0de2277bb8d948",
+                "width": 300
+              },
+              {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d00004851f5991f6f1f0de2277bb8d948",
+                "width": 64
+              }
+            ],
+            "total_tracks": 14,
+            "release_date": "2018-11-26",
+            "release_date_precision": "day",
+            "album_type": "album",
+            "artists": [
+              {
+                "name": "JID",
+                "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+                "type": "artist",
+                "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Stick (with JID & J. Cole feat. Kenny Mason & Sheck Wes)",
+          "id": "1BzXvBpIFWJgu0P8P6xmP4",
+          "popularity": "68",
+          "href": "https://api.spotify.com/v1/tracks/1BzXvBpIFWJgu0P8P6xmP4",
+          "type": "track",
+          "artists": [
+            {
+              "name": "Dreamville",
+              "id": "1iNqsUDUraNWrj00bqssQG",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/1iNqsUDUraNWrj00bqssQG"
+            },
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            },
+            {
+              "name": "J. Cole",
+              "id": "6l3HvQ5sa6mXTsMTB19rO5",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6l3HvQ5sa6mXTsMTB19rO5"
+            },
+            {
+              "name": "Kenny Mason",
+              "id": "4mwdnO2jZrMmMVrjcHsZBv",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/4mwdnO2jZrMmMVrjcHsZBv"
+            },
+            {
+              "name": "Sheck Wes",
+              "id": "2RDOrhPqAM4jzTRCEb19qX",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/2RDOrhPqAM4jzTRCEb19qX"
+            }
+          ],
+          "album": {
+            "name": "D-Day: A Gangsta Grillz Mixtape",
+            "id": "3tFjhFPqGhhLrCULnPu7Wy",
+            "type": "album",
+            "href": "https://api.spotify.com/v1/albums/3tFjhFPqGhhLrCULnPu7Wy",
+            "images": [
+              {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b273580d8d4b0061e5a244c86c77",
+                "width": 640
+              },
+              {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e02580d8d4b0061e5a244c86c77",
+                "width": 300
+              },
+              {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d00004851580d8d4b0061e5a244c86c77",
+                "width": 64
+              }
+            ],
+            "total_tracks": 15,
+            "release_date": "2022-03-31",
+            "release_date_precision": "day",
+            "album_type": "album",
+            "artists": [
+              {
+                "name": "Dreamville",
+                "id": "1iNqsUDUraNWrj00bqssQG",
+                "type": "artist",
+                "href": "https://api.spotify.com/v1/artists/1iNqsUDUraNWrj00bqssQG"
+              },
+              {
+                "name": "J. Cole",
+                "id": "6l3HvQ5sa6mXTsMTB19rO5",
+                "type": "artist",
+                "href": "https://api.spotify.com/v1/artists/6l3HvQ5sa6mXTsMTB19rO5"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Enemy - from the series Arcane League of Legends",
+          "id": "18nD4ksoYcLFxeV8wb6zG8",
+          "popularity": "0",
+          "href": "https://api.spotify.com/v1/tracks/18nD4ksoYcLFxeV8wb6zG8",
+          "type": "track",
+          "artists": [
+            {
+              "name": "Imagine Dragons",
+              "id": "53XhwfbYqKCa1cC15pYq2q",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/53XhwfbYqKCa1cC15pYq2q"
+            },
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            },
+            {
+              "name": "Arcane",
+              "id": "57nPqD7z62gDdq37US9XJR",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/57nPqD7z62gDdq37US9XJR"
+            },
+            {
+              "name": "League of Legends",
+              "id": "47mIJdHORyRerp4os813jD",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/47mIJdHORyRerp4os813jD"
+            }
+          ],
+          "album": {
+            "name": "Tonos Bailables Vol. 4",
+            "id": "0DgjiSDzS7HOcZsiKLFHUm",
+            "type": "album",
+            "href": "https://api.spotify.com/v1/albums/0DgjiSDzS7HOcZsiKLFHUm",
+            "images": [
+              {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b273374b0305a866fc12e67ee3a3",
+                "width": 640
+              },
+              {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e02374b0305a866fc12e67ee3a3",
+                "width": 300
+              },
+              {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d00004851374b0305a866fc12e67ee3a3",
+                "width": 64
+              }
+            ],
+            "total_tracks": 22,
+            "release_date": "2023-05-02",
+            "release_date_precision": "day",
+            "album_type": "compilation",
+            "artists": [
+              {
+                "name": "Various Artists",
+                "id": "0LyfQWJT6nXafLPZqxe9Of",
+                "type": "artist",
+                "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of"
+              }
+            ]
+          }
+        }
+      ],
+      "offset": 0,
+      "limit": 8,
+      "next": "https://api.spotify.com/v1/search?query=jid&type=track&market=US&offset=8&limit=8"
+    },
+    "artists": {
+      "total": 21,
+      "items": [
+        {
+          "name": "JID",
+          "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+          "type": "artist",
+          "popularity": "78",
+          "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7",
+          "genres": [
+            "hip hop",
+            "rap",
+            "underground hip hop"
+          ],
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab6761610000e5eb8f0270ec23a53f3c1fe91849",
+              "width": 640
+            },
+            {
+              "height": 320,
+              "url": "https://i.scdn.co/image/ab676161000051748f0270ec23a53f3c1fe91849",
+              "width": 320
+            },
+            {
+              "height": 160,
+              "url": "https://i.scdn.co/image/ab6761610000f1788f0270ec23a53f3c1fe91849",
+              "width": 160
+            }
+          ]
+        },
+        {
+          "name": "Jidenna",
+          "id": "4TsHKU8l8Wq7n7OPVikirn",
+          "type": "artist",
+          "popularity": "53",
+          "href": "https://api.spotify.com/v1/artists/4TsHKU8l8Wq7n7OPVikirn",
+          "genres": [
+            "ghanaian hip hop",
+            "viral trap"
+          ],
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab6761610000e5ebeaf75445e070451c0fb5bc7d",
+              "width": 640
+            },
+            {
+              "height": 320,
+              "url": "https://i.scdn.co/image/ab67616100005174eaf75445e070451c0fb5bc7d",
+              "width": 320
+            },
+            {
+              "height": 160,
+              "url": "https://i.scdn.co/image/ab6761610000f178eaf75445e070451c0fb5bc7d",
+              "width": 160
+            }
+          ]
+        },
+        {
+          "name": "Jidanofu",
+          "id": "6JwHgPzxWOKHVH6aWoHuxm",
+          "type": "artist",
+          "popularity": "50",
+          "href": "https://api.spotify.com/v1/artists/6JwHgPzxWOKHVH6aWoHuxm",
+          "genres": [],
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab6761610000e5eb57392d4da0edf924643211c6",
+              "width": 640
+            },
+            {
+              "height": 320,
+              "url": "https://i.scdn.co/image/ab6761610000517457392d4da0edf924643211c6",
+              "width": 320
+            },
+            {
+              "height": 160,
+              "url": "https://i.scdn.co/image/ab6761610000f17857392d4da0edf924643211c6",
+              "width": 160
+            }
+          ]
+        },
+        {
+          "name": "Dreamville",
+          "id": "1iNqsUDUraNWrj00bqssQG",
+          "type": "artist",
+          "popularity": "72",
+          "href": "https://api.spotify.com/v1/artists/1iNqsUDUraNWrj00bqssQG",
+          "genres": [
+            "hip hop",
+            "pop rap",
+            "rap",
+            "underground hip hop"
+          ],
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab6761610000e5eb080d11275f15655a11b2610d",
+              "width": 640
+            },
+            {
+              "height": 320,
+              "url": "https://i.scdn.co/image/ab67616100005174080d11275f15655a11b2610d",
+              "width": 320
+            },
+            {
+              "height": 160,
+              "url": "https://i.scdn.co/image/ab6761610000f178080d11275f15655a11b2610d",
+              "width": 160
+            }
+          ]
+        },
+        {
+          "name": "JIDDY",
+          "id": "2pVWwaFwgfOc1pwlDoj1uA",
+          "type": "artist",
+          "popularity": "35",
+          "href": "https://api.spotify.com/v1/artists/2pVWwaFwgfOc1pwlDoj1uA",
+          "genres": [],
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab6761610000e5eb9fa5f4d68e3cb651181a1bc8",
+              "width": 640
+            },
+            {
+              "height": 320,
+              "url": "https://i.scdn.co/image/ab676161000051749fa5f4d68e3cb651181a1bc8",
+              "width": 320
+            },
+            {
+              "height": 160,
+              "url": "https://i.scdn.co/image/ab6761610000f1789fa5f4d68e3cb651181a1bc8",
+              "width": 160
+            }
+          ]
+        },
+        {
+          "name": "Smino",
+          "id": "1ybINI1qPiFbwDXamRtwxD",
+          "type": "artist",
+          "popularity": "69",
+          "href": "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+          "genres": [
+            "alternative r&b"
+          ],
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab6761610000e5eb665eca0564934b82f47c49bc",
+              "width": 640
+            },
+            {
+              "height": 320,
+              "url": "https://i.scdn.co/image/ab67616100005174665eca0564934b82f47c49bc",
+              "width": 320
+            },
+            {
+              "height": 160,
+              "url": "https://i.scdn.co/image/ab6761610000f178665eca0564934b82f47c49bc",
+              "width": 160
+            }
+          ]
+        },
+        {
+          "name": "jidrip",
+          "id": "3kJrGFiXmWiL2Tsm329PUj",
+          "type": "artist",
+          "popularity": "29",
+          "href": "https://api.spotify.com/v1/artists/3kJrGFiXmWiL2Tsm329PUj",
+          "genres": [],
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab6761610000e5eb20d018dc7288e261c9f3ee0e",
+              "width": 640
+            },
+            {
+              "height": 320,
+              "url": "https://i.scdn.co/image/ab6761610000517420d018dc7288e261c9f3ee0e",
+              "width": 320
+            },
+            {
+              "height": 160,
+              "url": "https://i.scdn.co/image/ab6761610000f17820d018dc7288e261c9f3ee0e",
+              "width": 160
+            }
+          ]
+        },
+        {
+          "name": "JiDion",
+          "id": "4wrIB8cZ5s5J0H2y1y4pis",
+          "type": "artist",
+          "popularity": "31",
+          "href": "https://api.spotify.com/v1/artists/4wrIB8cZ5s5J0H2y1y4pis",
+          "genres": [],
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273e4da4311317a585bc0b90bad",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02e4da4311317a585bc0b90bad",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851e4da4311317a585bc0b90bad",
+              "width": 64
+            }
+          ]
+        }
+      ],
+      "offset": 0,
+      "limit": 8,
+      "next": "https://api.spotify.com/v1/search?query=jid&type=artist&market=US&offset=8&limit=8"
+    },
+    "albums": {
+      "total": 141,
+      "items": [
+        {
+          "name": "The Forever Story (Extended Version)",
+          "id": "4rJDCELWL0fjdmN9Gn4f4g",
+          "type": "album",
+          "href": "https://api.spotify.com/v1/albums/4rJDCELWL0fjdmN9Gn4f4g",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273cae6e44dcc84e2035c3ad092",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02cae6e44dcc84e2035c3ad092",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851cae6e44dcc84e2035c3ad092",
+              "width": 64
+            }
+          ]
+        },
+        {
+          "name": "DiCaprio 2",
+          "id": "2oI6gtIXrvNiL2VEMmj5kY",
+          "type": "album",
+          "href": "https://api.spotify.com/v1/albums/2oI6gtIXrvNiL2VEMmj5kY",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273f5991f6f1f0de2277bb8d948",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02f5991f6f1f0de2277bb8d948",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851f5991f6f1f0de2277bb8d948",
+              "width": 64
+            }
+          ]
+        },
+        {
+          "name": "The Never Story",
+          "id": "1gPqbxhs90kppgOVxGOPzd",
+          "type": "album",
+          "href": "https://api.spotify.com/v1/albums/1gPqbxhs90kppgOVxGOPzd",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273f705b14ca8b81af140d1f1d3",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02f705b14ca8b81af140d1f1d3",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851f705b14ca8b81af140d1f1d3",
+              "width": 64
+            }
+          ]
+        },
+        {
+          "name": "Enemy (with JID) [from the series Arcane League of Legends]",
+          "id": "1bTgKomQYSkKYPD9UI9W4b",
+          "type": "album",
+          "href": "https://api.spotify.com/v1/albums/1bTgKomQYSkKYPD9UI9W4b",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273aa597e50829169e6994eb403",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02aa597e50829169e6994eb403",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851aa597e50829169e6994eb403",
+              "width": 64
+            }
+          ]
+        },
+        {
+          "name": "Revenge Of The Dreamers III",
+          "id": "2n3quCZ0anEa46j2IveacI",
+          "type": "album",
+          "href": "https://api.spotify.com/v1/albums/2n3quCZ0anEa46j2IveacI",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273c0ae820e3b64854de4642101",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02c0ae820e3b64854de4642101",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851c0ae820e3b64854de4642101",
+              "width": 64
+            }
+          ]
+        },
+        {
+          "name": "Ma Boy",
+          "id": "0UqZZstwaKzBuNLXPZANxa",
+          "type": "album",
+          "href": "https://api.spotify.com/v1/albums/0UqZZstwaKzBuNLXPZANxa",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27365ac5e83eb3b7b41f9e2d98b",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0265ac5e83eb3b7b41f9e2d98b",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485165ac5e83eb3b7b41f9e2d98b",
+              "width": 64
+            }
+          ]
+        },
+        {
+          "name": "La Maquina",
+          "id": "35C2QYq4OgkEXETksStyzz",
+          "type": "album",
+          "href": "https://api.spotify.com/v1/albums/35C2QYq4OgkEXETksStyzz",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273e9166dea653ce1aa302d2916",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02e9166dea653ce1aa302d2916",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851e9166dea653ce1aa302d2916",
+              "width": 64
+            }
+          ]
+        },
+        {
+          "name": "Spilligion",
+          "id": "2L13Kv0sx6GPAHo7QTZLAy",
+          "type": "album",
+          "href": "https://api.spotify.com/v1/albums/2L13Kv0sx6GPAHo7QTZLAy",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273230d88bf27d6ca322fb59eb4",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02230d88bf27d6ca322fb59eb4",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851230d88bf27d6ca322fb59eb4",
+              "width": 64
+            }
+          ]
+        }
+      ],
+      "offset": 0,
+      "limit": 8,
+      "next": "https://api.spotify.com/v1/search?query=jid&type=album&market=US&offset=8&limit=8"
+    }
+  },
+  "params": {
+    "offset": [
+      "0"
+    ],
+    "query": [
+      "jid"
+    ]
+  }
+}

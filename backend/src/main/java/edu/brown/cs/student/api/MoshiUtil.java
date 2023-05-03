@@ -8,7 +8,7 @@ import edu.brown.cs.student.api.exceptions.DeserializeException;
 
 import edu.brown.cs.student.api.formats.SearchRecord;
 import edu.brown.cs.student.api.formats.SearchRecord.Artists;
-import edu.brown.cs.student.api.formats.SearchRecord.Artists.Artist;
+import edu.brown.cs.student.api.formats.ArtistRecord.Artist;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -41,11 +41,16 @@ public class MoshiUtil {
    * @return A Location record storing this JSON's attributes.
    * @throws DeserializeException If an exception has occurred in moshi's methods.
    */
-  public static SearchRecord deserializeSearch(Buffer buf) throws IOException {
-    Moshi moshi = new Moshi.Builder().build();
-    JsonAdapter<SearchRecord> adapter = moshi.adapter(
-        Types.newParameterizedType(SearchRecord.class, Artists.class, Artist.class));
-    return adapter.fromJson(buf);
+  public static SearchRecord deserializeSearch(Buffer buf) throws DeserializeException {
+    try {
+      // make a new moshi adapter and
+      Moshi moshi = new Moshi.Builder().build();
+      JsonAdapter<SearchRecord> adapter = moshi.adapter(
+          Types.newParameterizedType(SearchRecord.class, Artists.class, Artist.class));
+      return adapter.fromJson(buf);
+    } catch (Exception e) {
+      throw new DeserializeException(e.getMessage());
+    }
   }
 
   public static UpdateRecord deserializeUpdate(Buffer buf) throws IOException {

@@ -8,7 +8,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
+/**
+ * TODO: comment
+ */
 public interface SpotifyDataSource {
-
+    /**
+     * TODO: comment
+     */
     public Buffer getData(String urlString) throws APIRequestException;
 }
