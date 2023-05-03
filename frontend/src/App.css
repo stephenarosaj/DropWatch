@@ -39,10 +39,8 @@
 
 
 .App {
-  /* text-align: center; */
   background-color: #1e1e1e;
   width: 100%;
-  /* margin: 0; */
 }
 
 .App-logo {
@@ -79,9 +77,7 @@
     transform: rotate(360deg);
   }
 }
-/* * {
-  margin: 0px !important
-} */
+
 .login-page {
   color: #ffffff;
   font-family: "Inter" !important; 
@@ -137,4 +133,22 @@ h3 {
   color: #ffffff;
   text-align: center;
   margin-top: 50px;
+}
+
+.artists {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #E8DBAD !important;
+  max-width: 70%;
+  margin: auto;
+  min-height: 480px;
+}
+
+.dropwatch {
+  background-color: #FFF6D7 !important;
+  text-align: center;
+  align-items: center;
+  padding-bottom: 50px
+  /* margin-bottom: 500px; */
 }

@@ -11,6 +11,7 @@ import Image from 'react-bootstrap/Image'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button';
 import Welcome from './components/Welcome';
+import DropWatch from './components/DropWatch';
 
 const redirect_uri = "http://localhost:3000/callback"
 
@@ -26,20 +27,22 @@ function getCode(query) {
 function App() {
   const [refreshToken, setRefreshToken] = useState(null)
   const [username, setUsername] = useState(null)
-  // const [artists, setArtists] = useState([])
+  const [artists, setArtists] = useState([])
   // const [drops, setDrops] = useState([])
   const [isLoggedIn, setLogin] = useState(false)
+
   function handleRedirect(query) {
     let code = getCode(query)
     console.log("code: "+code)
     fetchAccessToken(code, setLogin, setRefreshToken, setUsername)
     window.history.pushState("","", redirect_uri)
   }
+
   function onLoad() {
-  let query = window.location.search
-  if (query.length > 0) {
-    handleRedirect(query);
-  }
+    let query = window.location.search
+    if (query.length > 0) {
+      handleRedirect(query);
+    }
 }
 
   useEffect(() => {
@@ -98,6 +101,9 @@ function App() {
       </div>
       <div>
         <Welcome isLoggedIn={isLoggedIn} username={username}/>
+      </div>
+      <div>
+        <DropWatch artists={artists}/>
       </div>
     </div>
 

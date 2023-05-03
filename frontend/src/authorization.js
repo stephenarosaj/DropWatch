@@ -1,5 +1,3 @@
-
-
 import { clientID, clientSecretID} from "./private/tokens"
 const redirect_uri = "http://localhost:3000/callback"
 const client_id = clientID
@@ -27,14 +25,14 @@ export function requestAuthorization(){
  * Function to build the body of parameters to supply to get the access token
  * @param {*} code - the authorization code provdied to us from requestAuthorization
  */
-export function fetchAccessToken(code, setLogin, setRefreshToken, setUsername) {
-  let body = "grant_type=authorization_code";
-  body += "&code=" + code;
-  body += "&redirect_uri=" + redirect_uri;
-  body += "&client_id-=" + client_id;
-  body += "&client_secret=" + client_secret;
-  callAuthorizationApi(body, setLogin, setRefreshToken, setUsername);
-}
+// export function fetchAccessToken(code, setLogin, setRefreshToken, setUsername) {
+//   let body = "grant_type=authorization_code";
+//   body += "&code=" + code;
+//   body += "&redirect_uri=" + redirect_uri;
+//   body += "&client_id-=" + client_id;
+//   body += "&client_secret=" + client_secret;
+//   callAuthorizationApi(body, setLogin, setRefreshToken, setUsername);
+// }
 
 // callAuthorizationApi(body) {
 //   console.log("hi");
@@ -44,13 +42,21 @@ export function fetchAccessToken(code, setLogin, setRefreshToken, setUsername) {
  * Function to call the spotify api to get the access token
  * @param {*} body - the parameters to be provided to the api request
  */
-function callAuthorizationApi(body, setLogin, setRefreshToken, setUsername) {
+export async function fetchAccessToken(code, setLogin, setRefreshToken, setUsername) {
+  // builds the body of the Spotify api request
+  let body = "grant_type=authorization_code";
+  body += "&code=" + code;
+  body += "&redirect_uri=" + redirect_uri;
+  body += "&client_id-=" + client_id;
+  body += "&client_secret=" + client_secret;
+
   const requestOpts = {
     method: 'POST',
     headers: {'Content-Type' : 'application/x-www-form-urlencoded', 
               'Authorization': 'Basic ' + btoa(client_id + ":" + client_secret)},
     body: body
   };
+  
   fetch(TOKEN, requestOpts)
     .then(response => {
       if(!response.ok) {
@@ -76,10 +82,12 @@ function callAuthorizationApi(body, setLogin, setRefreshToken, setUsername) {
     });
 }
 
+
 async function getUsername(setUsername) {
+
   let access_token = localStorage.getItem('access_token')
-  console.log("access_token getUsername: " + access_token)
   let headers = {headers : {Authorization: 'Bearer ' + access_token}}
+
   fetch('https://api.spotify.com/v1/me', headers)
     .then(response => {
       if(!response.ok) {
