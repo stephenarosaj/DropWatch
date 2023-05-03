@@ -27,6 +27,7 @@ function App() {
   // const [profile, setProfile] = useState(null)
   // const [artists, setArtists] = useState([])
   // const [drops, setDrops] = useState([])
+  const [isLoggedIn, setLogin] = useState(false)
   function handleRedirect(query) {
     let code = getCode(query)
     console.log("code: "+code)
