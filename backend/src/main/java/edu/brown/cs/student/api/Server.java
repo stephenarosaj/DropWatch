@@ -2,6 +2,7 @@ package edu.brown.cs.student.api;
 
 import static spark.Spark.after;
 
+import edu.brown.cs.student.api.database.DropWatchDB;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyAPIRequester;
 import edu.brown.cs.student.api.endpointHandlers.SearchHandler;
 import edu.brown.cs.student.api.endpointHandlers.UpdateHandler;
@@ -9,7 +10,6 @@ import spark.Spark;
 
 /** Main class for the Server. */
 public class Server {
-
   /**
    * Main method that handles setting up the server and endpoints.
    *
@@ -24,10 +24,8 @@ public class Server {
           response.header("Access-Control-Allow-Methods", "*");
         });
 
-
     Spark.get("search", new SearchHandler(new SpotifyAPIRequester()));
     Spark.get("update", new UpdateHandler());
-
 
     Spark.init();
     Spark.awaitInitialization();

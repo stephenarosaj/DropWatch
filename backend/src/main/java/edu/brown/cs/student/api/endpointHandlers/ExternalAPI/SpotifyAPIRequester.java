@@ -16,6 +16,10 @@ public class SpotifyAPIRequester implements SpotifyDataSource {
 
     }
 
+    /***
+     * Retrieves the token. The token is required to make any API Call.
+     * @return - access token
+     */
     public Map<String, String> getAccessMap() {
         String client_id = "1be4c1544f31438693f0c3b488f9ceee";
         String client_secret = "c44a4bd0073440178a7c3477202b7a74";
@@ -45,16 +49,16 @@ public class SpotifyAPIRequester implements SpotifyDataSource {
     @Override
     public Buffer getData(String urlString) throws APIRequestException {
         try {
-            URL url = new URL(urlString);
+        URL url = new URL(urlString);
 
-            URLConnection urls = url.openConnection();
+        URLConnection urls = url.openConnection();
 
-            urls.setDoOutput(true);
-            //set access token before reading input stream
-            urls.setRequestProperty("Authorization","Bearer  " +
-                    this.getAccessMap().get("access_token"));
+        urls.setDoOutput(true);
+        //set access token before reading input stream
+        urls.setRequestProperty("Authorization","Bearer  " +
+                this.getAccessMap().get("access_token"));
 
-            return new Buffer().readFrom(urls.getInputStream());
+        return new Buffer().readFrom(urls.getInputStream());
         } catch (IOException e) {
             throw new APIRequestException(e.getMessage());
         }

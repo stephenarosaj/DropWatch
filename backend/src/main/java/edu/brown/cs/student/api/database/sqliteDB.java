@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * A class for connecting to and interacting with the sqlite3 database for our
- * backend server. This database will store information on what artists are being
- * tracked by which users, what artists' most recent release dates are, and more!
+ * A class for connecting to and interacting with an sqlite3 database.
  * This class uses the JDBC (Java DataBase Controller) library with an sqlite3
  * driver (because I <3 sqlite3). My understanding is that JDBC is like the VFS
  * (Virtual File System) and sqlite3 is like S5FS (a filesystem), if that makes

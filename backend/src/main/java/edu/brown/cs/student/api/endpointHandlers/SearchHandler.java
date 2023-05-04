@@ -15,7 +15,7 @@ import spark.Response;
 import spark.Route;
 
 /**
- * Class for SearchHandler - handles searching spotify's data!
+ * Class for SearchHandler - handles searching spotify's api for artists, tracks, and albums!
  */
 public class SearchHandler implements Route {
 
@@ -33,34 +33,6 @@ public class SearchHandler implements Route {
   public SearchHandler(SpotifyDataSource SpotifyAPIRequester) {
     this.SpotifyAPIRequester = SpotifyAPIRequester;
   }
-
-//  // get the access token - REQUIRED TO MAKE ANY API CALL
-//  public Map<String, String> getAccessMap() {
-//    String client_id = "1be4c1544f31438693f0c3b488f9ceee";
-//    String client_secret = "c44a4bd0073440178a7c3477202b7a74";
-//    // https://stackoverflow.com/questions/65750837/how-to-use-this-curl-post-request-in-java-spotify-api
-//    try {
-//      URL url = new URL("https://accounts.spotify.com/api/token");
-//      URLConnection urlc = url.openConnection();
-//
-//      urlc.setDoOutput(true);
-//      urlc.setRequestProperty ("Content-Type", "application/x-www-form-urlencoded");
-//
-//      OutputStreamWriter writer = new OutputStreamWriter(urlc.getOutputStream());
-//
-//      writer.write("grant_type=client_credentials&client_id="+client_id+"&client_secret="+client_secret);
-//      writer.flush();
-//
-//      Buffer buf = new Buffer().readFrom(urlc.getInputStream());
-//
-//      writer.close();
-//
-//      return MoshiUtil.deserializeToken(buf);
-//    } catch (Exception e) {
-//      System.out.println(e.getMessage());
-//      return null;
-//    }
-//  }
 
   /**
    * Function that handles searching. Will take the users query params and use them
@@ -80,15 +52,12 @@ public class SearchHandler implements Route {
       String rawQuery = request.queryParams("query");
       String offset = request.queryParams("offset");
 
-      // grab request url
-      String url = request.url();
-
       // number of params
       int nParams = request.queryParams().size();
       // error check params - we should have exactly 2
       if (nParams != 2) {
         // return error!
-        return MoshiUtil.serialize(ret, "ERROR: /search endpoint requires exactly 2 params, but did receive 2 (received " + nParams + ")");
+        return MoshiUtil.serialize(ret, "ERROR: /search endpoint requires exactly 2 params, but received " + nParams);
       }
 
       // error check params - we should have rawQuery and offset
@@ -97,17 +66,30 @@ public class SearchHandler implements Route {
         return MoshiUtil.serialize(ret, "ERROR: /search endpoint requires params 'query' and 'offset', but did not receive them both");
       }
 
+      // error check offset - should be an int!
+      try {
+        int parsedOffset = Integer.parseInt(offset);
+        if (parsedOffset < 0) {
+          throw new NumberFormatException("ERROR: parsedOffset < 0 - we need a positive number!");
+        }
+      } catch (NumberFormatException e) {
+        // offset is not a number!
+        System.out.println(e.getMessage());
+        return MoshiUtil.serialize(ret, "ERROR: /search endpoint requires param 'offset' to be a number >= 0, but recevied '" + offset + "'");
+      }
+
       // our params are safe - let's execute a search!
       // can't use spaces, must use +
       String query = rawQuery.replace(' ', '+');
 
       // make the request!
-      Buffer buf = this.SpotifyAPIRequester.getData("https://api.spotify.com/v1/search?"
-              + "query=" + query
-              + "&type=artist,album,track"
-              + "&market=US"
-              + "&limit=8"
-              + "&offset=" + offset);
+      String urlString = "https://api.spotify.com/v1/search?"
+        + "query=" + query
+        + "&type=artist,album,track"
+        + "&market=US"
+        + "&limit=8"
+        + "&offset=" + offset;
+      Buffer buf = this.SpotifyAPIRequester.getData(urlString);
 
       // deserialize the api's JSON response
       SearchRecord searchResponse = MoshiUtil.deserializeSearch(buf);
@@ -119,7 +101,7 @@ public class SearchHandler implements Route {
       return MoshiUtil.serialize(ret, "success");
     } catch (Exception e) {
       System.out.println(e.getMessage());
-      return null;
+      return MoshiUtil.serialize(ret, "ERROR: " + e.getMessage());
     }
   }
 }
