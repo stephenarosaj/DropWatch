@@ -46,7 +46,6 @@ public class UpdateHandler implements Route {
      * there is no new release
      */
     public ArrayList<String> checkNewRelease(String artist_id) throws APIRequestException, IOException {
-        // TODO: is this still right? I took it from Aku's code but I'm not sure if I messed something up when I was changing things...
         // make the request!
         // we want just 1 album - the most recent one!
         String urlString = "https://api.spotify.com/v1/artists/"
@@ -55,12 +54,14 @@ public class UpdateHandler implements Route {
           + "&limit=" + 1
           + "&offset=0";
         Buffer buf = this.SpotifyAPIRequester.getData(urlString);
-        // TODO: I made deserializeUpdate return AlbumRecord instead... not sure if this is right tho...
-        AlbumRecord albums = MoshiUtil.deserializeUpdate(buf);
+        AlbumRecord album = MoshiUtil.deserializeUpdate(buf);
 
-        // TODO:
+        // TODO: Review code below
         // parse request results to find the latest release date
-        String newDate = null;
+        // TODO: To my understanding, this request should only return one result which is the latest album.
+        // So I thought we could access the date with the call below but I'm unsure
+        String newDate = album.getReleaseDate();
+
 
         // TODO:
         // compare old and new dates. if there is a new release, return both!
@@ -68,39 +69,6 @@ public class UpdateHandler implements Route {
         String oldDate = this.db.queryLatestRelease(artist_id);
         return null;
     }
-
-    // TODO: This code has been outsourced to this.SpotifyAPIRequester. If you feel comfy, you can delete it
-
-//    /***
-//     * Retrieves the token. The token is required to make any API Call.
-//     * @return - access token
-//     */
-//    public Map<String, String> getAccessMap() {
-//        String client_id = "1be4c1544f31438693f0c3b488f9ceee";
-//        String client_secret = "c44a4bd0073440178a7c3477202b7a74";
-//        // https://stackoverflow.com/questions/65750837/how-to-use-this-curl-post-request-in-java-spotify-api
-//        try {
-//            URL url = new URL("https://accounts.spotify.com/api/token");
-//            URLConnection urlc = url.openConnection();
-//
-//            urlc.setDoOutput(true);
-//            urlc.setRequestProperty ("Content-Type", "application/x-www-form-urlencoded");
-//
-//            OutputStreamWriter writer = new OutputStreamWriter(urlc.getOutputStream());
-//
-//            writer.write("grant_type=client_credentials&client_id="+client_id+"&client_secret="+client_secret);
-//            writer.flush();
-//
-//            okio.Buffer buf = new Buffer().readFrom(urlc.getInputStream());
-//
-//            writer.close();
-//
-//            return MoshiUtil.deserializeToken(buf);
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            return null;
-//        }
-//    }
 
     /***
      * Handles calls to update endpoint. Refreshes database to have most updated

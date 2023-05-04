@@ -26,7 +26,7 @@ public class DropWatchDB {
   /**
    * method that queries the db for the artists a user is tracking, returning
    * their artist_ids as a list!
-   * @param user the user whose tracked artsits we want to query from the db
+   * @param user the user whose tracked artists we want to query from the db
    * @return an array list of artist_ids that the user is tracking (empty if none)
    */
   public ArrayList<String> queryTracking(String user) {

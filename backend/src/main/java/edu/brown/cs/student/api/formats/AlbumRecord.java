@@ -8,6 +8,16 @@ import java.util.List;
  * Record to hold information on an Album
  */
 public record AlbumRecord() {
+
+  static String initialRelease;
+
+  /***
+   * Helper function to access the Album's release date... a part of an unfinished attempt to access the release_date (see below).
+   * @return - String representing the date the Album was initially released.
+   */
+  public static String getReleaseDate() {
+    return initialRelease;
+  }
   /**
    * Note that when one of these objects is returned via search, all fields are present (EXCEPT FOR "tracks",
    * since the object returned there is "SimplifiedAlbumObject"!)
@@ -50,5 +60,15 @@ public record AlbumRecord() {
     @Json(name = "artists") List<Album> artists,
     @Json(name = "tracks") List<TrackRecord.Track> tracks // NOT returned by search!!!!
 
-  ) {}
+  ) {
+    // TODO: I was looking through documentation on records trying to figure out how to retrieve just the release date,
+    // but the code below gives the following warning:
+    // Non-canonical record constructor must delegate to another constructor
+    // so I'm still chipping away at it
+
+//    public Album (String release_date) {
+//      initialRelease = release_date;
+//    }
+  }
+
 }
