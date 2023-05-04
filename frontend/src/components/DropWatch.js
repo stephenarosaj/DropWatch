@@ -1,4 +1,5 @@
 import {Card, Button, Col, Row, Container} from 'react-bootstrap';
+import Artist from './Artist';
 
 /**
  * Component to display the artists that a user is tracking
@@ -16,6 +17,17 @@ function DropWatch(props) {
           <p>Click one of the buttons below and track some artists!</p>
         </Card.Text>
       </Card>
+  } else {
+    middle = 
+    <Container>
+      <Row xs={1} md={2} lg={3} className="g-4">
+        {props.artists.map((item) => (
+          <Col>
+            <Artist image={item.image} name={item.name}/>
+          </Col>
+        ))}
+      </Row>
+    </Container>
   }
   return(
     <div className='dropwatch'>
