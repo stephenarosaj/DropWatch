@@ -1,4 +1,4 @@
-package edu.brown.cs.student.api.endpointHandlers.ExternalAPI;
+package edu.brown.cs.student.api.endpointHandlers;
 
 /**
  * Class for TrackHandler - handles tracking/untracking artists!

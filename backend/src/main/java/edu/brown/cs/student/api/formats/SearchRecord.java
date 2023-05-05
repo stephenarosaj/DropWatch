@@ -29,7 +29,7 @@ public record SearchRecord(
    */
   public record Tracks(
     @Json(name = "total") Integer total,
-    @Json(name = "items") List<TrackRecord.Track> items,
+    @Json(name = "items") List<TrackRecord> items,
 
     @Json(name = "offset") Integer offset,
     @Json(name = "limit") Integer limit,
@@ -48,7 +48,7 @@ public record SearchRecord(
    */
   public record Artists(
     @Json(name = "total") Integer total,
-    @Json(name = "items") List<ArtistRecord.Artist> items,
+    @Json(name = "items") List<ArtistRecord> items,
 
     @Json(name = "offset") Integer offset,
     @Json(name = "limit") Integer limit,
@@ -67,7 +67,7 @@ public record SearchRecord(
    */
   public record Albums (
     @Json(name = "total") Integer total,
-    @Json(name = "items") List<ArtistRecord.Artist> items,
+    @Json(name = "items") List<ArtistRecord> items,
 
     @Json(name = "offset") Integer offset,
     @Json(name = "limit") Integer limit,

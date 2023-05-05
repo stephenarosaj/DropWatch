@@ -7,9 +7,9 @@ import com.squareup.moshi.Types;
 import edu.brown.cs.student.api.exceptions.DeserializeException;
 
 import edu.brown.cs.student.api.formats.AlbumRecord;
+import edu.brown.cs.student.api.formats.ArtistRecord;
 import edu.brown.cs.student.api.formats.SearchRecord;
 import edu.brown.cs.student.api.formats.SearchRecord.Artists;
-import edu.brown.cs.student.api.formats.ArtistRecord.Artist;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class MoshiUtil {
       // make a new moshi adapter and
       Moshi moshi = new Moshi.Builder().build();
       JsonAdapter<SearchRecord> adapter = moshi.adapter(
-          Types.newParameterizedType(SearchRecord.class, Artists.class, Artist.class));
+          Types.newParameterizedType(SearchRecord.class, Artists.class, ArtistRecord.class));
       return adapter.fromJson(buf);
     } catch (Exception e) {
       throw new DeserializeException(e.getMessage());
