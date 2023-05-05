@@ -10,10 +10,6 @@ import DropWatch from './components/DropWatch';
 
 const redirect_uri = "http://localhost:3000/callback"
 
-
-
-//AQBqff_vdV3ErtEF8dodQ6MRYtw66ItIWCQqFs1tSZV0M3KNl4TfWZzOdPWG4yAQ7pd0uXnhBh6g3o7M0nJLDu1BwmJvN0yQYjsInGgOH3HWYw322iG8mHoczLltUdZ-RvcvWiqvVDW5hn_2QBPrwMUIVFWVwn1vvcmIPKYL_V-yRD1p7Ot1YhPsFa17z7R_lDoWbMZ-GH2dPMHw0Vb9zmCgN1wEYw6_YEGKa_gtm7EsqFj2zhyu6_KAW_4Izx8HVVTlX1pHddtrQuTc_JJsLL7511xBSTtmVQ&state=JThm6QyPkWEAKIVz
-
 function getCode(query) {
   const urlParams = new URLSearchParams(query);
   let code = urlParams.get('code')
@@ -94,12 +90,12 @@ function App() {
         </Row>
       </Container>
       </div>
-      <div>
-        <Welcome isLoggedIn={isLoggedIn} username={username}/>
-      </div>
-      <div>
-        <DropWatch artists={artists} isLoggedIn={isLoggedIn}/>
-      </div>
+      <Welcome isLoggedIn={isLoggedIn} username={username}/>
+      <DropWatch artists={artists} isLoggedIn={isLoggedIn}/>
+      <Recents drops={drops} isLoggedIn={isLoggedIn}/>
+      <Search isLoggedIn={isLoggedIn}/>
+      <Playlists isLoggedIn={isLoggedIn}/>
+      <Followed isLoggedIn={isLoggedIn}/>
     </div>
 
     

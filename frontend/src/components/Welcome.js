@@ -12,7 +12,7 @@ function Welcome(props) {
     <div className='welcome-section'>
         <h1>Hello, <span style={{color: '#00C437'}}>{props.username}</span></h1>
         <p>Scroll to see your artists' new drops and track more!</p>
-      </div>
+    </div>
   )
 }
 
