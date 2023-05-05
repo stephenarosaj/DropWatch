@@ -206,6 +206,35 @@ h3 {
 }
 
 .artist-image {
-  width: 170px;
-  height: 170px;
+  width: 100%;
+  height: 160px;
+}
+
+.not-done {
+  color: #ffffff
+}
+
+.dropwatch-name {
+  min-height: 100%;
+  /* width: 100%; */
+  border-radius: 0% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #E8DBAD !important;
+  /* padding: 0 !important; */
+}
+
+.dropwatch-img {
+  height: 160px !important;
+  width: 160px !important;
+  padding: 0 !important;
+}
+
+.dropwatch-col {
+  padding: 0 !important;
+}
+
+.artists-container {
+  padding: 5% 0px;
 }

@@ -1,6 +1,6 @@
 function Playlists(props) {
   return(
-    <div>
+    <div className="not-done">
       <p> Playlists NOT IMPLEMENTED YET</p>
     </div>
   )

@@ -1,6 +1,6 @@
 function Followed(props) {
   return(
-    <div>
+    <div className="not-done">
       <p> FOLLOWED NOT IMPLEMENTED YET</p>
     </div>
   )

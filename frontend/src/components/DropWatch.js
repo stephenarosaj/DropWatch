@@ -24,15 +24,19 @@ function DropWatch(props) {
       </Card>
   } else {
     middle = 
-    <Container>
-      <Row xs={1} md={2} lg={3} className="g-4">
-        {props.artists.map((item) => (
-          <Col>
-            <Artist image={item.image} name={item.name}/>
-          </Col>
-        ))}
-      </Row>
-    </Container>
+    <Card className='artists'>
+      <Card.Text>
+        <Container className='artists-container'>
+          <Row xs={1} md={2} className="g-4">
+            {props.artists.map((item) => (
+              <Col>
+                <Artist artist={item}/>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </Card.Text>
+    </Card>
   }
   
   return(

@@ -7,6 +7,11 @@ import {Col, Row, Container, Image, Card, Button} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Welcome from './components/Welcome';
 import DropWatch from './components/DropWatch';
+import Drops from './components/Drops';
+import Search from './components/Search';
+import Playlists from './components/Playlists';
+import Followed from './components/Followed';
+import artistData from "./data/artists.json";
 
 const redirect_uri = "http://localhost:3000/callback"
 
@@ -18,13 +23,13 @@ function getCode(query) {
 function App() {
   const [refreshToken, setRefreshToken] = useState(null)
   const [username, setUsername] = useState(null)
-  const [artists, setArtists] = useState([])
-  // const [drops, setDrops] = useState([])
+  const [artists, setArtists] = useState(artistData)
+  const [drops, setDrops] = useState([])
   const [isLoggedIn, setLogin] = useState(false)
 
   function handleRedirect(query) {
     let code = getCode(query)
-    console.log("code: "+code)
+    console.log("code: " + code)
     fetchAccessToken(code, setLogin, setRefreshToken, setUsername)
     window.history.pushState("","", redirect_uri)
   }
@@ -43,12 +48,6 @@ function App() {
   return (
     // need to turn this stuff into a component so we can have access to the state variables
     <div className="App">
-      {/* <button className= "authorize" onClick={() => requestAuthorization()}>Request Authorization</button>
-      <p>{token}</p> */}
-
-      {/* <div className="home-page">
-
-      </div> */}
       <div>
       <Container fluid className="login-page">
         <Row>
@@ -92,10 +91,10 @@ function App() {
       </div>
       <Welcome isLoggedIn={isLoggedIn} username={username}/>
       <DropWatch artists={artists} isLoggedIn={isLoggedIn}/>
-      <Recents drops={drops} isLoggedIn={isLoggedIn}/>
+      <Drops drops={drops} isLoggedIn={isLoggedIn}/>
       <Search isLoggedIn={isLoggedIn}/>
-      <Playlists isLoggedIn={isLoggedIn}/>
-      <Followed isLoggedIn={isLoggedIn}/>
+      <Playlists isLoggedIn={isLoggedIn} refreshToken={refreshToken} setRefreshToken={setRefreshToken}/>
+      <Followed isLoggedIn={isLoggedIn} refreshToken={refreshToken} setRefreshToken={setRefreshToken}/>
     </div>
 
     

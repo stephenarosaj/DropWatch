@@ -1,6 +1,6 @@
 function Search(props) {
   return(
-    <div>
+    <div className="not-done">
       <p> Search NOT IMPLEMENTED YET</p>
     </div>
   )

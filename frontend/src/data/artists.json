@@ -1,6 +1,224 @@
 [
-    {
-      "name": "JID",
-      "image" : "https://i.scdn.co/image/ab67616d00001e02cae6e44dcc84e2035c3ad092"
-    }
+  {
+    "name": "JID",
+    "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+    "type": "artist",
+    "popularity": 78,
+    "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7",
+    "genres": [
+      "hip hop",
+      "rap",
+      "underground hip hop"
+    ],
+    "images": [
+      {
+        "url": "https://i.scdn.co/image/ab6761610000e5eb8f0270ec23a53f3c1fe91849",
+        "height": 640,
+        "width": 640
+      },
+      {
+        "url": "https://i.scdn.co/image/ab676161000051748f0270ec23a53f3c1fe91849",
+        "height": 320,
+        "width": 320
+      },
+      {
+        "url": "https://i.scdn.co/image/ab6761610000f1788f0270ec23a53f3c1fe91849",
+        "height": 160,
+        "width": 160
+      }
+    ]
+  },
+  {
+    "name": "Jidenna",
+    "id": "4TsHKU8l8Wq7n7OPVikirn",
+    "type": "artist",
+    "popularity": 53,
+    "href": "https://api.spotify.com/v1/artists/4TsHKU8l8Wq7n7OPVikirn",
+    "genres": [
+      "ghanaian hip hop",
+      "viral trap"
+    ],
+    "images": [
+      {
+        "url": "https://i.scdn.co/image/ab6761610000e5ebeaf75445e070451c0fb5bc7d",
+        "height": 640,
+        "width": 640
+      },
+      {
+        "url": "https://i.scdn.co/image/ab67616100005174eaf75445e070451c0fb5bc7d",
+        "height": 320,
+        "width": 320
+      },
+      {
+        "url": "https://i.scdn.co/image/ab6761610000f178eaf75445e070451c0fb5bc7d",
+        "height": 160,
+        "width": 160
+      }
+    ]
+  },
+  {
+    "name": "Jidanofu",
+    "id": "6JwHgPzxWOKHVH6aWoHuxm",
+    "type": "artist",
+    "popularity": 50,
+    "href": "https://api.spotify.com/v1/artists/6JwHgPzxWOKHVH6aWoHuxm",
+    "genres": [
+      
+    ],
+    "images": [
+      {
+        "url": "https://i.scdn.co/image/ab6761610000e5eb57392d4da0edf924643211c6",
+        "height": 640,
+        "width": 640
+      },
+      {
+        "url": "https://i.scdn.co/image/ab6761610000517457392d4da0edf924643211c6",
+        "height": 320,
+        "width": 320
+      },
+      {
+        "url": "https://i.scdn.co/image/ab6761610000f17857392d4da0edf924643211c6",
+        "height": 160,
+        "width": 160
+      }
+    ]
+  },
+  {
+    "name": "Dreamville",
+    "id": "1iNqsUDUraNWrj00bqssQG",
+    "type": "artist",
+    "popularity": 72,
+    "href": "https://api.spotify.com/v1/artists/1iNqsUDUraNWrj00bqssQG",
+    "genres": [
+      "hip hop",
+      "pop rap",
+      "rap",
+      "underground hip hop"
+    ],
+    "images": [
+      {
+        "url": "https://i.scdn.co/image/ab6761610000e5eb080d11275f15655a11b2610d",
+        "height": 640,
+        "width": 640
+      },
+      {
+        "url": "https://i.scdn.co/image/ab67616100005174080d11275f15655a11b2610d",
+        "height": 320,
+        "width": 320
+      },
+      {
+        "url": "https://i.scdn.co/image/ab6761610000f178080d11275f15655a11b2610d",
+        "height": 160,
+        "width": 160
+      }
+    ]
+  },
+  {
+    "name": "JIDDY",
+    "id": "2pVWwaFwgfOc1pwlDoj1uA",
+    "type": "artist",
+    "popularity": 35,
+    "href": "https://api.spotify.com/v1/artists/2pVWwaFwgfOc1pwlDoj1uA",
+    "genres": [
+      
+    ],
+    "images": [
+      {
+        "url": "https://i.scdn.co/image/ab6761610000e5eb9fa5f4d68e3cb651181a1bc8",
+        "height": 640,
+        "width": 640
+      },
+      {
+        "url": "https://i.scdn.co/image/ab676161000051749fa5f4d68e3cb651181a1bc8",
+        "height": 320,
+        "width": 320
+      },
+      {
+        "url": "https://i.scdn.co/image/ab6761610000f1789fa5f4d68e3cb651181a1bc8",
+        "height": 160,
+        "width": 160
+      }
+    ]
+  },
+  {
+    "name": "JiDion",
+    "id": "4wrIB8cZ5s5J0H2y1y4pis",
+    "type": "artist",
+    "popularity": 31,
+    "href": "https://api.spotify.com/v1/artists/4wrIB8cZ5s5J0H2y1y4pis",
+    "genres": [
+      
+    ],
+    "images": [
+      {
+        "url": "https://i.scdn.co/image/ab67616d0000b273e4da4311317a585bc0b90bad",
+        "height": 640,
+        "width": 640
+      },
+      {
+        "url": "https://i.scdn.co/image/ab67616d00001e02e4da4311317a585bc0b90bad",
+        "height": 300,
+        "width": 300
+      },
+      {
+        "url": "https://i.scdn.co/image/ab67616d00004851e4da4311317a585bc0b90bad",
+        "height": 64,
+        "width": 64
+      }
+    ]
+  },
+  {
+    "name": "jidrip",
+    "id": "3kJrGFiXmWiL2Tsm329PUj",
+    "type": "artist",
+    "popularity": 29,
+    "href": "https://api.spotify.com/v1/artists/3kJrGFiXmWiL2Tsm329PUj",
+    "genres": [
+      
+    ],
+    "images": [
+      {
+        "url": "https://i.scdn.co/image/ab6761610000e5eb20d018dc7288e261c9f3ee0e",
+        "height": 640,
+        "width": 640
+      },
+      {
+        "url": "https://i.scdn.co/image/ab6761610000517420d018dc7288e261c9f3ee0e",
+        "height": 320,
+        "width": 320
+      },
+      {
+        "url": "https://i.scdn.co/image/ab6761610000f17820d018dc7288e261c9f3ee0e",
+        "height": 160,
+        "width": 160
+      }
+    ]
+  },
+  {
+    "name": "Smino",
+    "id": "1ybINI1qPiFbwDXamRtwxD",
+    "type": "artist",
+    "popularity": 69,
+    "href": "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+    "genres": [
+      "alternative r&b"
+    ],
+    "images": [
+      {
+        "url": "https://i.scdn.co/image/ab6761610000e5eb665eca0564934b82f47c49bc",
+        "height": 640,
+        "width": 640
+      },
+      {
+        "url": "https://i.scdn.co/image/ab67616100005174665eca0564934b82f47c49bc",
+        "height": 320,
+        "width": 320
+      },
+      {
+        "url": "https://i.scdn.co/image/ab6761610000f178665eca0564934b82f47c49bc",
+        "height": 160,
+        "width": 160
+      }
+    ]
+  }
 ]
