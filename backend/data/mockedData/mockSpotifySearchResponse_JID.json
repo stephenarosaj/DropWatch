@@ -2,12 +2,12 @@
   "result": "success",
   "data": {
     "tracks": {
-      "total": 127,
+      "total": 148,
       "items": [
         {
           "name": "Surround Sound (feat. 21 Savage & Baby Tate)",
           "id": "1udwFobQ1JoOdWPQrp2b6u",
-          "popularity": "79",
+          "popularity": 79,
           "href": "https://api.spotify.com/v1/tracks/1udwFobQ1JoOdWPQrp2b6u",
           "type": "track",
           "artists": [
@@ -37,18 +37,18 @@
             "href": "https://api.spotify.com/v1/albums/4rJDCELWL0fjdmN9Gn4f4g",
             "images": [
               {
-                "height": 640,
                 "url": "https://i.scdn.co/image/ab67616d0000b273cae6e44dcc84e2035c3ad092",
+                "height": 640,
                 "width": 640
               },
               {
-                "height": 300,
                 "url": "https://i.scdn.co/image/ab67616d00001e02cae6e44dcc84e2035c3ad092",
+                "height": 300,
                 "width": 300
               },
               {
-                "height": 64,
                 "url": "https://i.scdn.co/image/ab67616d00004851cae6e44dcc84e2035c3ad092",
+                "height": 64,
                 "width": 64
               }
             ],
@@ -69,7 +69,7 @@
         {
           "name": "Enemy (with JID) - from the series Arcane League of Legends",
           "id": "1r9xUipOqoNwggBpENDsvJ",
-          "popularity": "83",
+          "popularity": 83,
           "href": "https://api.spotify.com/v1/tracks/1r9xUipOqoNwggBpENDsvJ",
           "type": "track",
           "artists": [
@@ -105,18 +105,18 @@
             "href": "https://api.spotify.com/v1/albums/1bTgKomQYSkKYPD9UI9W4b",
             "images": [
               {
-                "height": 640,
                 "url": "https://i.scdn.co/image/ab67616d0000b273aa597e50829169e6994eb403",
+                "height": 640,
                 "width": 640
               },
               {
-                "height": 300,
                 "url": "https://i.scdn.co/image/ab67616d00001e02aa597e50829169e6994eb403",
+                "height": 300,
                 "width": 300
               },
               {
-                "height": 64,
                 "url": "https://i.scdn.co/image/ab67616d00004851aa597e50829169e6994eb403",
+                "height": 64,
                 "width": 64
               }
             ],
@@ -149,7 +149,7 @@
         {
           "name": "151 Rum",
           "id": "22WV03i2lBbwNVCE1g671p",
-          "popularity": "72",
+          "popularity": 72,
           "href": "https://api.spotify.com/v1/tracks/22WV03i2lBbwNVCE1g671p",
           "type": "track",
           "artists": [
@@ -167,18 +167,18 @@
             "href": "https://api.spotify.com/v1/albums/2oI6gtIXrvNiL2VEMmj5kY",
             "images": [
               {
-                "height": 640,
                 "url": "https://i.scdn.co/image/ab67616d0000b273f5991f6f1f0de2277bb8d948",
+                "height": 640,
                 "width": 640
               },
               {
-                "height": 300,
                 "url": "https://i.scdn.co/image/ab67616d00001e02f5991f6f1f0de2277bb8d948",
+                "height": 300,
                 "width": 300
               },
               {
-                "height": 64,
                 "url": "https://i.scdn.co/image/ab67616d00004851f5991f6f1f0de2277bb8d948",
+                "height": 64,
                 "width": 64
               }
             ],
@@ -199,7 +199,7 @@
         {
           "name": "Enemy (with JID) - from the series Arcane League of Legends",
           "id": "3CIyK1V4JEJkg02E4EJnDl",
-          "popularity": "82",
+          "popularity": 82,
           "href": "https://api.spotify.com/v1/tracks/3CIyK1V4JEJkg02E4EJnDl",
           "type": "track",
           "artists": [
@@ -235,18 +235,18 @@
             "href": "https://api.spotify.com/v1/albums/6yiXkzHvC0OTmhfDQOEWtS",
             "images": [
               {
-                "height": 640,
                 "url": "https://i.scdn.co/image/ab67616d0000b273fc915b69600dce2991a61f13",
+                "height": 640,
                 "width": 640
               },
               {
-                "height": 300,
                 "url": "https://i.scdn.co/image/ab67616d00001e02fc915b69600dce2991a61f13",
+                "height": 300,
                 "width": 300
               },
               {
-                "height": 64,
                 "url": "https://i.scdn.co/image/ab67616d00004851fc915b69600dce2991a61f13",
+                "height": 64,
                 "width": 64
               }
             ],
@@ -267,7 +267,7 @@
         {
           "name": "Dance Now (feat. Kenny Mason)",
           "id": "2WrldKXSBVbNNm3A9vJryi",
-          "popularity": "73",
+          "popularity": 73,
           "href": "https://api.spotify.com/v1/tracks/2WrldKXSBVbNNm3A9vJryi",
           "type": "track",
           "artists": [
@@ -291,18 +291,18 @@
             "href": "https://api.spotify.com/v1/albums/4rJDCELWL0fjdmN9Gn4f4g",
             "images": [
               {
-                "height": 640,
                 "url": "https://i.scdn.co/image/ab67616d0000b273cae6e44dcc84e2035c3ad092",
+                "height": 640,
                 "width": 640
               },
               {
-                "height": 300,
                 "url": "https://i.scdn.co/image/ab67616d00001e02cae6e44dcc84e2035c3ad092",
+                "height": 300,
                 "width": 300
               },
               {
-                "height": 64,
                 "url": "https://i.scdn.co/image/ab67616d00004851cae6e44dcc84e2035c3ad092",
+                "height": 64,
                 "width": 64
               }
             ],
@@ -323,7 +323,7 @@
         {
           "name": "Off Deez (with J. Cole)",
           "id": "3JAeYOjyJodI4PRs44lx2l",
-          "popularity": "65",
+          "popularity": 65,
           "href": "https://api.spotify.com/v1/tracks/3JAeYOjyJodI4PRs44lx2l",
           "type": "track",
           "artists": [
@@ -347,18 +347,18 @@
             "href": "https://api.spotify.com/v1/albums/2oI6gtIXrvNiL2VEMmj5kY",
             "images": [
               {
-                "height": 640,
                 "url": "https://i.scdn.co/image/ab67616d0000b273f5991f6f1f0de2277bb8d948",
+                "height": 640,
                 "width": 640
               },
               {
-                "height": 300,
                 "url": "https://i.scdn.co/image/ab67616d00001e02f5991f6f1f0de2277bb8d948",
+                "height": 300,
                 "width": 300
               },
               {
-                "height": 64,
                 "url": "https://i.scdn.co/image/ab67616d00004851f5991f6f1f0de2277bb8d948",
+                "height": 64,
                 "width": 64
               }
             ],
@@ -379,7 +379,7 @@
         {
           "name": "Stick (with JID & J. Cole feat. Kenny Mason & Sheck Wes)",
           "id": "1BzXvBpIFWJgu0P8P6xmP4",
-          "popularity": "68",
+          "popularity": 68,
           "href": "https://api.spotify.com/v1/tracks/1BzXvBpIFWJgu0P8P6xmP4",
           "type": "track",
           "artists": [
@@ -421,18 +421,18 @@
             "href": "https://api.spotify.com/v1/albums/3tFjhFPqGhhLrCULnPu7Wy",
             "images": [
               {
-                "height": 640,
                 "url": "https://i.scdn.co/image/ab67616d0000b273580d8d4b0061e5a244c86c77",
+                "height": 640,
                 "width": 640
               },
               {
-                "height": 300,
                 "url": "https://i.scdn.co/image/ab67616d00001e02580d8d4b0061e5a244c86c77",
+                "height": 300,
                 "width": 300
               },
               {
-                "height": 64,
                 "url": "https://i.scdn.co/image/ab67616d00004851580d8d4b0061e5a244c86c77",
+                "height": 64,
                 "width": 64
               }
             ],
@@ -459,7 +459,7 @@
         {
           "name": "Enemy - from the series Arcane League of Legends",
           "id": "18nD4ksoYcLFxeV8wb6zG8",
-          "popularity": "0",
+          "popularity": 0,
           "href": "https://api.spotify.com/v1/tracks/18nD4ksoYcLFxeV8wb6zG8",
           "type": "track",
           "artists": [
@@ -495,18 +495,18 @@
             "href": "https://api.spotify.com/v1/albums/0DgjiSDzS7HOcZsiKLFHUm",
             "images": [
               {
-                "height": 640,
                 "url": "https://i.scdn.co/image/ab67616d0000b273374b0305a866fc12e67ee3a3",
+                "height": 640,
                 "width": 640
               },
               {
-                "height": 300,
                 "url": "https://i.scdn.co/image/ab67616d00001e02374b0305a866fc12e67ee3a3",
+                "height": 300,
                 "width": 300
               },
               {
-                "height": 64,
                 "url": "https://i.scdn.co/image/ab67616d00004851374b0305a866fc12e67ee3a3",
+                "height": 64,
                 "width": 64
               }
             ],
@@ -536,7 +536,7 @@
           "name": "JID",
           "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
           "type": "artist",
-          "popularity": "78",
+          "popularity": 78,
           "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7",
           "genres": [
             "hip hop",
@@ -545,18 +545,18 @@
           ],
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab6761610000e5eb8f0270ec23a53f3c1fe91849",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 320,
               "url": "https://i.scdn.co/image/ab676161000051748f0270ec23a53f3c1fe91849",
+              "height": 320,
               "width": 320
             },
             {
-              "height": 160,
               "url": "https://i.scdn.co/image/ab6761610000f1788f0270ec23a53f3c1fe91849",
+              "height": 160,
               "width": 160
             }
           ]
@@ -565,7 +565,7 @@
           "name": "Jidenna",
           "id": "4TsHKU8l8Wq7n7OPVikirn",
           "type": "artist",
-          "popularity": "53",
+          "popularity": 53,
           "href": "https://api.spotify.com/v1/artists/4TsHKU8l8Wq7n7OPVikirn",
           "genres": [
             "ghanaian hip hop",
@@ -573,18 +573,18 @@
           ],
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab6761610000e5ebeaf75445e070451c0fb5bc7d",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 320,
               "url": "https://i.scdn.co/image/ab67616100005174eaf75445e070451c0fb5bc7d",
+              "height": 320,
               "width": 320
             },
             {
-              "height": 160,
               "url": "https://i.scdn.co/image/ab6761610000f178eaf75445e070451c0fb5bc7d",
+              "height": 160,
               "width": 160
             }
           ]
@@ -593,23 +593,25 @@
           "name": "Jidanofu",
           "id": "6JwHgPzxWOKHVH6aWoHuxm",
           "type": "artist",
-          "popularity": "50",
+          "popularity": 50,
           "href": "https://api.spotify.com/v1/artists/6JwHgPzxWOKHVH6aWoHuxm",
-          "genres": [],
+          "genres": [
+            
+          ],
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab6761610000e5eb57392d4da0edf924643211c6",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 320,
               "url": "https://i.scdn.co/image/ab6761610000517457392d4da0edf924643211c6",
+              "height": 320,
               "width": 320
             },
             {
-              "height": 160,
               "url": "https://i.scdn.co/image/ab6761610000f17857392d4da0edf924643211c6",
+              "height": 160,
               "width": 160
             }
           ]
@@ -618,7 +620,7 @@
           "name": "Dreamville",
           "id": "1iNqsUDUraNWrj00bqssQG",
           "type": "artist",
-          "popularity": "72",
+          "popularity": 72,
           "href": "https://api.spotify.com/v1/artists/1iNqsUDUraNWrj00bqssQG",
           "genres": [
             "hip hop",
@@ -628,18 +630,18 @@
           ],
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab6761610000e5eb080d11275f15655a11b2610d",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 320,
               "url": "https://i.scdn.co/image/ab67616100005174080d11275f15655a11b2610d",
+              "height": 320,
               "width": 320
             },
             {
-              "height": 160,
               "url": "https://i.scdn.co/image/ab6761610000f178080d11275f15655a11b2610d",
+              "height": 160,
               "width": 160
             }
           ]
@@ -648,75 +650,25 @@
           "name": "JIDDY",
           "id": "2pVWwaFwgfOc1pwlDoj1uA",
           "type": "artist",
-          "popularity": "35",
+          "popularity": 35,
           "href": "https://api.spotify.com/v1/artists/2pVWwaFwgfOc1pwlDoj1uA",
-          "genres": [],
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab6761610000e5eb9fa5f4d68e3cb651181a1bc8",
-              "width": 640
-            },
-            {
-              "height": 320,
-              "url": "https://i.scdn.co/image/ab676161000051749fa5f4d68e3cb651181a1bc8",
-              "width": 320
-            },
-            {
-              "height": 160,
-              "url": "https://i.scdn.co/image/ab6761610000f1789fa5f4d68e3cb651181a1bc8",
-              "width": 160
-            }
-          ]
-        },
-        {
-          "name": "Smino",
-          "id": "1ybINI1qPiFbwDXamRtwxD",
-          "type": "artist",
-          "popularity": "69",
-          "href": "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
           "genres": [
-            "alternative r&b"
+            
           ],
           "images": [
             {
+              "url": "https://i.scdn.co/image/ab6761610000e5eb9fa5f4d68e3cb651181a1bc8",
               "height": 640,
-              "url": "https://i.scdn.co/image/ab6761610000e5eb665eca0564934b82f47c49bc",
               "width": 640
             },
             {
+              "url": "https://i.scdn.co/image/ab676161000051749fa5f4d68e3cb651181a1bc8",
               "height": 320,
-              "url": "https://i.scdn.co/image/ab67616100005174665eca0564934b82f47c49bc",
               "width": 320
             },
             {
+              "url": "https://i.scdn.co/image/ab6761610000f1789fa5f4d68e3cb651181a1bc8",
               "height": 160,
-              "url": "https://i.scdn.co/image/ab6761610000f178665eca0564934b82f47c49bc",
-              "width": 160
-            }
-          ]
-        },
-        {
-          "name": "jidrip",
-          "id": "3kJrGFiXmWiL2Tsm329PUj",
-          "type": "artist",
-          "popularity": "29",
-          "href": "https://api.spotify.com/v1/artists/3kJrGFiXmWiL2Tsm329PUj",
-          "genres": [],
-          "images": [
-            {
-              "height": 640,
-              "url": "https://i.scdn.co/image/ab6761610000e5eb20d018dc7288e261c9f3ee0e",
-              "width": 640
-            },
-            {
-              "height": 320,
-              "url": "https://i.scdn.co/image/ab6761610000517420d018dc7288e261c9f3ee0e",
-              "width": 320
-            },
-            {
-              "height": 160,
-              "url": "https://i.scdn.co/image/ab6761610000f17820d018dc7288e261c9f3ee0e",
               "width": 160
             }
           ]
@@ -725,24 +677,80 @@
           "name": "JiDion",
           "id": "4wrIB8cZ5s5J0H2y1y4pis",
           "type": "artist",
-          "popularity": "31",
+          "popularity": 31,
           "href": "https://api.spotify.com/v1/artists/4wrIB8cZ5s5J0H2y1y4pis",
-          "genres": [],
+          "genres": [
+            
+          ],
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab67616d0000b273e4da4311317a585bc0b90bad",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 300,
               "url": "https://i.scdn.co/image/ab67616d00001e02e4da4311317a585bc0b90bad",
+              "height": 300,
               "width": 300
             },
             {
-              "height": 64,
               "url": "https://i.scdn.co/image/ab67616d00004851e4da4311317a585bc0b90bad",
+              "height": 64,
               "width": 64
+            }
+          ]
+        },
+        {
+          "name": "jidrip",
+          "id": "3kJrGFiXmWiL2Tsm329PUj",
+          "type": "artist",
+          "popularity": 29,
+          "href": "https://api.spotify.com/v1/artists/3kJrGFiXmWiL2Tsm329PUj",
+          "genres": [
+            
+          ],
+          "images": [
+            {
+              "url": "https://i.scdn.co/image/ab6761610000e5eb20d018dc7288e261c9f3ee0e",
+              "height": 640,
+              "width": 640
+            },
+            {
+              "url": "https://i.scdn.co/image/ab6761610000517420d018dc7288e261c9f3ee0e",
+              "height": 320,
+              "width": 320
+            },
+            {
+              "url": "https://i.scdn.co/image/ab6761610000f17820d018dc7288e261c9f3ee0e",
+              "height": 160,
+              "width": 160
+            }
+          ]
+        },
+        {
+          "name": "Smino",
+          "id": "1ybINI1qPiFbwDXamRtwxD",
+          "type": "artist",
+          "popularity": 69,
+          "href": "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+          "genres": [
+            "alternative r&b"
+          ],
+          "images": [
+            {
+              "url": "https://i.scdn.co/image/ab6761610000e5eb665eca0564934b82f47c49bc",
+              "height": 640,
+              "width": 640
+            },
+            {
+              "url": "https://i.scdn.co/image/ab67616100005174665eca0564934b82f47c49bc",
+              "height": 320,
+              "width": 320
+            },
+            {
+              "url": "https://i.scdn.co/image/ab6761610000f178665eca0564934b82f47c49bc",
+              "height": 160,
+              "width": 160
             }
           ]
         }
@@ -752,7 +760,7 @@
       "next": "https://api.spotify.com/v1/search?query=jid&type=artist&market=US&offset=8&limit=8"
     },
     "albums": {
-      "total": 141,
+      "total": 143,
       "items": [
         {
           "name": "The Forever Story (Extended Version)",
@@ -761,18 +769,18 @@
           "href": "https://api.spotify.com/v1/albums/4rJDCELWL0fjdmN9Gn4f4g",
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab67616d0000b273cae6e44dcc84e2035c3ad092",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 300,
               "url": "https://i.scdn.co/image/ab67616d00001e02cae6e44dcc84e2035c3ad092",
+              "height": 300,
               "width": 300
             },
             {
-              "height": 64,
               "url": "https://i.scdn.co/image/ab67616d00004851cae6e44dcc84e2035c3ad092",
+              "height": 64,
               "width": 64
             }
           ]
@@ -784,18 +792,18 @@
           "href": "https://api.spotify.com/v1/albums/2oI6gtIXrvNiL2VEMmj5kY",
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab67616d0000b273f5991f6f1f0de2277bb8d948",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 300,
               "url": "https://i.scdn.co/image/ab67616d00001e02f5991f6f1f0de2277bb8d948",
+              "height": 300,
               "width": 300
             },
             {
-              "height": 64,
               "url": "https://i.scdn.co/image/ab67616d00004851f5991f6f1f0de2277bb8d948",
+              "height": 64,
               "width": 64
             }
           ]
@@ -807,18 +815,18 @@
           "href": "https://api.spotify.com/v1/albums/1gPqbxhs90kppgOVxGOPzd",
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab67616d0000b273f705b14ca8b81af140d1f1d3",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 300,
               "url": "https://i.scdn.co/image/ab67616d00001e02f705b14ca8b81af140d1f1d3",
+              "height": 300,
               "width": 300
             },
             {
-              "height": 64,
               "url": "https://i.scdn.co/image/ab67616d00004851f705b14ca8b81af140d1f1d3",
+              "height": 64,
               "width": 64
             }
           ]
@@ -830,18 +838,18 @@
           "href": "https://api.spotify.com/v1/albums/1bTgKomQYSkKYPD9UI9W4b",
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab67616d0000b273aa597e50829169e6994eb403",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 300,
               "url": "https://i.scdn.co/image/ab67616d00001e02aa597e50829169e6994eb403",
+              "height": 300,
               "width": 300
             },
             {
-              "height": 64,
               "url": "https://i.scdn.co/image/ab67616d00004851aa597e50829169e6994eb403",
+              "height": 64,
               "width": 64
             }
           ]
@@ -853,18 +861,18 @@
           "href": "https://api.spotify.com/v1/albums/2n3quCZ0anEa46j2IveacI",
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab67616d0000b273c0ae820e3b64854de4642101",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 300,
               "url": "https://i.scdn.co/image/ab67616d00001e02c0ae820e3b64854de4642101",
+              "height": 300,
               "width": 300
             },
             {
-              "height": 64,
               "url": "https://i.scdn.co/image/ab67616d00004851c0ae820e3b64854de4642101",
+              "height": 64,
               "width": 64
             }
           ]
@@ -876,18 +884,18 @@
           "href": "https://api.spotify.com/v1/albums/0UqZZstwaKzBuNLXPZANxa",
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab67616d0000b27365ac5e83eb3b7b41f9e2d98b",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 300,
               "url": "https://i.scdn.co/image/ab67616d00001e0265ac5e83eb3b7b41f9e2d98b",
+              "height": 300,
               "width": 300
             },
             {
-              "height": 64,
               "url": "https://i.scdn.co/image/ab67616d0000485165ac5e83eb3b7b41f9e2d98b",
+              "height": 64,
               "width": 64
             }
           ]
@@ -899,18 +907,18 @@
           "href": "https://api.spotify.com/v1/albums/35C2QYq4OgkEXETksStyzz",
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab67616d0000b273e9166dea653ce1aa302d2916",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 300,
               "url": "https://i.scdn.co/image/ab67616d00001e02e9166dea653ce1aa302d2916",
+              "height": 300,
               "width": 300
             },
             {
-              "height": 64,
               "url": "https://i.scdn.co/image/ab67616d00004851e9166dea653ce1aa302d2916",
+              "height": 64,
               "width": 64
             }
           ]
@@ -922,18 +930,18 @@
           "href": "https://api.spotify.com/v1/albums/2L13Kv0sx6GPAHo7QTZLAy",
           "images": [
             {
-              "height": 640,
               "url": "https://i.scdn.co/image/ab67616d0000b273230d88bf27d6ca322fb59eb4",
+              "height": 640,
               "width": 640
             },
             {
-              "height": 300,
               "url": "https://i.scdn.co/image/ab67616d00001e02230d88bf27d6ca322fb59eb4",
+              "height": 300,
               "width": 300
             },
             {
-              "height": 64,
               "url": "https://i.scdn.co/image/ab67616d00004851230d88bf27d6ca322fb59eb4",
+              "height": 64,
               "width": 64
             }
           ]
