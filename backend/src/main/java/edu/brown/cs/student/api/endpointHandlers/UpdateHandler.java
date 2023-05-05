@@ -11,9 +11,12 @@ import spark.Response;
 import spark.Route;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.lang.System.exit;
 
 /**
  * Class for UpdateHandler - handles checking for new music releases!
@@ -29,14 +32,27 @@ public class UpdateHandler implements Route {
     private SpotifyDataSource SpotifyAPIRequester;
 
     /**
+     * The filepath for our DropWatchDB!
+     */
+    private String filepath = "data/DropWatchDB.db";
+
+    /**
      * The db we use to store stuff!
      */
-    private DropWatchDB db = new DropWatchDB();
+    private DropWatchDB db;
 
     /**
      * Constructor for this class
      */
-    public UpdateHandler() {}
+    public UpdateHandler() {
+        try {
+            this.db = new DropWatchDB(filepath);
+        } catch (Exception e) {
+            System.out.println("CRITICAL ERROR: COULD NOT SET UP CONNECTION TO DB '" + filepath + "', ABORTING UpdateHandler()!\n");
+            System.out.println(e.getMessage());
+            exit(1);
+        }
+    }
 
     /**
      * Function that checks for a new release
@@ -56,17 +72,33 @@ public class UpdateHandler implements Route {
         Buffer buf = this.SpotifyAPIRequester.getData(urlString);
         AlbumRecord album = MoshiUtil.deserializeUpdate(buf);
 
-        // TODO: Review code below
-        // parse request results to find the latest release date
-        // TODO: To my understanding, this request should only return one result which is the latest album.
-        // So I thought we could access the date with the call below but I'm unsure
-        String newDate = album.getReleaseDate();
+        // parse request results to find the latest release date (being mindful of precision)
+        String newDate = album.release_date();
+        String newDatePrecision = album.release_date_precision();
 
-
-        // TODO:
-        // compare old and new dates. if there is a new release, return both!
+        // grab stored latest release date
         // TODO: implement DropWatchDB.queryLatestRelease()
-        String oldDate = this.db.queryLatestRelease(artist_id);
+        String[] oldDateList = this.db.queryLatestRelease(artist_id);
+        String oldDate = oldDateList[0];
+        String oldDatePrecision = oldDateList[1];
+
+        // TODO: do something inside these if statements
+        // compare old and new dates. if there is a new release, return both!
+        // since the possible values are "day", "month", and "year", and when
+        // lexicographically ordered they are also ordered in terms of precision,
+        // we can use String.compareTo, which compares lexicographic ordering,
+        // to determine which is more precise
+        if (newDatePrecision == null || oldDatePrecision == null || newDate == null || oldDate == null) {
+            // error!
+        } else if (oldDatePrecision.compareTo(newDatePrecision) < 0) {
+            // if this is true, we could have "day".compareTo("month")
+            // new date is less precise than old date
+        } else if (oldDatePrecision.compareTo(newDatePrecision) > 0) {
+            // if this is true, we could have "year".compareTo("month")
+            // new date is more precise than old date
+        } else {
+            // same precision
+        }
         return null;
     }
 
@@ -94,7 +126,7 @@ public class UpdateHandler implements Route {
             ArrayList<String> artist_ids = this.db.queryTracking(user);
 
             // map containing new drops!
-            HashMap<String, AlbumRecord> drops = new HashMap<String, AlbumRecord>();
+            HashMap<String, ArrayList<AlbumRecord>> drops = new HashMap<String, ArrayList<AlbumRecord>>();
 
             // for each artist id, check for new music
             for (String artist_id: artist_ids) {
@@ -118,7 +150,7 @@ public class UpdateHandler implements Route {
                         // TODO: implement function to do this
                         // now we have to use the old and new dates to grab all artist's
                         // music in the range (oldDate, newDate]
-                        AlbumRecord newAlbums = null;
+                        ArrayList<AlbumRecord> newAlbums = new ArrayList<AlbumRecord>();
 
                         // update drops so that we can return the frontend some new info!
                         drops.put(artist_id, newAlbums);
