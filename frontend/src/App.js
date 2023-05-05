@@ -98,7 +98,7 @@ function App() {
         <Welcome isLoggedIn={isLoggedIn} username={username}/>
       </div>
       <div>
-        <DropWatch artists={artists}/>
+        <DropWatch artists={artists} isLoggedIn={isLoggedIn}/>
       </div>
     </div>
 

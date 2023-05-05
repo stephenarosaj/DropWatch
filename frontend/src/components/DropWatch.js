@@ -4,11 +4,16 @@ import Artist from './Artist';
 /**
  * Component to display the artists that a user is tracking
  * @param {*} props 
- * @returns 
+ * @returns a div that will render the 
  */
 function DropWatch(props) {
   let middle = null
-
+  if(!props.isLoggedIn) {
+    return (
+      <div>
+      </div>
+    )
+  }
   if(props.artists.length === 0) {
     middle =
       <Card className='artists'>
@@ -29,6 +34,7 @@ function DropWatch(props) {
       </Row>
     </Container>
   }
+  
   return(
     <div className='dropwatch'>
       <div className='dropwatch-text'>
