@@ -1,17 +1,15 @@
-import { Card, Col, Container, Image, Row, Stack } from "react-bootstrap";
+import { Card, Col, Container, Image, Row} from "react-bootstrap";
 
 
 function Artist(props) {
-  console.log(props.artist.images[2].url)
-  console.log(props.artist.name)
   return (
     <Container fluid>
       <Row xs={2}>
-        <Col className='dropwatch-img'>
+        <Col className='artist-image-col'>
           <Image className="artist-image" src={props.artist.images[0].url}/>
         </Col>
-        <Col className="dropwatch-col">
-          <Card className="dropwatch-name">
+        <Col className="artist-name-col">
+          <Card className="artist-name">
             <Card.Text>
               <p>{props.artist.name}</p>
             </Card.Text>

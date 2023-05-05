@@ -1,3 +1,4 @@
+/* -------------------------------- FONTS -------------------------------- */
 /* inter-regular - latin */
 @font-face {
   font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
@@ -35,9 +36,7 @@
        url('./fonts/inter-v12-latin-800.svg#Inter') format('svg'); /* Legacy iOS */
 }
 
-
-
-
+/* -------------------------------- MAIN APP -------------------------------- */
 .App {
   background-color: #1e1e1e;
   width: 100%;
@@ -78,6 +77,7 @@
   }
 }
 
+/* -------------------------------- LOGIN SECTION -------------------------------- */
 .login-page {
   color: #ffffff;
   font-family: "Inter" !important; 
@@ -129,6 +129,7 @@ h3 {
   font-size: 32px !important
 }
 
+/* -------------------------------- WELCOME COMPONENT -------------------------------- */
 .welcome-section {
   color: #ffffff;
   text-align: center;
@@ -136,16 +137,7 @@ h3 {
   padding-bottom: 50px;
 }
 
-.artists {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #E8DBAD !important;
-  max-width: 90%;
-  margin: auto;
-  min-height: 480px;
-  margin-bottom: 50px;
-}
+/* -------------------------------- DROPWATCH COMPONENT -------------------------------- */
 
 .dropwatch {
   background-color: #FFF6D7 !important;
@@ -153,19 +145,13 @@ h3 {
   align-items: center;
   padding-top: 20px;
   padding-bottom: 50px;
-  /* margin-bottom: 500px; */
 }
 
 .dropwatch-text {
   padding-bottom: 20px;
 }
 
-.add-artists {
-  font-size: 36px !important;
-  font-weight: bold !important;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
+
 .bottom {
   display: flex;
   align-items: center;
@@ -205,36 +191,164 @@ h3 {
   max-width: 90%;
 }
 
-.artist-image {
-  width: 100%;
-  height: 160px;
+.add-artists {
+  font-size: 36px !important;
+  font-weight: bold !important;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.not-done {
-  color: #ffffff
-}
-
-.dropwatch-name {
-  min-height: 100%;
-  /* width: 100%; */
-  border-radius: 0% !important;
+.artists {
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #E8DBAD !important;
-  /* padding: 0 !important; */
+  max-width: 90%;
+  margin: auto;
+  min-height: 480px;
+  margin-bottom: 50px;
 }
 
-.dropwatch-img {
+.artists-container {
+  padding: 5% 0px;
+}
+
+/* -------------------------------- ARTIST COMPONENT -------------------------------- */
+
+.artist-image-col {
   height: 160px !important;
   width: 160px !important;
   padding: 0 !important;
 }
 
-.dropwatch-col {
+.artist-image {
+  width: 100%;
+  height: 160px;
+}
+
+.artist-name-col {
   padding: 0 !important;
 }
 
-.artists-container {
+.artist-name {
+  min-height: 100%;
+  border-radius: 0% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #E8DBAD !important;
+}
+
+/* -------------------------------- RECENTDROPS COMPONENT -------------------------------- */
+
+.recent-drops {
+  background-color: #CDFCBD !important;
+  text-align: center;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 50px;
+}
+
+.recent-drops-text {
+  padding-bottom: 20px;
+}
+
+.drops {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #9EDB8A !important;
+  max-width: 90%;
+  margin: auto;
+  min-height: 750px;
+  margin-bottom: 50px;
+}
+
+.drops-container {
   padding: 5% 0px;
+}
+
+/* -------------------------------- DROP COMPONENT -------------------------------- */
+
+.drop-image-col {
+  height: 160px !important;
+  width: 160px !important;
+  padding: 0 !important;
+}
+
+.drop-image {
+  width: 100%;
+  height: 160px;
+}
+
+.drop-name-col {
+  padding: 0 !important;
+}
+
+.drop-name {
+  min-height: 100%;
+  border-radius: 0% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #9EDB8A !important;
+}
+
+/* -------------------------------- SEARCH COMPONENT -------------------------------- */
+
+.search {
+  background-color: #BDE9FC !important;
+  text-align: center;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 50px;
+}
+
+.search-text {
+  padding-bottom: 20px;
+}
+
+.search-results {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #77BFDE !important;
+  max-width: 90%;
+  margin: auto;
+  min-height: 750px;
+  margin-bottom: 50px;
+}
+
+.search-results-container {
+  padding: 5% 0px;
+}
+
+/* -------------------------------- SEARCHRESULT COMPONENT -------------------------------- */
+
+.search-result-image-col {
+  height: 160px !important;
+  width: 160px !important;
+  padding: 0 !important;
+}
+
+.search-result-image {
+  width: 100%;
+  height: 160px;
+}
+
+.search-result-name-col {
+  padding: 0 !important;
+}
+
+.search-result-name {
+  min-height: 100%;
+  border-radius: 0% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #77BFDE !important;
+}
+
+.not-done {
+  color: #ffffff
 }
