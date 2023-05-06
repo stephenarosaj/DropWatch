@@ -9,7 +9,7 @@ import Welcome from './components/Welcome';
 import DropWatch from './components/DropWatch';
 import RecentDrops from './components/RecentDrops';
 import Search from './components/Search';
-import Playlists from './components/Playlists';
+import SavedPlaylists from './components/SavedPlaylists';
 import Followed from './components/Followed';
 import artistData from "./data/artists.json";
 
@@ -45,6 +45,7 @@ function App() {
   const [artists, setArtists] = useState(artistData)
   const [drops, setDrops] = useState(artistData)
   const [isLoggedIn, setLogin] = useState(false)
+  const[playlists, setPlaylists] = useState([])
 
   /**
    * @function handleRedirect - function to retrieve the Spotify authorization code and generate
@@ -54,7 +55,7 @@ function App() {
   function handleRedirect(query) {
     let code = getCode(query)
     console.log("code: " + code)
-    fetchAccessToken(code, setLogin, setRefreshToken, setUsername)
+    fetchAccessToken(code, setLogin, setRefreshToken, setUsername, setPlaylists)
     window.history.pushState("","", redirect_uri)
   }
 
@@ -120,9 +121,9 @@ function App() {
       </div>
       <Welcome isLoggedIn={isLoggedIn} username={username}/>
       <DropWatch artists={artists} isLoggedIn={isLoggedIn}/>
-      <RecentDrops drops={drops} isLoggedIn={isLoggedIn}/>
+      {/* <RecentDrops drops={drops} isLoggedIn={isLoggedIn}/> */}
       {/* <Search isLoggedIn={isLoggedIn}/> */}
-      <Playlists isLoggedIn={isLoggedIn} refreshToken={refreshToken} setRefreshToken={setRefreshToken}/>
+      <SavedPlaylists isLoggedIn={isLoggedIn} playlists={playlists}/>
       {/* <Followed isLoggedIn={isLoggedIn} refreshToken={refreshToken} setRefreshToken={setRefreshToken}/> */}
     </div>
 

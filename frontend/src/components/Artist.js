@@ -11,7 +11,7 @@ function Artist(props) {
         <Col className="artist-name-col">
           <Card className="artist-name">
             <Card.Text>
-              <p>{props.artist.name}</p>
+              {props.artist.name}
             </Card.Text>
           </Card>
         </Col>

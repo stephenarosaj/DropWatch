@@ -1,4 +1,5 @@
 import { clientID, clientSecretID} from "../private/tokens"
+import { getPlaylists } from "./playlists"
 const redirect_uri = "http://localhost:3000/callback"
 const client_id = clientID
 const client_secret = clientSecretID
@@ -8,8 +9,9 @@ const TOKEN = "https://accounts.spotify.com/api/token"
 export function requestAuthorization(){
   console.log("clicked")
   localStorage.setItem("client_id", client_id)
+  
   // here is where we change the permissions of what we want to know about the user
-  let scope = "user-read-private user-read-email"
+  let scope = "user-read-private user-follow-read playlist-read-collaborative playlist-read-private"
 
   let url = AUTHORIZE;
   url += "?client_id="+client_id;
@@ -42,7 +44,7 @@ export function requestAuthorization(){
  * Function to call the spotify api to get the access token
  * @param {*} body - the parameters to be provided to the api request
  */
-export async function fetchAccessToken(code, setLogin, setRefreshToken, setUsername) {
+export async function fetchAccessToken(code, setLogin, setRefreshToken, setUsername, setPlaylists) {
   // builds the body of the Spotify api request
   let body = "grant_type=authorization_code";
   body += "&code=" + code;
@@ -76,6 +78,7 @@ export async function fetchAccessToken(code, setLogin, setRefreshToken, setUsern
       }
       setLogin(true)
       getUsername(setUsername)
+      getPlaylists(setPlaylists)
     })
     .catch(error => {
       console.error('Error:', error)
@@ -90,6 +93,7 @@ async function getUsername(setUsername) {
 
   fetch('https://api.spotify.com/v1/me', headers)
     .then(response => {
+      console.log("status: " + response.status)
       if(!response.ok) {
         throw new Error('HTTP status' + response.status);
       }
@@ -100,6 +104,13 @@ async function getUsername(setUsername) {
           setUsername(data.display_name)
         } else {
           console.log(data.json())
+        }
+
+        if(data.id !== undefined) {
+          localStorage.setItem('user_id', data.id)
+          console.log('id: ' + data.id)
+        } else {
+          console.log("could not find user_id!")
         }
       })
 }

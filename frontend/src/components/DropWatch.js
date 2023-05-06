@@ -17,25 +17,21 @@ function DropWatch(props) {
   if(props.artists.length === 0) {
     middle =
       <Card className='artists'>
-        <Card.Text>
           <p>You're not tracking any artists yet! Let's fix that.</p>
           <p>Click one of the buttons below and track some artists!</p>
-        </Card.Text>
       </Card>
   } else {
     middle = 
     <Card className='artists'>
-      <Card.Text>
         <Container className='artists-container'>
           <Row xs={1} md={2} className="g-4">
-            {props.artists.map((item) => (
-              <Col>
+            {props.artists.map((item, i) => (
+              <Col key={i}>
                 <Artist artist={item}/>
               </Col>
             ))}
           </Row>
         </Container>
-      </Card.Text>
     </Card>
   }
   
@@ -53,8 +49,7 @@ function DropWatch(props) {
         <Card.Title className='add-artists'>
           Missing someone? Add them in one of 3 ways:
         </Card.Title>
-        <Card.Text>
-        <Container >
+        <Container>
           <Row>
             <Col>
               <Button className='search'>Search Songs and Artists</Button>
@@ -67,7 +62,6 @@ function DropWatch(props) {
             </Col>
           </Row>
         </Container>
-        </Card.Text>
     </Card>
       </div>
     </div>

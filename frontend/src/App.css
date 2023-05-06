@@ -349,6 +349,61 @@ h3 {
   background-color: #77BFDE !important;
 }
 
+/* -------------------------------- SAVEDPLAYLIST COMPONENT -------------------------------- */
+
+.saved-playlists {
+  background-color: #ECBDFC !important;
+  text-align: center;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 50px;
+}
+
+.saved-playlists-text {
+  padding-bottom: 20px;
+}
+
+.playlists {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #C280D9 !important;
+  max-width: 90%;
+  margin: auto;
+  min-height: 750px;
+  margin-bottom: 50px;
+}
+
+.playlists-container {
+  padding: 5% 0px;
+}
+
+/* -------------------------------- PLAYLIST COMPONENT -------------------------------- */
+
+.playlist-image-col {
+  height: 160px !important;
+  width: 160px !important;
+  padding: 0 !important;
+}
+
+.playlist-image {
+  width: 100%;
+  height: 160px;
+}
+
+.playlist-name-col {
+  padding: 0 !important;
+}
+
+.playlist-name {
+  min-height: 100%;
+  border-radius: 0% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #C280D9 !important;
+}
+
 .not-done {
   color: #ffffff
 }
