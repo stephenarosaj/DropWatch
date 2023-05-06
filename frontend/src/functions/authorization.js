@@ -1,4 +1,4 @@
-import { clientID, clientSecretID} from "./private/tokens"
+import { clientID, clientSecretID} from "../private/tokens"
 const redirect_uri = "http://localhost:3000/callback"
 const client_id = clientID
 const client_secret = clientSecretID

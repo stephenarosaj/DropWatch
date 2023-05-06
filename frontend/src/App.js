@@ -2,7 +2,7 @@
 import './App.css';
 import {useEffect, useState} from "react"
 // import {clientID, clientSecretID } from './private/tokens';
-import { requestAuthorization, fetchAccessToken} from './authorization';
+import { requestAuthorization, fetchAccessToken} from './functions/authorization';
 import {Col, Row, Container, Image, Card, Button} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Welcome from './components/Welcome';
@@ -122,8 +122,8 @@ function App() {
       <DropWatch artists={artists} isLoggedIn={isLoggedIn}/>
       <RecentDrops drops={drops} isLoggedIn={isLoggedIn}/>
       {/* <Search isLoggedIn={isLoggedIn}/> */}
-      {/* <Playlists isLoggedIn={isLoggedIn} refreshToken={refreshToken} setRefreshToken={setRefreshToken}/>
-      <Followed isLoggedIn={isLoggedIn} refreshToken={refreshToken} setRefreshToken={setRefreshToken}/> */}
+      <Playlists isLoggedIn={isLoggedIn} refreshToken={refreshToken} setRefreshToken={setRefreshToken}/>
+      {/* <Followed isLoggedIn={isLoggedIn} refreshToken={refreshToken} setRefreshToken={setRefreshToken}/> */}
     </div>
 
     
