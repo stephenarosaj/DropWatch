@@ -10,4 +10,6 @@ package edu.brown.cs.student.api.endpointHandlers;
  */
 public class TrackHandler {
   //TODO: track some shit man
+  // each call to this is either an query of, addition to, or deletion from the
+  // user's currently tracked artists
 }

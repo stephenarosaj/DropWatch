@@ -67,7 +67,7 @@ public record SearchRecord(
    */
   public record Albums (
     @Json(name = "total") Integer total,
-    @Json(name = "items") List<ArtistRecord> items,
+    @Json(name = "items") List<AlbumRecord> items,
 
     @Json(name = "offset") Integer offset,
     @Json(name = "limit") Integer limit,

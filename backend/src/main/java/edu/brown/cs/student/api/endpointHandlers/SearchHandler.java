@@ -4,6 +4,9 @@ import edu.brown.cs.student.api.MoshiUtil;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyAPIRequester;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
 import edu.brown.cs.student.api.formats.SearchRecord;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
@@ -90,6 +93,11 @@ public class SearchHandler implements Route {
         + "&limit=8"
         + "&offset=" + offset;
       Buffer buf = this.SpotifyAPIRequester.getData(urlString);
+      try (BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+        writer.write(new String(buf.readByteArray()));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
 
       // deserialize the api's JSON response
       SearchRecord searchResponse = MoshiUtil.deserializeSearch(buf);

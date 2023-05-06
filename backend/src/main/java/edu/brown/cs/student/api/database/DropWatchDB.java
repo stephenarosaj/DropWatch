@@ -1,6 +1,4 @@
 package edu.brown.cs.student.api.database;
-
-import edu.brown.cs.student.api.formats.AlbumRecord;
 import org.testng.internal.collections.Pair;
 
 import java.sql.ResultSet;
@@ -43,9 +41,11 @@ public class DropWatchDB {
     // set up fields and connect to db
     this.filepath = filepath;
     this.db.connectDB(this.filepath);
+    this.tables = new HashMap<>();
 
     // setup!
     initializeDB();
+    this.db.commit();
   }
 
   /**
@@ -55,21 +55,30 @@ public class DropWatchDB {
    */
   private void initializeDB() throws ClassNotFoundException, SQLException {
     // CREATE TABLES!
+    createTracking();
+    createArtists();
+    createAlbums();
+    createArtistAlbums();
+  }
 
-    // this table is for keeping track of the artists a user tracks, and the
-    // users tracking an artist!
-    // EXAMPLE:
-    // user_id | artist_id
-    //    1    |    JID
-    //    1    |   Smino
-    //    2    |    JID
-    //    2    |   Tyler
-    //    3    |   Smino
-    //    3    |   Tyler
-    //
-    // tracking(user_id = 3) --> [Smino, Tyler]
-    // tracking(artist_id = JID) --> [1, 2]
-
+  /**
+   * Helper to create the tracking table. this table is for keeping track of the art
+   * users tracking an artist!
+   * EXAMPLE:
+   *      tracking
+   * user_id | artist_id
+   *    1    |    JID
+   *    1    |   Smino
+   *    2    |    JID
+   *    2    |   Tyler
+   *    3    |   Smino
+   *    3    |   Tyler
+   * tracking(user_id = 3) --> [Smino, Tyler]
+   * tracking(artist_id = JID) --> [1, 2]
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not check for/create tracking table
+   */
+  private void createTracking() throws SQLException, ClassNotFoundException {
     // make the table in the db (if it doesn't exist)
     String trackingName = "tracking";
     String trackingSchema = "" +
@@ -81,61 +90,84 @@ public class DropWatchDB {
     }
     // update tables field
     this.tables.put(trackingName, trackingSchema);
+  }
 
-//    // this table is for keeping track of the latest release date of an artist
-//    // EXAMPLE:
-//    // artist_id |    date    | precision
-//    //    JID    |   2022-10  |   month
-//    //   Smino   | 2023-09-16 |    day
-//    //   Tyler   |    2021    |    year
-//    //
-//    // artists(artist_id = JID) --> ["2022-10", "month"]
-//    // tracking(artist_id = JID) --> [1, 2]
-//    // make the table in the db (if it doesn't exist)
-//    String latestReleaseName = "latestRelease";
-//    String latestReleaseSchema = "" +
-//      "artist_id VARCHAR(100) PRIMARY KEY," + // artist_id - the unique spotify id of the artist - our primary key
-//      "date VARCHAR(10)," + // date - the latest release date for this artist
-//      "precision VARCHAR(5)"; // precision - the precision of the latest release date - year, month, or day
-//    if (!db.tableExists(latestReleaseName)) {
-//      db.createNewTable(latestReleaseName, latestReleaseSchema);
-//    }
-//    // update tables field
-//    this.tables.put(latestReleaseName, latestReleaseSchema);
+  /**
+   * Helper to create the artists table. this table is for keeping track of artists,
+   * EXAMPLE:
+   *                  artists
+   * artist_id |    date    | precision | link
+   *    JID    |   2022-10  |   month   |  a
+   *   Smino   | 2023-09-16 |    day    |  b
+   *   Tyler   |    2021    |    year   |  c
+   * artists(artist_id = JID) --> (2022-10, month, a)
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not check for/create tracking table
+   */
+  private void createArtists() throws SQLException, ClassNotFoundException {
+    // make the table in the db (if it doesn't exist)
+    String latestReleaseName = "artists";
+    String latestReleaseSchema = "" +
+      "artist_id VARCHAR(100) PRIMARY KEY," + // artist_id - the unique spotify id of the artist - our primary key
+      "date VARCHAR(10)," + // date - the latest release date for this artist
+      "precision VARCHAR(5)," + // precision - the precision of the latest release date - year, month, or day
+      "link VARCHAR(100)"; // link - the link to grab more data on an artist
+    if (!db.tableExists(latestReleaseName)) {
+      db.createNewTable(latestReleaseName, latestReleaseSchema);
+    }
+    // update tables field
+    this.tables.put(latestReleaseName, latestReleaseSchema);
+  }
 
-    // this table is for keeping track of albums artists release
-    // EXAMPLE:
-    // album_id | release_date | precision | link
-    //    1     |  2020-10-06  |    day    |  a
-    //    2     |     04-05    |   month   |  b
-    //    3     |     2021     |   year    |  c
-    //
+  /**
+   * Helper to create the tracking table. this table is for keeping track of albums
+   * artists release
+   * EXAMPLE:
+   *                    albums
+   * album_id | release_date | precision | link
+   *    1     |  2020-10-06  |    day    |  a
+   *    2     |     04-05    |   month   |  b
+   *    3     |     2021     |   year    |  c
+   * albums(album_id = 1) --> (2020-10-06, day, a)
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not check for/create tracking table
+   */
+  private void createAlbums() throws SQLException, ClassNotFoundException {
     // make the table in the db (if it doesn't exist)
     String albumsName = "albums";
     String albumsSchema = "" +
       "album_id VARCHAR(100) PRIMARY KEY," + // album_id - the unique spotify id of the album
       "date VARCHAR(10)," + // date - the latest release date for this artist
       "precision VARCHAR(5)," + // precision - the precision of the latest release date - year, month, or day
-      "link VARCHAR(100);"; // link - the link to get more info about an album
+      "link VARCHAR(100)"; // link - the link to get more info about an album
     if (!db.tableExists(albumsName)) {
       db.createNewTable(albumsName, albumsSchema);
     }
     // update tables field
     this.tables.put(albumsName, albumsSchema);
+  }
 
-    // this table is for keeping track of artists who release albums
-    // EXAMPLE:
-    // artist_id | album_id
-    //     4     |    1
-    //     5     |    2
-    //     6     |    3
-    //
+  /**
+   * Helper to create the artistAlbums table. this table is for keeping track of
+   * the relationship between artists and albums (releasing albums)
+   * EXAMPLE:
+   *     artistAlbums
+   * artist_id | album_id
+   *     4     |    1
+   *     5     |    2
+   *     6     |    3
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not check for/create tracking table
+   */
+  private void createArtistAlbums() throws SQLException, ClassNotFoundException {
     // make the table in the db (if it doesn't exist)
     String artistAlbumsName = "artistAlbums";
     String artistAlbumsSchema = "" +
       "artist_id VARCHAR(100)," + // artist_id - the unique spotify id of the artist
       "album_id VARCHAR(100)," + // album_id - the unique spotify id of the album
-      "PRIMARY KEY (artist_id, album_id);"; // primary key is tuple of columns
+      "PRIMARY KEY (artist_id, album_id)," + // primary key is tuple of columns
+      "FOREIGN KEY artist_id REFERENCES artists(artist_id)," + // ids are from other tables!
+      "FOREIGN KEY album_id REFERENCES albums(album_id)"; // ids are from other tables!
     if (!db.tableExists(artistAlbumsName)) {
       db.createNewTable(artistAlbumsName, artistAlbumsSchema);
     }
@@ -192,7 +224,7 @@ public class DropWatchDB {
   }
 
   /**
-   * method that inserts a new (user_id, artist_id) pair into the tracking table!
+   * method that adds a new (user_id, artist_id) pair into the tracking table!
    * NOTE: since the primary key of the tracking table is a tuple (user_id, artist_id),
    * if you try to enter the same pair, an error will occur
    * @param user_id the user who is tracking the artist
@@ -201,7 +233,7 @@ public class DropWatchDB {
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not insert into tracking table
    */
-  public boolean insertTracking(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
+  public boolean addTracking(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
     // make our statement!
     String SQLStatement = "" +
       "INSERT INTO tracking VALUES (" +
@@ -222,7 +254,7 @@ public class DropWatchDB {
   }
 
   /**
-   * method that deletes a (user_id, artist_id) row from the tracking table!
+   * method that removes a (user_id, artist_id) row from the tracking table!
    * @param user_id the user who is tracking the artist
    * @param artist_id the artist who is being tracked
    * @return boolean indicating successful removal - true means it was present and removed,
@@ -230,7 +262,7 @@ public class DropWatchDB {
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not delete row from tracking table
    */
-  public boolean deleteTracking(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
+  public boolean removeTracking(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
     // check that this entry is even actually there
     if (!isUserTrackingArtist(user_id, artist_id)) {
       return false;

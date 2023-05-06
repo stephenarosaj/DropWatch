@@ -9,11 +9,12 @@ import edu.brown.cs.student.api.exceptions.DeserializeException;
 import edu.brown.cs.student.api.formats.AlbumRecord;
 import edu.brown.cs.student.api.formats.ArtistRecord;
 import edu.brown.cs.student.api.formats.SearchRecord;
-import edu.brown.cs.student.api.formats.SearchRecord.Artists;
+import edu.brown.cs.student.api.formats.SearchRecord.*;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+import edu.brown.cs.student.api.formats.TrackRecord;
 import okio.Buffer;
 
 /** Util class for moshi serializing and deserializing. */
@@ -46,7 +47,7 @@ public class MoshiUtil {
       // make a new moshi adapter and
       Moshi moshi = new Moshi.Builder().build();
       JsonAdapter<SearchRecord> adapter = moshi.adapter(
-          Types.newParameterizedType(SearchRecord.class, Artists.class, ArtistRecord.class));
+          Types.newParameterizedType(SearchRecord.class, Artists.class, ArtistRecord.class, Albums.class, AlbumRecord.class, Tracks.class, TrackRecord.class));
       return adapter.fromJson(buf);
     } catch (Exception e) {
       throw new DeserializeException(e.getMessage());

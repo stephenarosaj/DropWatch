@@ -459,7 +459,7 @@
         {
           "name": "Enemy - from the series Arcane League of Legends",
           "id": "18nD4ksoYcLFxeV8wb6zG8",
-          "popularity": 0,
+          "popularity": 1,
           "href": "https://api.spotify.com/v1/tracks/18nD4ksoYcLFxeV8wb6zG8",
           "type": "track",
           "artists": [
@@ -530,7 +530,7 @@
       "next": "https://api.spotify.com/v1/search?query=jid&type=track&market=US&offset=8&limit=8"
     },
     "artists": {
-      "total": 21,
+      "total": 16,
       "items": [
         {
           "name": "JID",
@@ -593,10 +593,10 @@
           "name": "Jidanofu",
           "id": "6JwHgPzxWOKHVH6aWoHuxm",
           "type": "artist",
-          "popularity": 50,
+          "popularity": 49,
           "href": "https://api.spotify.com/v1/artists/6JwHgPzxWOKHVH6aWoHuxm",
           "genres": [
-            
+
           ],
           "images": [
             {
@@ -653,7 +653,7 @@
           "popularity": 35,
           "href": "https://api.spotify.com/v1/artists/2pVWwaFwgfOc1pwlDoj1uA",
           "genres": [
-            
+
           ],
           "images": [
             {
@@ -680,7 +680,7 @@
           "popularity": 31,
           "href": "https://api.spotify.com/v1/artists/4wrIB8cZ5s5J0H2y1y4pis",
           "genres": [
-            
+
           ],
           "images": [
             {
@@ -707,7 +707,7 @@
           "popularity": 29,
           "href": "https://api.spotify.com/v1/artists/3kJrGFiXmWiL2Tsm329PUj",
           "genres": [
-            
+
           ],
           "images": [
             {
@@ -760,7 +760,7 @@
       "next": "https://api.spotify.com/v1/search?query=jid&type=artist&market=US&offset=8&limit=8"
     },
     "albums": {
-      "total": 143,
+      "total": 142,
       "items": [
         {
           "name": "The Forever Story (Extended Version)",
@@ -782,6 +782,18 @@
               "url": "https://i.scdn.co/image/ab67616d00004851cae6e44dcc84e2035c3ad092",
               "height": 64,
               "width": 64
+            }
+          ],
+          "total_tracks": 16,
+          "release_date": "2022-10-31",
+          "release_date_precision": "day",
+          "album_type": "album",
+          "artists": [
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
             }
           ]
         },
@@ -806,6 +818,18 @@
               "height": 64,
               "width": 64
             }
+          ],
+          "total_tracks": 14,
+          "release_date": "2018-11-26",
+          "release_date_precision": "day",
+          "album_type": "album",
+          "artists": [
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            }
           ]
         },
         {
@@ -828,6 +852,18 @@
               "url": "https://i.scdn.co/image/ab67616d00004851f705b14ca8b81af140d1f1d3",
               "height": 64,
               "width": 64
+            }
+          ],
+          "total_tracks": 12,
+          "release_date": "2017-03-10",
+          "release_date_precision": "day",
+          "album_type": "album",
+          "artists": [
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
             }
           ]
         },
@@ -852,6 +888,30 @@
               "height": 64,
               "width": 64
             }
+          ],
+          "total_tracks": 1,
+          "release_date": "2021-10-28",
+          "release_date_precision": "day",
+          "album_type": "single",
+          "artists": [
+            {
+              "name": "Imagine Dragons",
+              "id": "53XhwfbYqKCa1cC15pYq2q",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/53XhwfbYqKCa1cC15pYq2q"
+            },
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            },
+            {
+              "name": "Arcane",
+              "id": "57nPqD7z62gDdq37US9XJR",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/57nPqD7z62gDdq37US9XJR"
+            }
           ]
         },
         {
@@ -875,28 +935,70 @@
               "height": 64,
               "width": 64
             }
+          ],
+          "total_tracks": 18,
+          "release_date": "2019-07-05",
+          "release_date_precision": "day",
+          "album_type": "album",
+          "artists": [
+            {
+              "name": "Dreamville",
+              "id": "1iNqsUDUraNWrj00bqssQG",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/1iNqsUDUraNWrj00bqssQG"
+            },
+            {
+              "name": "J. Cole",
+              "id": "6l3HvQ5sa6mXTsMTB19rO5",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6l3HvQ5sa6mXTsMTB19rO5"
+            }
           ]
         },
         {
-          "name": "Ma Boy",
-          "id": "0UqZZstwaKzBuNLXPZANxa",
+          "name": "Spilligion",
+          "id": "2L13Kv0sx6GPAHo7QTZLAy",
           "type": "album",
-          "href": "https://api.spotify.com/v1/albums/0UqZZstwaKzBuNLXPZANxa",
+          "href": "https://api.spotify.com/v1/albums/2L13Kv0sx6GPAHo7QTZLAy",
           "images": [
             {
-              "url": "https://i.scdn.co/image/ab67616d0000b27365ac5e83eb3b7b41f9e2d98b",
+              "url": "https://i.scdn.co/image/ab67616d0000b273230d88bf27d6ca322fb59eb4",
               "height": 640,
               "width": 640
             },
             {
-              "url": "https://i.scdn.co/image/ab67616d00001e0265ac5e83eb3b7b41f9e2d98b",
+              "url": "https://i.scdn.co/image/ab67616d00001e02230d88bf27d6ca322fb59eb4",
               "height": 300,
               "width": 300
             },
             {
-              "url": "https://i.scdn.co/image/ab67616d0000485165ac5e83eb3b7b41f9e2d98b",
+              "url": "https://i.scdn.co/image/ab67616d00004851230d88bf27d6ca322fb59eb4",
               "height": 64,
               "width": 64
+            }
+          ],
+          "total_tracks": 12,
+          "release_date": "2020-09-25",
+          "release_date_precision": "day",
+          "album_type": "album",
+          "artists": [
+            {
+              "name": "Spillage Village",
+              "id": "7izarc0fRIPbdZ8cVyChRf",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/7izarc0fRIPbdZ8cVyChRf"
+            },
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            },
+            {
+              "name": "EARTHGANG",
+              "id": "5MbNzCW3qokGyoo9giHA3V",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/5MbNzCW3qokGyoo9giHA3V"
             }
           ]
         },
@@ -921,28 +1023,64 @@
               "height": 64,
               "width": 64
             }
+          ],
+          "total_tracks": 11,
+          "release_date": "2021-04-16",
+          "release_date_precision": "day",
+          "album_type": "album",
+          "artists": [
+            {
+              "name": "Conway the Machine",
+              "id": "67gqUXxHedeUGDTxwBzdjS",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/67gqUXxHedeUGDTxwBzdjS"
+            }
           ]
         },
         {
-          "name": "Spilligion",
-          "id": "2L13Kv0sx6GPAHo7QTZLAy",
+          "name": "Ma Boy",
+          "id": "0UqZZstwaKzBuNLXPZANxa",
           "type": "album",
-          "href": "https://api.spotify.com/v1/albums/2L13Kv0sx6GPAHo7QTZLAy",
+          "href": "https://api.spotify.com/v1/albums/0UqZZstwaKzBuNLXPZANxa",
           "images": [
             {
-              "url": "https://i.scdn.co/image/ab67616d0000b273230d88bf27d6ca322fb59eb4",
+              "url": "https://i.scdn.co/image/ab67616d0000b27365ac5e83eb3b7b41f9e2d98b",
               "height": 640,
               "width": 640
             },
             {
-              "url": "https://i.scdn.co/image/ab67616d00001e02230d88bf27d6ca322fb59eb4",
+              "url": "https://i.scdn.co/image/ab67616d00001e0265ac5e83eb3b7b41f9e2d98b",
               "height": 300,
               "width": 300
             },
             {
-              "url": "https://i.scdn.co/image/ab67616d00004851230d88bf27d6ca322fb59eb4",
+              "url": "https://i.scdn.co/image/ab67616d0000485165ac5e83eb3b7b41f9e2d98b",
               "height": 64,
               "width": 64
+            }
+          ],
+          "total_tracks": 1,
+          "release_date": "2023-02-03",
+          "release_date_precision": "day",
+          "album_type": "single",
+          "artists": [
+            {
+              "name": "Dreamville",
+              "id": "1iNqsUDUraNWrj00bqssQG",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/1iNqsUDUraNWrj00bqssQG"
+            },
+            {
+              "name": "JID",
+              "id": "6U3ybJ9UHNKEdsH7ktGBZ7",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7"
+            },
+            {
+              "name": "Lute",
+              "id": "75WcpJKWXBV3o3cfluWapK",
+              "type": "artist",
+              "href": "https://api.spotify.com/v1/artists/75WcpJKWXBV3o3cfluWapK"
             }
           ]
         }
