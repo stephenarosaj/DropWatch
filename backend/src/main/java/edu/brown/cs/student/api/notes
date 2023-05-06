@@ -1,0 +1,5 @@
+STUFF REQUIRED FROM SPOTIFY JSON FOR FRONTEND:
+
+tracked artists: image, name of artist, link
+for drops: image, name of artist, name of album, album type, link
+search: image, name of artist, name of album, album type, link

@@ -154,7 +154,7 @@ public class DropWatchDB {
   public boolean insertTracking(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
     // make our statement!
     String SQLStatement = "" +
-      "INSERT INTO tracking tracking VALUES (" +
+      "INSERT INTO tracking VALUES (" +
       "\"" + user_id + "\", \"" + artist_id + "\");";
 
     // execute our statement!
@@ -170,14 +170,27 @@ public class DropWatchDB {
   }
 
   /**
-   * method that removes a (user_id, artist_id) pair from the tracking table!
+   * method that deletes a (user_id, artist_id) row from the tracking table!
    * @param user_id the user who is tracking the artist
    * @param artist_id the artist who is being tracked
    * @return boolean indicating successful removal
    */
-  public boolean removeTracking(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
-    // TODO
-    return false;
+  public boolean deleteTracking(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
+    // make our statement!
+    String SQLStatement = "" +
+      "DELETE FROM tracking WHERE " +
+      "user_id = \"" + user_id + "\" AND artist_id = \"" + artist_id + "\";";
+
+    // execute our statement!
+    Pair<Boolean, Statement> ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+        // result set returned or wrong number for updateCount - ERROR!
+        throw new SQLException("ERROR: Insert into DropWatchDB tracking table ('" + user_id + "', '" + artist_id + "') FAILED");
+      }
+      // executed successfully
+      return true;
+    }
   }
 
   /**

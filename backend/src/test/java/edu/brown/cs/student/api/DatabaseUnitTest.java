@@ -731,7 +731,25 @@ public class DatabaseUnitTest {
         ret.second().close();
       }
 
-      // now delete through statement
+      // now remove added row
+      SQLStatement = "" +
+        "REMOVE FROM \"test\" WHERE id = 0 AND name = \"rosa\" AND age = 21;";
+      // make auto-closable try statement! WOW!
+      try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+        assertFalse(ret.first());
+        assertEquals(statement.getUpdateCount(), 1);
+        // check for effects
+        try (ResultSet rs = db.executeSQLQuery("SELECT * FROM \"test\";")) {
+          assertTrue(rs.next());
+          assertEquals(rs.getInt(1), 0);
+          assertEquals(rs.getString(2), "rosa");
+          assertEquals(rs.getInt(3), 21);
+        }
+        // close statement!
+        ret.second().close();
+      }
+
+      // now delete table through statement
       SQLStatement = "DROP TABLE \"test\";";
       // make auto-closable try statement! WOW!
       try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
