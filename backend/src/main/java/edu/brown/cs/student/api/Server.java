@@ -6,6 +6,7 @@ import edu.brown.cs.student.api.database.DropWatchDB;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyAPIRequester;
 import edu.brown.cs.student.api.endpointHandlers.SearchHandler;
 import edu.brown.cs.student.api.endpointHandlers.UpdateHandler;
+import edu.brown.cs.student.api.endpointHandlers.UserDataHandler;
 import spark.Spark;
 
 /** Main class for the Server. */
@@ -26,6 +27,7 @@ public class Server {
 
     Spark.get("search", new SearchHandler(new SpotifyAPIRequester()));
     Spark.get("update", new UpdateHandler());
+    Spark.get("user_data", new UserDataHandler(new SpotifyAPIRequester()));
 
     Spark.init();
     Spark.awaitInitialization();
