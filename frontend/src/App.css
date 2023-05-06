@@ -182,7 +182,7 @@ h3 {
   max-width: 90%;
 }
 
-.followed {
+.followed-button {
   font-size: 36px !important;
   font-weight: bold !important;
   background-color: #FCB !important;
@@ -404,6 +404,59 @@ h3 {
   background-color: #C280D9 !important;
 }
 
+/* -------------------------------- FOLLOWED COMPONENT -------------------------------- */
+
+.followed {
+  background-color: #FCBDBD !important;
+  text-align: center;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 50px;
+}
+
+.followed-text {
+  padding-bottom: 20px;
+}
+
+.followed-artists {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #D78B8B !important;
+  max-width: 90%;
+  margin: auto;
+  min-height: 750px;
+  margin-bottom: 50px;
+}
+
+.followed-artists-container {
+  padding: 5% 0px;
+}
+/* -------------------------------- FOLLOWEDARTIST COMPONENT -------------------------------- */
+
+.followed-artist-image-col {
+  height: 160px !important;
+  width: 160px !important;
+  padding: 0 !important;
+}
+
+.followed-artist-image {
+  width: 100%;
+  height: 160px;
+}
+
+.followed-artist-name-col {
+  padding: 0 !important;
+}
+
+.followed-artist-name {
+  min-height: 100%;
+  border-radius: 0% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #D78B8B !important;
+}
 .not-done {
   color: #ffffff
 }

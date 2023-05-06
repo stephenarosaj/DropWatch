@@ -1,5 +1,6 @@
 import { clientID, clientSecretID} from "../private/tokens"
 import { getPlaylists } from "./playlists"
+import { getFollowed, getUserInfo } from "./followed"
 const redirect_uri = "http://localhost:3000/callback"
 const client_id = clientID
 const client_secret = clientSecretID
@@ -9,7 +10,7 @@ const TOKEN = "https://accounts.spotify.com/api/token"
 export function requestAuthorization(){
   console.log("clicked")
   localStorage.setItem("client_id", client_id)
-  
+
   // here is where we change the permissions of what we want to know about the user
   let scope = "user-read-private user-follow-read playlist-read-collaborative playlist-read-private"
 
@@ -44,7 +45,7 @@ export function requestAuthorization(){
  * Function to call the spotify api to get the access token
  * @param {*} body - the parameters to be provided to the api request
  */
-export async function fetchAccessToken(code, setLogin, setRefreshToken, setUsername, setPlaylists) {
+export async function fetchAccessToken(code, setLogin, setRefreshToken, setUsername, setPlaylists, setFollowed) {
   // builds the body of the Spotify api request
   let body = "grant_type=authorization_code";
   body += "&code=" + code;
@@ -77,8 +78,13 @@ export async function fetchAccessToken(code, setLogin, setRefreshToken, setUsern
         setRefreshToken(refresh_token)
       }
       setLogin(true)
+      // console.log("setPlaylists")
+      // getUserInfo('playlists?limit=10', setPlaylists)
+      // console.log("setFollowed")
+      // getUserInfo('following?type=artist&limit=10', setFollowed)
       getUsername(setUsername)
       getPlaylists(setPlaylists)
+      getFollowed(setFollowed)
     })
     .catch(error => {
       console.error('Error:', error)

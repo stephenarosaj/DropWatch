@@ -27,7 +27,7 @@ function DropWatch(props) {
           <Row xs={1} md={2} className="g-4">
             {props.artists.map((item, i) => (
               <Col key={i}>
-                <Artist artist={item}/>
+                <Artist artist={item} class='artist'/>
               </Col>
             ))}
           </Row>
@@ -58,7 +58,7 @@ function DropWatch(props) {
               <Button className='saved'>Your Saved Playlists</Button>
             </Col>
             <Col>
-              <Button className='followed'>Your Followed Artists</Button>
+              <Button className='followed-button'>Your Followed Artists</Button>
             </Col>
           </Row>
         </Container>

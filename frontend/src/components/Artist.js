@@ -5,11 +5,11 @@ function Artist(props) {
   return (
     <Container fluid>
       <Row xs={2}>
-        <Col className='artist-image-col'>
-          <Image className="artist-image" src={props.artist.images[0].url}/>
+        <Col className={props.class + '-image-col'}>
+          <Image className={props.class + '-image'} src={props.artist.images[0].url}/>
         </Col>
-        <Col className="artist-name-col">
-          <Card className="artist-name">
+        <Col className={props.class + '-name-col'}>
+          <Card className={props.class + '-name'}>
             <Card.Text>
               {props.artist.name}
             </Card.Text>

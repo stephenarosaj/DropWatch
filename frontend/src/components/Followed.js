@@ -1,3 +1,6 @@
+import {Card, Col, Row, Container} from 'react-bootstrap';
+import Artist from './Artist';
+
 function Followed(props) {
   let middle = null
   if(!props.isLoggedIn) {
@@ -19,7 +22,7 @@ function Followed(props) {
           <Row xs={1} md={2} className="g-4">
             {props.followed_artists.map((item, i) => (
               <Col key={i}>
-                <FollowedArtist artist={item}/>
+                <Artist artist={item} class='followed-artist'/>
               </Col>
             ))}
           </Row>

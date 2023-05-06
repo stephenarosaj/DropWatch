@@ -46,6 +46,7 @@ function App() {
   const [drops, setDrops] = useState(artistData)
   const [isLoggedIn, setLogin] = useState(false)
   const[playlists, setPlaylists] = useState([])
+  const [followed, setFollowed] = useState([])
 
   /**
    * @function handleRedirect - function to retrieve the Spotify authorization code and generate
@@ -55,7 +56,7 @@ function App() {
   function handleRedirect(query) {
     let code = getCode(query)
     console.log("code: " + code)
-    fetchAccessToken(code, setLogin, setRefreshToken, setUsername, setPlaylists)
+    fetchAccessToken(code, setLogin, setRefreshToken, setUsername, setPlaylists, setFollowed)
     window.history.pushState("","", redirect_uri)
   }
 
@@ -124,7 +125,7 @@ function App() {
       {/* <RecentDrops drops={drops} isLoggedIn={isLoggedIn}/> */}
       {/* <Search isLoggedIn={isLoggedIn}/> */}
       <SavedPlaylists isLoggedIn={isLoggedIn} playlists={playlists}/>
-      {/* <Followed isLoggedIn={isLoggedIn} refreshToken={refreshToken} setRefreshToken={setRefreshToken}/> */}
+      <Followed isLoggedIn={isLoggedIn} followed_artists={followed}/>
     </div>
 
     
