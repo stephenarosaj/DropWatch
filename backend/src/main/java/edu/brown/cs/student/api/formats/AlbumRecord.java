@@ -48,24 +48,4 @@ public record AlbumRecord(
   @Json(name = "tracks") List<TrackRecord> tracks // NOT returned by search!!!!
 
 ) {
-  // I was looking through documentation on records trying to figure out how to retrieve just the release date,
-  // but the code below gives the following warning:
-  // Non-canonical record constructor must delegate to another constructor
-  // so I'm still chipping away at it
-  // you can access them without getters by using album.release_date! :)
-
-//    public Album (String release_date) {
-//      initialRelease = release_date;
-//    }
-  static String initialRelease;
-
-  /***
-   * Helper function to access the Album's release date... a part of an unfinished attempt to access the release_date (see below).
-   * @return - String representing the date the Album was initially released.
-   */
-  public static String getReleaseDate() {
-    return initialRelease;
-  }
-
-
 }

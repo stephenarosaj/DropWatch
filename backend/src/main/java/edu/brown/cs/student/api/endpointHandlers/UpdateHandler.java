@@ -5,6 +5,7 @@ import edu.brown.cs.student.api.database.DropWatchDB;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
 import edu.brown.cs.student.api.exceptions.APIRequestException;
 import edu.brown.cs.student.api.formats.AlbumRecord;
+import edu.brown.cs.student.api.formats.DateRecord;
 import okio.Buffer;
 import spark.Request;
 import spark.Response;
@@ -73,8 +74,10 @@ public class UpdateHandler implements Route {
         AlbumRecord album = MoshiUtil.deserializeUpdate(buf);
 
         // parse request results to find the latest release date (being mindful of precision)
-        String newDate = album.release_date();
-        String newDatePrecision = album.release_date_precision();
+
+        //String newDate = album.release_date();
+        //String newDatePrecision = album.release_date_precision();
+        DateRecord release = new DateRecord(album.release_date(), album.release_date_precision());
 
         // grab stored latest release date
         // TODO: implement DropWatchDB.findLatestRelease()
@@ -88,17 +91,17 @@ public class UpdateHandler implements Route {
         // lexicographically ordered they are also ordered in terms of precision,
         // we can use String.compareTo, which compares lexicographic ordering,
         // to determine which is more precise
-        if (newDatePrecision == null || oldDatePrecision == null || newDate == null || oldDate == null) {
-            // error!
-        } else if (oldDatePrecision.compareTo(newDatePrecision) < 0) {
-            // if this is true, we could have "day".compareTo("month")
-            // new date is less precise than old date
-        } else if (oldDatePrecision.compareTo(newDatePrecision) > 0) {
-            // if this is true, we could have "year".compareTo("month")
-            // new date is more precise than old date
-        } else {
-            // same precision
-        }
+//        if (newDatePrecision == null || oldDatePrecision == null || newDate == null || oldDate == null) {
+//            // error!
+//        } else if (oldDatePrecision.compareTo(newDatePrecision) < 0) {
+//            // if this is true, we could have "day".compareTo("month")
+//            // new date is less precise than old date
+//        } else if (oldDatePrecision.compareTo(newDatePrecision) > 0) {
+//            // if this is true, we could have "year".compareTo("month")
+//            // new date is more precise than old date
+//        } else {
+//            // same precision
+//        }
         return null;
     }
 

@@ -20,6 +20,8 @@ import java.util.List;
  *                                    "explicit" - The content item is explicit and the user's account is set to not play explicit content.
  * @param artists "The artists of the album." - Array of ArtistObject
  * @param album "The album on which the track appears." - AlbumObject (AlbumRecord.Album)
+ * @param release_date "The date the album was first released."
+ * @param release_date_precision "The precision with which release_date value is known."
  */
 public record TrackRecord(
   @Json(name = "name") String name,
@@ -29,6 +31,8 @@ public record TrackRecord(
   @Json(name = "type") String type,
   @Json(name = "restrictions") String restrictions,
   @Json(name = "artists") List<ArtistRecord> artists,
-  @Json(name = "album") AlbumRecord album
+  @Json(name = "album") AlbumRecord album,
+  @Json(name = "release_date") String release_date,
+  @Json(name = "release_date_precision") String release_date_precision
 
 ) {}
