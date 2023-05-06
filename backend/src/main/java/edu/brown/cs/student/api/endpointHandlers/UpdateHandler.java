@@ -90,6 +90,7 @@ public class UpdateHandler implements Route {
         // to determine which is more precise
         if (newDatePrecision == null || oldDatePrecision == null || newDate == null || oldDate == null) {
             // error!
+            return null;
         } else if (oldDatePrecision.compareTo(newDatePrecision) < 0) {
             // if this is true, we could have "day".compareTo("month")
             // new date is less precise than old date
