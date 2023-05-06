@@ -59,9 +59,9 @@ public class UpdateHandler implements Route {
      * @param artist_id the artist who we want to check
      * @return if there is a new release, returns a list where the first value is
      * the old release date and the second is the newest release date, or null if
-     * there is no new release
+     * there is no new release, and the third value is the precision of the new date
      */
-    public ArrayList<String> checkNewRelease(String artist_id) throws APIRequestException, IOException {
+    public ArrayList<String> checkNewRelease(String artist_id) throws APIRequestException, IOException, SQLException, ClassNotFoundException {
         // make the request!
         // we want just 1 album - the most recent one!
         String urlString = "https://api.spotify.com/v1/artists/"
@@ -77,8 +77,8 @@ public class UpdateHandler implements Route {
         String newDatePrecision = album.release_date_precision();
 
         // grab stored latest release date
-        // TODO: implement DropWatchDB.queryLatestRelease()
-        String[] oldDateList = this.db.queryLatestRelease(artist_id);
+        // TODO: implement DropWatchDB.findLatestRelease()
+        String[] oldDateList = this.db.findLatestRelease(artist_id);
         String oldDate = oldDateList[0];
         String oldDatePrecision = oldDateList[1];
 
@@ -90,7 +90,6 @@ public class UpdateHandler implements Route {
         // to determine which is more precise
         if (newDatePrecision == null || oldDatePrecision == null || newDate == null || oldDate == null) {
             // error!
-            return null;
         } else if (oldDatePrecision.compareTo(newDatePrecision) < 0) {
             // if this is true, we could have "day".compareTo("month")
             // new date is less precise than old date
@@ -120,8 +119,8 @@ public class UpdateHandler implements Route {
             // grab input params
             String user = request.queryParams("user");
 
-        // NOTE: I think we should search by artist id like Aku suggested, and
-        // this should be taken from the user's tracking table
+            // NOTE: I think we should search by artist id like Aku suggested, and
+            // this should be taken from the user's tracking table
             // TODO: implement DropWatchDB.queryTracking()
             // query db for list of artist ids being tracked by this user
             ArrayList<String> artist_ids = this.db.queryTracking(user, true);
@@ -142,11 +141,15 @@ public class UpdateHandler implements Route {
                         // grab new and old dates from return of checkNewRelease!
                         String oldDate = dates.get(0);
                         String newDate = dates.get(1);
+                        String newDatePrecision = dates.get(2);
 
-                        // TODO: implement DropWatchDB.updateLatestRelease()
+                        // TODO: implement DropWatchDB.findLatestRelease()
                         // TODO: implement notifyUser()
-                        // if they have new music, update latest release date for that artist
-                        this.db.updateLatestRelease(artist_id, newDate);
+                        // if they have new music, update albums and artistAlbums
+                            // FOR NOW:
+                        String album_id = null;
+                        String link = null;
+                        this.db.addNewAlbum(artist_id, album_id, newDate, newDatePrecision, link);
 
                         // TODO: implement function to do this
                         // now we have to use the old and new dates to grab all artist's

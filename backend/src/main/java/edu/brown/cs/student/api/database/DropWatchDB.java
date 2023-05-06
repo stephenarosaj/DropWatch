@@ -36,6 +36,8 @@ public class DropWatchDB {
 
   /**
    * Constructor for this class!
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not connect to DB
    */
   public DropWatchDB(String filepath) throws SQLException, ClassNotFoundException {
     // set up fields and connect to db
@@ -48,9 +50,12 @@ public class DropWatchDB {
 
   /**
    * method to initialize our DB with the right tables
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not create tables/check for them
    */
   private void initializeDB() throws ClassNotFoundException, SQLException {
     // CREATE TABLES!
+
     // this table is for keeping track of the artists a user tracks, and the
     // users tracking an artist!
     // EXAMPLE:
@@ -77,26 +82,65 @@ public class DropWatchDB {
     // update tables field
     this.tables.put(trackingName, trackingSchema);
 
-    // this table is for keeping track of the latest release date of an artist
+//    // this table is for keeping track of the latest release date of an artist
+//    // EXAMPLE:
+//    // artist_id |    date    | precision
+//    //    JID    |   2022-10  |   month
+//    //   Smino   | 2023-09-16 |    day
+//    //   Tyler   |    2021    |    year
+//    //
+//    // artists(artist_id = JID) --> ["2022-10", "month"]
+//    // tracking(artist_id = JID) --> [1, 2]
+//    // make the table in the db (if it doesn't exist)
+//    String latestReleaseName = "latestRelease";
+//    String latestReleaseSchema = "" +
+//      "artist_id VARCHAR(100) PRIMARY KEY," + // artist_id - the unique spotify id of the artist - our primary key
+//      "date VARCHAR(10)," + // date - the latest release date for this artist
+//      "precision VARCHAR(5)"; // precision - the precision of the latest release date - year, month, or day
+//    if (!db.tableExists(latestReleaseName)) {
+//      db.createNewTable(latestReleaseName, latestReleaseSchema);
+//    }
+//    // update tables field
+//    this.tables.put(latestReleaseName, latestReleaseSchema);
+
+    // this table is for keeping track of albums artists release
     // EXAMPLE:
-    // artist_id |    date    | precision
-    //    JID    |   2022-10  |   month
-    //   Smino   | 2023-09-16 |    day
-    //   Tyler   |    2021    |    year
+    // album_id | release_date | precision | link
+    //    1     |  2020-10-06  |    day    |  a
+    //    2     |     04-05    |   month   |  b
+    //    3     |     2021     |   year    |  c
     //
-    // releaseDates(artist_id = JID) --> ["2022-10", "month"]
-    // tracking(artist_id = JID) --> [1, 2]
     // make the table in the db (if it doesn't exist)
-    String releaseDatesName = "releaseDates";
-    String releaseDatesSchema = "" +
-      "artist_id VARCHAR(100) PRIMARY KEY," + // artist_id - the unique spotify id of the artist - our primary key
+    String albumsName = "albums";
+    String albumsSchema = "" +
+      "album_id VARCHAR(100) PRIMARY KEY," + // album_id - the unique spotify id of the album
       "date VARCHAR(10)," + // date - the latest release date for this artist
-      "precision VARCHAR(5)"; // precision - the precision of the latest release date - year, month, or day
-    if (!db.tableExists(releaseDatesName)) {
-      db.createNewTable(releaseDatesName, releaseDatesSchema);
+      "precision VARCHAR(5)," + // precision - the precision of the latest release date - year, month, or day
+      "link VARCHAR(100);"; // link - the link to get more info about an album
+    if (!db.tableExists(albumsName)) {
+      db.createNewTable(albumsName, albumsSchema);
     }
     // update tables field
-    this.tables.put(releaseDatesName, releaseDatesSchema);
+    this.tables.put(albumsName, albumsSchema);
+
+    // this table is for keeping track of artists who release albums
+    // EXAMPLE:
+    // artist_id | album_id
+    //     4     |    1
+    //     5     |    2
+    //     6     |    3
+    //
+    // make the table in the db (if it doesn't exist)
+    String artistAlbumsName = "artistAlbums";
+    String artistAlbumsSchema = "" +
+      "artist_id VARCHAR(100)," + // artist_id - the unique spotify id of the artist
+      "album_id VARCHAR(100)," + // album_id - the unique spotify id of the album
+      "PRIMARY KEY (artist_id, album_id);"; // primary key is tuple of columns
+    if (!db.tableExists(artistAlbumsName)) {
+      db.createNewTable(artistAlbumsName, artistAlbumsSchema);
+    }
+    // update tables field
+    this.tables.put(artistAlbumsName, artistAlbumsSchema);
   }
 
   /**
@@ -104,6 +148,8 @@ public class DropWatchDB {
    * @param user_id the user to look up in the db
    * @param artist_id the artist to look up in the db
    * @return boolean indicating if user follows artist
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not check if user is tracking artist
    */
   public boolean isUserTrackingArtist(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
     // execute our query!
@@ -111,7 +157,7 @@ public class DropWatchDB {
       "SELECT count(*) FROM table WHERE user_id = \"" + user_id + "\" AND artist_id = \"" + artist_id + "\"";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // return whether there is a single entry of this user_id tracking this artist_id
-      boolean ret = (result.next() && (result.getInt(1) == 1));
+      boolean ret = result.next();
       // close results!
       result.close();
       return ret;
@@ -125,6 +171,8 @@ public class DropWatchDB {
    * @param id the artist/user to look up in the db
    * @param selectUsers indicates whether we're selecting users (true) or artists (false)
    * @return an array list of ids (empty if none)
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not query tracking table
    */
   public ArrayList<String> queryTracking(String id, boolean selectUsers) throws SQLException, ClassNotFoundException {
     // execute our query!
@@ -150,6 +198,8 @@ public class DropWatchDB {
    * @param user_id the user who is tracking the artist
    * @param artist_id the artist who is being tracked
    * @return an array list of artist_ids that the user is tracking (empty if none)
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not insert into tracking table
    */
   public boolean insertTracking(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
     // make our statement!
@@ -162,9 +212,11 @@ public class DropWatchDB {
     try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
       if (ret.first() || (statement.getUpdateCount() != 1)) {
         // result set returned or wrong number for updateCount - ERROR!
+        statement.close();
         throw new SQLException("ERROR: Insert into DropWatchDB tracking table ('" + user_id + "', '" + artist_id + "') FAILED");
       }
       // executed successfully
+      statement.close();
       return true;
     }
   }
@@ -173,9 +225,17 @@ public class DropWatchDB {
    * method that deletes a (user_id, artist_id) row from the tracking table!
    * @param user_id the user who is tracking the artist
    * @param artist_id the artist who is being tracked
-   * @return boolean indicating successful removal
+   * @return boolean indicating successful removal - true means it was present and removed,
+   *         false means it was not present and thus not removed
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not delete row from tracking table
    */
   public boolean deleteTracking(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
+    // check that this entry is even actually there
+    if (!isUserTrackingArtist(user_id, artist_id)) {
+      return false;
+    }
+
     // make our statement!
     String SQLStatement = "" +
       "DELETE FROM tracking WHERE " +
@@ -186,84 +246,93 @@ public class DropWatchDB {
     try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
       if (ret.first() || (statement.getUpdateCount() != 1)) {
         // result set returned or wrong number for updateCount - ERROR!
-        throw new SQLException("ERROR: Insert into DropWatchDB tracking table ('" + user_id + "', '" + artist_id + "') FAILED");
+        statement.close();
+        throw new SQLException("ERROR: Delete from DropWatchDB tracking table ('" + user_id + "', '" + artist_id + "') FAILED");
       }
       // executed successfully
+      statement.close();
       return true;
     }
   }
 
   /**
-   * method to insert data for an artist's latest release date
-   * @param artist_id the artist_id whose data we're adding
-   * @param date their latest release date
-   * @param precision the precision of their latest release date - "day", "month", or "year"
-   * @return a boolean indicating success or failure
+   * method that queries the db for albums by searching either album_id (one result) or artist_id (up to 4 results)
+   * @param id the album_id/artist_id to look up in the db
+   * @param isAlbum_id indicates whether we're selecting 1 album (true) or 4 (false)
+   * @return an array album links (empty if none)
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not query tracking table
    */
-  public boolean insertLatestRelease(String artist_id, String date, String precision) throws SQLException, ClassNotFoundException {
+  public ArrayList<String> queryAlbums(String id, boolean isAlbum_id) throws SQLException, ClassNotFoundException {
+    // execute our query!
+    String oneAlbum = "= \"" + id + "\"";
+    String fourAlbum = "IN (SELECT album_id FROM artistAlbums WHERE artist_id = \"" + id + "\")";
+    String sqlQuery = "" +
+      "SELECT release_date, precision, link FROM albums" +
+      "WHERE album_id " + (isAlbum_id ? oneAlbum : fourAlbum) + ";";
+    try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
+      // collect the results as a list
+      ArrayList<String> ret = new ArrayList<>();
+      while (result.next()) {
+        ret.add(result.getString(1));
+      }
+      // return our results!
+      result.close();
+      return ret;
+    }
+  }
+
+  /**
+   * method to update the albums table
+   * @param album_id the album_id of the album whose data we're adding
+   * @param date the release date
+   * @param precision the precision of the release date - "day", "month", or "year"
+   * @param link the link to get more info about the album
+   * @return a boolean indicating success or failure
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not insert into latest release table
+   */
+  public boolean insertOrReplaceAlbums(String album_id, String date, String precision, String link) throws SQLException, ClassNotFoundException {
     // make our statement!
     String SQLStatement = "" +
-      "INSERT INTO recentDrops VALUES (" +
-      "\"" + artist_id + "\", \"" + date + "\", \"" + precision + "\");";
+      "INSERT OR REPLACE INTO albums VALUES (" +
+      "\"" + album_id + "\", \"" + date + "\", \"" + precision + "\"" + link + "\");";
 
     // execute our statement!
     Pair<Boolean, Statement> ret;
     try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
       if (ret.first() || (statement.getUpdateCount() != 1)) {
         // result set returned or wrong number for updateCount - ERROR!
-        throw new SQLException("ERROR: Insert into DropWatchDB tracking table ('" + artist_id + "', '" + date + "', '" + precision + "') FAILED");
+        statement.close();
+        throw new SQLException("ERROR: Insert into DropWatchDB albums table ('" + album_id + "', '" + date + "', '" + precision + "', " + link + "') FAILED");
       }
       // executed successfully
+      statement.close();
       return true;
     }
   }
 
-  /**
-   * Returns a string (SHOULD IT BE A STRING?) representing the latest release
-   * date stored on the db for the artist given by artist_id
-   * @param artist_id the artist whose latest release date we want to check
-   * @return an array of 2 strings representing the stored latest release date for the artist
-   * and that date's precision
-   */
-  public String[] queryLatestRelease(String artist_id) {
-    // TODO
-    return null;
+  // add new album to albums and artistAlbums tables
+  public String[] findLatestRelease(String artist_id) {
+    String[] ret = new String[3];
+    ret[0] = null;
+    ret[1] = null;
+    ret[2] = null;
+    return ret;
   }
 
-  /**
-   * method that updates an artist's latest release date!
-   * @param artist_id the artist whose latest release date needs to be updated!
-   * @param newDate the new latest release date
-   * @return a list where the first value is the old release date and the second
-   * is the newest release date
-   */
-  public ArrayList<String> updateLatestRelease(String artist_id, String newDate) {
-    // TODO
-    return new ArrayList<String>();
+  // add new album to albums and artistAlbums tables
+  public void addNewAlbum(String artist_id, String album_id, String newDate, String newDatePrecision, String link) {
+    return;
   }
 
-  public boolean insertRecentDrops() throws SQLException, ClassNotFoundException {
-    // TODO
-    return false;
-  }
 
-  /**
-   * Method that queries db for the recent drops for a user
-   * @param user the user whose recent drops we want to query
-   * @return a map of (artist_id, AlbumRecord[]) pairs which are the recent drops
-   */
-  public HashMap<String, ArrayList<AlbumRecord>> queryRecentDrops(String user) {
-    // TODO
-    return new HashMap<String, ArrayList<AlbumRecord>>();
-  }
+  // TODO: MORE!?
+  // tracking done!
+  // insertOrRepalce albums - need to keep only 4 at a time, also update artistAlbums
+  // query artistAlbums
+  // insertOrReplace artistAlbums
 
-  /**
-   * Method that updates recent drops for a user in the db
-   * @param user the user whose recent drops we want to query
-   * @return a map of (artist_id, AlbumRecord[]) pairs which are the recent drops
-   */
-  public HashMap<String, ArrayList<AlbumRecord>> updateRecentDrops(String user) {
-    // TODO
-    return new HashMap<String, ArrayList<AlbumRecord>>();
-  }
+  // findLatestRelease - use these tables to calculate latest release date for an artist
+  // addNewAlbum - use these tables to calculate latest release date for an artist
 }
