@@ -1,4 +1,6 @@
 package edu.brown.cs.student.api.database;
+import org.testng.internal.collections.Pair;
+
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
@@ -738,15 +740,18 @@ public class sqliteDB {
   }
 
   /**
-   * Function for executing an SQL Statement! Very open-ended for maximum
-   * flexibility :)
+   * Function for executing an SQL Statement THAT RETURNS A RESULT SET OR UPDATES SOME ROWS!
+   * Very open-ended for maximum flexibility :)
    * @param sqlStatement the statement to be executed
-   * @return a boolean indicating success of statement execution
+   * @return a boolean and Statement containing the results. The boolean indicates if there is
+   *         a result set with items in it. If false, there are no items, and/or the return value of
+   *         the statement isn't actually a ResultSet, but an updateCount.
+   *         NOTE: on INSERT, bool = false && updateCount > 0
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not successfully execute SQLStatement
    * 
    */
-  public boolean executeSQLStatement(String sqlStatement) throws ClassNotFoundException, SQLException {
+  public Pair<Boolean, Statement> executeSQLStatement(String sqlStatement) throws ClassNotFoundException, SQLException {
     Statement statement = null;
     try {
       // check if we have an org.sqlite.JDBC class
@@ -761,13 +766,16 @@ public class sqliteDB {
 
       // execute the statement!
       statement = this.conn.createStatement();
-      statement.execute(sqlStatement);
-      // close the statement
-      statement.close();
+      boolean ret = statement.execute(sqlStatement);
+      if (ret) {
+        // ResultSet
+        System.out.println("Success! SQL Statement has been executed in connected database - ResultSet returned from statement");
+      }
+      // no items or updateCount
+      System.out.println("Success! SQL Statement has been executed in connected database - UpdateCount returned from statement, or no items in ResultSet");
 
       // return success!
-      System.out.println("Success! SQL Statement has been executed in connected database");
-      return true;
+      return new Pair<Boolean, Statement>(ret, statement);
     } catch (SQLException e) {
       // error executing the SQLStatement!
       // close our statement if its open!

@@ -123,7 +123,7 @@ public class UpdateHandler implements Route {
         // this should be taken from the user's tracking table
             // TODO: implement DropWatchDB.queryTracking()
             // query db for list of artist ids being tracked by this user
-            ArrayList<String> artist_ids = this.db.queryTracking(user);
+            ArrayList<String> artist_ids = this.db.queryTracking(user, true);
 
             // map containing new drops!
             HashMap<String, ArrayList<AlbumRecord>> drops = new HashMap<String, ArrayList<AlbumRecord>>();

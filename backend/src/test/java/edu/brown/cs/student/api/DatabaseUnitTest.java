@@ -2,10 +2,12 @@ package edu.brown.cs.student.api;
 
 import edu.brown.cs.student.api.database.sqliteDB;
 import org.junit.jupiter.api.*;
+import org.testng.internal.collections.Pair;
 
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -691,24 +693,54 @@ public class DatabaseUnitTest {
   // Test executeSQLStatement
   @Test
   void test_ExecuteSQLStatement_GoodInput() {
+    Pair<Boolean, Statement> ret;
     try {
       // remove DB if it exists, then remake it, then check it really exists
       createEmptyTestDB();
+
       // add a table through statement
       String SQLStatement = "CREATE TABLE \"test\" (" +
         "id INTEGER," +
         "name VARCHAR(10)," +
         "age INTEGER" +
         ");";
-      assertTrue(db.executeSQLStatement(SQLStatement));
-      // check for effects
-      assertTrue(db.tableExists("test"));
+      // make auto-closable try statement! WOW!
+      try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+        assertFalse(ret.first());
+        // check for effects
+        assertTrue(db.tableExists("test"));
+        // close statement!
+        ret.second().close();
+      }
+
+      // now insert into rows
+      SQLStatement = "" +
+        "INSERT INTO \"test\" VALUES (0, \"rosa\", 21);";
+      // make auto-closable try statement! WOW!
+      try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+        assertFalse(ret.first());
+        assertEquals(statement.getUpdateCount(), 1);
+        // check for effects
+        try (ResultSet rs = db.executeSQLQuery("SELECT * FROM \"test\";")) {
+          assertTrue(rs.next());
+          assertEquals(rs.getInt(1), 0);
+          assertEquals(rs.getString(2), "rosa");
+          assertEquals(rs.getInt(3), 21);
+        }
+        // close statement!
+        ret.second().close();
+      }
 
       // now delete through statement
       SQLStatement = "DROP TABLE \"test\";";
-      assertTrue(db.executeSQLStatement(SQLStatement));
-      // check for effects
-      assertFalse(db.tableExists("test"));
+      // make auto-closable try statement! WOW!
+      try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+        assertFalse(ret.first());
+        // check for effects
+        assertFalse(db.tableExists("test"));
+        // close statement!
+        ret.second().close();
+      }
     } catch (Exception e) {
       // shouldn't error...
       fail(e.getMessage());
