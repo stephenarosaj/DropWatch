@@ -12,15 +12,14 @@ function SearchResult(props) {
   return (
     <Container fluid>
       <Row xs={2}>
-        <Col className='drop-image-col'>
-          <Image className="drop-image" src={'https://i.scdn.co/image/ab67616d0000b27337906edcfbfde42b203097f2'}/>
+        <Col className='search-result-image-col'>
+          <Image className="search-result-image" src={props.image}/>
         </Col>
-        <Col className="drop-name-col">
-          <Card className="drop-name">
-            <Card.Text>
-              <p>Cherry Bomb</p>
-              <p>Tyler, The Creator</p>
-            </Card.Text>
+        <Col className="search-result-name-col">
+          <Card className="search-result-name">
+              <p>{props.name}</p>
+              <p>{props.type}</p>
+              <p>{props.artist}</p>
           </Card>
         </Col>
       </Row>

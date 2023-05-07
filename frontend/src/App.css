@@ -164,7 +164,7 @@ h3 {
   padding-bottom: 30px;
 }
 
-.search {
+.search-button {
   font-size: 36px !important;
   font-weight: bold !important;
   background-color: #BDE9FC !important;
@@ -173,7 +173,7 @@ h3 {
   max-width: 90%;
 }
 
-.saved {
+.saved-button {
   font-size: 36px !important;
   font-weight: bold !important;
   background-color: #ECBDFC !important;
@@ -292,61 +292,6 @@ h3 {
   align-items: center;
   justify-content: center;
   background-color: #9EDB8A !important;
-}
-
-/* -------------------------------- SEARCH COMPONENT -------------------------------- */
-
-.search {
-  background-color: #BDE9FC !important;
-  text-align: center;
-  align-items: center;
-  padding-top: 20px;
-  padding-bottom: 50px;
-}
-
-.search-text {
-  padding-bottom: 20px;
-}
-
-.search-results {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #77BFDE !important;
-  max-width: 90%;
-  margin: auto;
-  min-height: 750px;
-  margin-bottom: 50px;
-}
-
-.search-results-container {
-  padding: 5% 0px;
-}
-
-/* -------------------------------- SEARCHRESULT COMPONENT -------------------------------- */
-
-.search-result-image-col {
-  height: 160px !important;
-  width: 160px !important;
-  padding: 0 !important;
-}
-
-.search-result-image {
-  width: 100%;
-  height: 160px;
-}
-
-.search-result-name-col {
-  padding: 0 !important;
-}
-
-.search-result-name {
-  min-height: 100%;
-  border-radius: 0% !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #77BFDE !important;
 }
 
 /* -------------------------------- SAVEDPLAYLIST COMPONENT -------------------------------- */
