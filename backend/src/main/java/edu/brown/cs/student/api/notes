@@ -1,16 +1,8 @@
 STUFF REQUIRED FROM SPOTIFY JSON FOR FRONTEND:
 
 tracked artists (DONE (not tested) - data comes from drops track handler response): first image, name of artist, artist_id, link
-for drops (NOT DONE - data comes from drops handler response): first image, name of artist, name of album, album type, link
-search (done - data comes from search handler response): first image, name of artist, name of album, album type, link
-
-
-UpdateHandler: should even do this????
-- when adding new album, make sure only 4 entries in db at a time
-	- in addNewAlbum, query artistAlbums(artist_id) -> album_id[] first
-	- if album_id[].size < 4, add album
-	- if album_id[].size = 4, remove oldest then add album
-
+for drops (DONE (not tested) - data comes from drops handler response): first image, name of artist, name of album, album type, link, releaseDate, precision
+search (done (tested manually, not systematically) - data comes from search handler response): first image, name of artist, name of album, album type, link
 
 - need to make it so that albums stores "image, name of artist, name of album, album type, link" so that drops can return them
 - need to fix trackhandler to serve [first image, name of artist, artist_id, link], not just artist_id

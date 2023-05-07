@@ -2,6 +2,10 @@ package edu.brown.cs.student.api.formats;
 
 import com.squareup.moshi.Json;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 /***
  * Record to hold date information (for Tracks and Albums).
  * REFERENCE: https://developer.spotify.com/documentation/web-api/reference/get-track
@@ -51,5 +55,32 @@ public record DateRecord(
 
     // compare lexicographically!
     return left.release_date.compareTo(right.release_date);
+  }
+
+  /**
+   * method that filters down a list of artistDrops to the n most recent ones!
+   * @param artistDrops the drops of an artist to filter down - list of lists,
+   *                   where each inner list looks like:
+   *                   [first image, name of artist, name of album, album type, link, releaseDate, precision]
+   * @param n how many drops we want to return from this artist, max
+   * @return the (up to n) most recent drops from this artist
+   */
+  public static ArrayList<ArrayList<String>> filterMostRecent(ArrayList<ArrayList<String>> artistDrops, int n) {
+    // define a custom comparator to compare the release dates in the inner lists
+    Comparator<ArrayList<String>> dropComparator = new Comparator<ArrayList<String>>() {
+      @Override
+      public int compare(ArrayList<String> list1, ArrayList<String> list2) {
+        // lists are [first image, name of artist, name of album, album type, link, releaseDate, precision]
+        DateRecord left = new DateRecord(list1.get(5), list1.get(6));
+        DateRecord right = new DateRecord(list2.get(5), list2.get(6));
+        return DateRecord.compareDates(left, right);
+      }
+    };
+
+    // Sort the albums list using the custom comparator
+    artistDrops.sort(dropComparator);
+
+    // grab only the 4 most recent items!
+    return new ArrayList<>(artistDrops.subList(0, 4));
   }
 }

@@ -96,27 +96,39 @@ public class DropsHandler implements Route {
       ArrayList<String> artist_ids = this.db.queryTracking(user_id, true);
 
       // map containing new drops!
-      HashMap<String, ArrayList<AlbumRecord>> drops = new HashMap<String, ArrayList<AlbumRecord>>();
+      HashMap<String, ArrayList<ArrayList<String>>> mostRecentDrops = new HashMap<String, ArrayList<ArrayList<String>>>();
 
       // for each artist id, grab their 4 most recent drops
       for (String artist_id: artist_ids) {
-        // collect drops in a list!
-        ArrayList<AlbumRecord> artistDrops = new ArrayList<>();
+        // collect the drops for this artist in a list!
+        ArrayList<ArrayList<String>> artistDrops = new ArrayList<>();
         // for each album_id related to this artist_id
         for (String album_id: this.db.queryArtistAlbums(artist_id, true)) {
-          String[] album = this.db.queryAlbums(album_id);
-          if (album.length == 0) {
-            // no results!
+          // grab the album info of this album id - [releaseDate, precision, link, image, name, type]
+          String[] albumInfo = this.db.queryAlbums(album_id);
+          // grab the artist info of this artist - [link, first image, name of artist]
+          ArrayList<String> artistInfo = this.db.queryArtists(artist_id);
+          // check if there is info...
+          if (albumInfo.length == 0 || artistInfo.size() == 0) {
             continue;
           }
-          //TODO: COMPILE RESULTS OF QUERY INTO MAP (not an album record tho)
-
+          // there is info!
+          // add: [first image, name of artist, name of album, album type, link, releaseDate, precision]
+          ArrayList<String> dropInfo = new ArrayList<>();
+          dropInfo.add(albumInfo[3]); // image of album
+          dropInfo.add(artistInfo.get(2)); // name of artist
+          dropInfo.add(albumInfo[4]); // name of album
+          dropInfo.add(albumInfo[5]); // album type
+          dropInfo.add(albumInfo[2]); // link
+          dropInfo.add(albumInfo[0]); // releaseDate
+          dropInfo.add(albumInfo[1]); // precision
+          artistDrops.add(dropInfo);
         }
-        drops.put(artist_id, artistDrops);
+        mostRecentDrops.put(artist_id, DateRecord.filterMostRecent(artistDrops, 4));
       }
 
       // add new drops to our map!
-      ret.put("data", drops);
+      ret.put("data", mostRecentDrops);
       // TODO: notify here? or somewhere else?
       // notifyUser(user, drops);
       this.db.commit();
