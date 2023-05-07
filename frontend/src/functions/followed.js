@@ -9,14 +9,22 @@ export async function getFollowed(setFollowed) {
       }
       return response.json();
     })
-    .then((data) => {
-      let artists = data.artists;
+    .then((followingResponse) => {
+      //structure of our backend api response is different
+
+      // let artists = data.artists;
+      // if (artists !== undefined) {
+      //   console.log(artists);
+      //   if (artists.items !== undefined) {
+      //     console.log(artists.items);
+      //     setFollowed(artists.items);
+      //   }
+      // }
+
+      let artists = followingResponse.data;
       if (artists !== undefined) {
         console.log(artists);
-        if (artists.items !== undefined) {
-          console.log(artists.items);
-          setFollowed(artists.items);
-        }
+        setFollowed(artists);
       }
     });
 }
