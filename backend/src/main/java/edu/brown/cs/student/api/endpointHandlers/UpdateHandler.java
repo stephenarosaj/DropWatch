@@ -106,7 +106,7 @@ public class UpdateHandler implements Route {
                         // add to our list
                         artistNewReleases.add(album);
                         // add it to our db
-                        this.db.addNewAlbum(album.artists(), album.id(), album.release_date(), album.release_date_precision(), album.href());
+                        this.db.addNewAlbum(album.artists(), album.id(), album.release_date(), album.release_date_precision(), album.href(), (album.images().length == 0 ? null : album.images()[0].url()), album.artists().get(0).name());
                     } catch (Exception e) {
                         // remove the latest album, continue!
                         artistNewReleases.remove(artistNewReleases.size() - 1);

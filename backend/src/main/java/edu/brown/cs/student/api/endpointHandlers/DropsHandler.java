@@ -109,22 +109,8 @@ public class DropsHandler implements Route {
             // no results!
             continue;
           }
-          artistDrops.add(
-            new AlbumRecord(null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null));
+          //TODO: COMPILE RESULTS OF QUERY INTO MAP (not an album record tho)
+
         }
         drops.put(artist_id, artistDrops);
       }
