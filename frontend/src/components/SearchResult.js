@@ -13,7 +13,7 @@ function SearchResult(props) {
     <Container fluid>
       <Row xs={2}>
         <Col className='search-result-image-col'>
-          <Image className="search-result-image" src={props.image}/>
+          <Image alt={props.name} className="search-result-image" src={props.image}/>
         </Col>
         <Col className="search-result-name-col">
           <Card className="search-result-name">

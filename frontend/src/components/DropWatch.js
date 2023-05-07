@@ -36,7 +36,7 @@ function DropWatch(props) {
   }
   
   return(
-    <div className='dropwatch' aria-label='DropWatch Section'>
+    <div className='dropwatch' aria-label='DropWatch section'>
       <div className='dropwatch-text'>
         <h1 >Your DropWatch</h1>
         <p> These are all the artists you're currently tracking </p>
