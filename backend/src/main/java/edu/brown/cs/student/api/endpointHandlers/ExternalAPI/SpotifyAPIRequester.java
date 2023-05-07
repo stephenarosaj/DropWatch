@@ -10,9 +10,16 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
 
+/**
+ * The class that wraps requests to the Spotify API.
+ */
 public class SpotifyAPIRequester implements SpotifyDataSource {
 
-    String accessToken;
+    private String accessToken;
+
+    /**
+     * Constructor that sets the access token to the basic general access token available for developers.
+     */
     public SpotifyAPIRequester() {
         this.accessToken = this.getAccessMap().get("access_token");
     }
@@ -21,7 +28,7 @@ public class SpotifyAPIRequester implements SpotifyDataSource {
      * Retrieves the token. The token is required to make any API Call.
      * @return - access token
      */
-    public Map<String, String> getAccessMap() {
+    private Map<String, String> getAccessMap() {
         String client_id = "1be4c1544f31438693f0c3b488f9ceee";
         String client_secret = "c44a4bd0073440178a7c3477202b7a74";
         // https://stackoverflow.com/questions/65750837/how-to-use-this-curl-post-request-in-java-spotify-api
@@ -48,12 +55,23 @@ public class SpotifyAPIRequester implements SpotifyDataSource {
         }
     }
 
+    /**
+     * A mutator for the access token; can be used to change the access token to user tokens, if the request is of a
+     * more private scope.
+     * @param token String that represents the user's access token.
+     */
     @Override
     public void setAccessToken(String token) {
         // allows us to differentiate between a general access token and a user access token
         this.accessToken = token;
     }
 
+    /**
+     * Calls the Spotify API and returns the JSON response.
+     * @param urlString API endpoint to request.
+     * @return Buffer containing the JSON response.
+     * @throws APIRequestException If there was an error with the API response.
+     */
     @Override
     public Buffer getData(String urlString) throws APIRequestException {
         try {
