@@ -15,5 +15,6 @@ public interface SpotifyDataSource {
     /**
      * TODO: comment
      */
+    public void setAccessToken(String token);
     public Buffer getData(String urlString) throws APIRequestException;
 }

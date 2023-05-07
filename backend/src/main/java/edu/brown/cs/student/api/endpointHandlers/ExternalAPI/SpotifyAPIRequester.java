@@ -6,14 +6,15 @@ import okio.Buffer;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
 
 public class SpotifyAPIRequester implements SpotifyDataSource {
-    public SpotifyAPIRequester() {
 
+    String accessToken;
+    public SpotifyAPIRequester() {
+        this.accessToken = this.getAccessMap().get("access_token");
     }
 
     /***
@@ -46,6 +47,13 @@ public class SpotifyAPIRequester implements SpotifyDataSource {
             return null;
         }
     }
+
+    @Override
+    public void setAccessToken(String token) {
+        // allows us to differentiate between a general access token and a user access token
+        this.accessToken = token;
+    }
+
     @Override
     public Buffer getData(String urlString) throws APIRequestException {
         try {
@@ -56,7 +64,7 @@ public class SpotifyAPIRequester implements SpotifyDataSource {
         urls.setDoOutput(true);
         //set access token before reading input stream
         urls.setRequestProperty("Authorization","Bearer  " +
-                this.getAccessMap().get("access_token"));
+                this.accessToken);
 
         return new Buffer().readFrom(urls.getInputStream());
         } catch (IOException e) {

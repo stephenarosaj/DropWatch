@@ -27,9 +27,9 @@ public class UserDataHandler implements Route {
         try {
             // grab input params
             String userToken = request.queryParams("user_token");
-            String urlString = "https://api.spotify.com/v1/me/following?"
-                    + "type=artist";
+            String urlString = "https://api.spotify.com/v1/me/playlists?limit=10";
 
+            SpotifyAPIRequester.setAccessToken("BQCHhFkbgXJiwcIUBvIm66fihghfMHZfV9smt9vgv-k9tjtLxab1i0ddynbavOj9uAu1e8JBubp04gbxWk_7GeKRcZSsqbhx5zpqGLhrBCNBgjOfGBd0StFta-iM8jkZatwxDnUSV-3KvNf9R7ItuxI_QXB7fr2TVVOgcsJ7Sj6d1aZR7ir5UTelxEcRHJEFiXy0Lq1SlDc8tK7wgHfV");
             Buffer buf = this.SpotifyAPIRequester.getData(urlString);
 
             // deserialize the api's JSON response
