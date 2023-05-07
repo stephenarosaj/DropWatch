@@ -406,7 +406,7 @@ h3 {
 /* -------------------------------- SEARCH COMPONENT -------------------------------- */
 
 .search {
-  background-color: #FCBDBD !important;
+  background-color: #BDE9FC !important;
   text-align: center;
   align-items: center;
   padding-top: 20px;
@@ -421,7 +421,7 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #D78B8B !important;
+  background-color: #77BFDE !important;
   max-width: 90%;
   margin: auto;
   min-height: 750px;
@@ -454,9 +454,27 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #D78B8B !important;
+  background-color: #77BFDE !important;
 }
 
+.search-section-button {
+  margin-bottom: 12px;
+  margin-left: 10px;
+  font-size: 24px !important;
+  padding: 3px !important;
+}
+
+.search-input-box {
+  background-color: #77BFDE;
+  color: black !important;
+  font-size: 24px;
+  min-height: 20px !important;
+  border: 0;
+}
+
+::placeholder {
+  color: black;
+}
 .not-done {
   color: #ffffff
 }
