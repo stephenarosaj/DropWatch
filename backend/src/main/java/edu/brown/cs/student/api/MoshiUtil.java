@@ -6,14 +6,12 @@ import com.squareup.moshi.Moshi.Builder;
 import com.squareup.moshi.Types;
 import edu.brown.cs.student.api.exceptions.DeserializeException;
 
-import edu.brown.cs.student.api.formats.AlbumRecord;
-import edu.brown.cs.student.api.formats.ArtistRecord;
-import edu.brown.cs.student.api.formats.SearchRecord;
+import edu.brown.cs.student.api.formats.*;
 import edu.brown.cs.student.api.formats.SearchRecord.*;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
 
-import edu.brown.cs.student.api.formats.TrackRecord;
 import okio.Buffer;
 
 /** Util class for moshi serializing and deserializing. */
@@ -46,18 +44,18 @@ public class MoshiUtil {
       // make a new moshi adapter and
       Moshi moshi = new Moshi.Builder().build();
       JsonAdapter<SearchRecord> adapter = moshi.adapter(
-          Types.newParameterizedType(SearchRecord.class, Artists.class, ArtistRecord.class, Albums.class, AlbumRecord.class, Tracks.class, TrackRecord.class));
+          Types.newParameterizedType(SearchRecord.class, Artists.class, ArtistRecord.class, Albums.class, AlbumRecord.class, Tracks.class, TrackRecord.class, ImageRecord.class));
       return adapter.fromJson(buf);
     } catch (Exception e) {
       throw new DeserializeException(e.getMessage());
     }
   }
 
-  public static AlbumRecord deserializeUpdate(Buffer buf) throws DeserializeException {
+  public static Albums deserializeUpdate(Buffer buf) throws DeserializeException {
     try {
       Moshi moshi = new Moshi.Builder().build();
-      JsonAdapter<AlbumRecord> adapter = moshi.adapter(
-              Types.newParameterizedType(AlbumRecord.class));
+      JsonAdapter<Albums> adapter = moshi.adapter(
+              Types.newParameterizedType(Albums.class, List.class, AlbumRecord.class, ImageRecord.class));
       return adapter.fromJson(buf);
     } catch (Exception e) {
       throw new DeserializeException(e.getMessage());

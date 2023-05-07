@@ -1,4 +1,5 @@
 package edu.brown.cs.student.api.database;
+import edu.brown.cs.student.api.formats.ArtistRecord;
 import edu.brown.cs.student.api.formats.DateRecord;
 import org.testng.internal.collections.Pair;
 
@@ -7,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Class that is the database controller for our actual database. It's like
@@ -47,6 +49,15 @@ public class DropWatchDB {
     // setup!
     initializeDB();
     this.db.commit();
+  }
+
+  /**
+   * Method to commit our DB's changes!
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not commit :(
+   */
+  public boolean commit() throws SQLException, ClassNotFoundException {
+    return this.db.commit();
   }
 
   /**
@@ -185,7 +196,7 @@ public class DropWatchDB {
   public boolean isUserTrackingArtist(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
-      "SELECT count(*) FROM table WHERE user_id = \"" + user_id + "\" AND artist_id = \"" + artist_id + "\"";
+      "SELECT count(*) FROM tracking WHERE user_id = \"" + user_id + "\" AND artist_id = \"" + artist_id + "\"";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // return whether there is a single entry of this user_id tracking this artist_id
       boolean ret = result.next();
@@ -208,7 +219,7 @@ public class DropWatchDB {
   public ArrayList<String> queryTracking(String id, boolean selectUsers) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
-      "SELECT " + (selectUsers ? "user_id" : "artist_id") + " FROM tracking" +
+      "SELECT " + (selectUsers ? "user_id" : "artist_id") + " FROM tracking " +
       "WHERE " + (selectUsers ? "artist_id" : "user_id") + " = \"" + id + "\";";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // collect the results as a list
@@ -296,7 +307,7 @@ public class DropWatchDB {
   public ArrayList<String[]> queryAlbums(String album_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
-      "SELECT releaseDate, precision, link FROM albums" +
+      "SELECT releaseDate, precision, link FROM albums " +
       "WHERE album_id  = \"" + album_id + "\";";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // collect the results as a list
@@ -387,7 +398,7 @@ public class DropWatchDB {
   public ArrayList<String> queryArtists(String artist_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
-      "SELECT link FROM artists" +
+      "SELECT link FROM artists " +
       "WHERE artist_id  = \"" + artist_id + "\";";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // collect the results as a list
@@ -473,7 +484,7 @@ public class DropWatchDB {
   public ArrayList<String> queryArtistAlbums_byOneID(String id, boolean isArtist_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
-      "SELECT " + (isArtist_id ? "album_id" : "artist_id") + " FROM artistAlbums" +
+      "SELECT " + (isArtist_id ? "album_id" : "artist_id") + " FROM artistAlbums " +
       "WHERE " + (isArtist_id ? "artist_id" : "album_id") + "  = \"" + id + "\";";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // collect the results as a list
@@ -498,7 +509,7 @@ public class DropWatchDB {
   public ArrayList<String> queryArtistAlbums_byPair(String artist_id, String album_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
-      "SELECT * FROM artistAlbums" +
+      "SELECT * FROM artistAlbums " +
       "WHERE artist_id = \"" + artist_id + "\" AND album_id = \"" + album_id + "\";";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // collect the results as a list
@@ -548,13 +559,13 @@ public class DropWatchDB {
 
   /**
    * method to update the artistAlbums table
+   *
    * @param artist_id the artist_id of the artist whose data we're adding
-   * @param album_id the album_id of the album whose data we're adding
-   * @return a boolean indicating success or failure
+   * @param album_id  the album_id of the album whose data we're adding
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not insert into latest release table
+   * @throws SQLException           if could not insert into latest release table
    */
-  public boolean insertOrReplaceArtistAlbums(String artist_id, String album_id) throws SQLException, ClassNotFoundException {
+  public void insertOrReplaceArtistAlbums(String artist_id, String album_id) throws SQLException, ClassNotFoundException {
     // make our statement!
     String SQLStatement = "" +
       "INSERT OR REPLACE INTO artistAlbums VALUES (" +
@@ -570,7 +581,6 @@ public class DropWatchDB {
       }
       // executed successfully
       statement.close();
-      return true;
     }
   }
 
@@ -579,23 +589,53 @@ public class DropWatchDB {
    * @param artist_id the artist whose latest release date we want to find
    * @return a DateRecord containing the latest release date for thar artist
    */
-  public DateRecord findLatestRelease(String artist_id) {
-    return null;
+  public DateRecord findLatestRelease(String artist_id) throws SQLException, ClassNotFoundException {
+    // grab all album_ids of artist
+    ArrayList<String> album_ids = queryArtistAlbums_byOneID(artist_id, true);
+    // if we have no albums, return null
+    if (album_ids.size() == 0) {
+      return null;
+    }
+
+    // grab all albums given by album_ids - [releaseDate, precision, link]
+    ArrayList<String[]> albums = new ArrayList<>();
+    for (String album_id: album_ids) {
+      albums.addAll(queryAlbums(album_id));
+    }
+
+    // hold the latest date in DateRecord!
+    DateRecord latestDate = new DateRecord("0000", "year");
+    for (String[] album: albums) {
+      // make new DateRecord
+      DateRecord albumDate = new DateRecord(album[0], album[1]);
+      // compare dates!
+      if (DateRecord.compareDates(albumDate, latestDate) > 0) {
+        // if newer, albumDate is new latestDate!
+        latestDate = albumDate;
+      }
+    }
+    return latestDate;
   }
 
   /**
    * a method to add a new album to our database. this means adding it to our
    * albums table and to our artistAlbums table
-   * @param artist_id the artist who is on the album
-   *                  NOTE: this is one of possibly many artists, we have to check the link for more artists before adding!
+   * @param artist_ids the artists who are on the album
    * @param album_id the album_id of the album
    * @param releaseDate the date the album was released
    * @param releaseDatePrecision the precision of the releaseDate ("day", "month", or "year")
    * @param link a link to get more data about the album
-   * @return a boolean indicating success of adding this album to the db
    */
-  public boolean addNewAlbum(String artist_id, String album_id, String releaseDate, String releaseDatePrecision, String link) {
-    return false;
+  public void addNewAlbum(List<ArtistRecord> artist_ids, String album_id, String releaseDate, String releaseDatePrecision, String link) throws SQLException, ClassNotFoundException {
+    // add the album to our db!
+    insertOrReplaceAlbums(album_id, releaseDate, releaseDatePrecision, link);
+    for (ArtistRecord artist: artist_ids) {
+      // for each artist:
+      // add the artist to our db if it's not already there
+      insertOrReplaceArtists(artist.id(), artist.href());
+      // add the artist to our relationship table if it's not already there
+      insertOrReplaceArtistAlbums(artist.id(), album_id);
+    }
   }
 
   // TODO: MORE!?

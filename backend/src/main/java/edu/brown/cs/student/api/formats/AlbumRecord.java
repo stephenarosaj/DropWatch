@@ -25,8 +25,12 @@ import java.util.List;
  *                     Allowed values:"market - The content item is not available in the given market.
  *                                    "product" - The content item is not available for the user's subscription type.
  *                                    "explicit" - The content item is explicit and the user's account is set to not play explicit content.
- * @param album_type "The type of the album."
+ * @param album_type "The type of the album." - USED ONLY IN /search
  *                   Allowed values: "album", "single", "compilation"
+ * @param album_group "The field is present when getting an artist's albums.
+ *                    Compare to album_type this field represents relationship between
+ *                    the artist and the album." - USED ONLY IN /artists/{id}/albums
+ *                   Allowed values: "album", "single", "compilation", "appears_on"
  * @param artists "The artists of the album." - Array of ArtistObject
  * @param tracks "The tracks of the album."
  */
@@ -44,6 +48,7 @@ public record AlbumRecord(
   @Json(name = "release_date_precision") String release_date_precision,
   @Json(name = "restrictions") String restrictions,
   @Json(name = "album_type") String album_type,
+  @Json(name = "album_group") String album_group,
   @Json(name = "artists") List<ArtistRecord> artists,
   @Json(name = "tracks") List<TrackRecord> tracks // NOT returned by search!!!!
 

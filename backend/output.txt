@@ -1,0 +1,46 @@
+{
+  "href" : "https://api.spotify.com/v1/artists/7mEGUdpQ3xFdIS31e5Zl8V/albums?offset=0&limit=1&include_groups=single&market=US",
+  "items" : [ {
+    "album_group" : "single",
+    "album_type" : "single",
+    "artists" : [ {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/7mEGUdpQ3xFdIS31e5Zl8V"
+      },
+      "href" : "https://api.spotify.com/v1/artists/7mEGUdpQ3xFdIS31e5Zl8V",
+      "id" : "7mEGUdpQ3xFdIS31e5Zl8V",
+      "name" : "Emily Montes",
+      "type" : "artist",
+      "uri" : "spotify:artist:7mEGUdpQ3xFdIS31e5Zl8V"
+    } ],
+    "external_urls" : {
+      "spotify" : "https://open.spotify.com/album/402zNugn8kPWTnHC44lJ3h"
+    },
+    "href" : "https://api.spotify.com/v1/albums/402zNugn8kPWTnHC44lJ3h",
+    "id" : "402zNugn8kPWTnHC44lJ3h",
+    "images" : [ {
+      "height" : 640,
+      "url" : "https://i.scdn.co/image/ab67616d0000b2736a912bd3f287888ca3890926",
+      "width" : 640
+    }, {
+      "height" : 300,
+      "url" : "https://i.scdn.co/image/ab67616d00001e026a912bd3f287888ca3890926",
+      "width" : 300
+    }, {
+      "height" : 64,
+      "url" : "https://i.scdn.co/image/ab67616d000048516a912bd3f287888ca3890926",
+      "width" : 64
+    } ],
+    "name" : "Can't See Me / Can I Just Be Me",
+    "release_date" : "2022-07-04",
+    "release_date_precision" : "day",
+    "total_tracks" : 1,
+    "type" : "album",
+    "uri" : "spotify:album:402zNugn8kPWTnHC44lJ3h"
+  } ],
+  "limit" : 1,
+  "next" : "https://api.spotify.com/v1/artists/7mEGUdpQ3xFdIS31e5Zl8V/albums?offset=1&limit=1&include_groups=single&market=US",
+  "offset" : 0,
+  "previous" : null,
+  "total" : 2
+}

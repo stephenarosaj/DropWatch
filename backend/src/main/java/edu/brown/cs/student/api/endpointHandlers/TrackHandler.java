@@ -85,7 +85,7 @@ public class TrackHandler implements Route {
       // error check params - we should have user_id, artist_id, and operation
       if (user_id == null || artist_id == null || operation == null) {
         // return error!
-        return MoshiUtil.serialize(ret, "ERROR: /track endpoint requires params 'user_id', 'artist_id', and 'operation', but did not receive them both");
+        return MoshiUtil.serialize(ret, "ERROR: /track endpoint requires params 'user_id', 'artist_id', and 'operation', but did not receive all of them");
       }
 
 
@@ -111,6 +111,7 @@ public class TrackHandler implements Route {
         // add && !alreadyTracking
         // add to db
         this.db.addTracking(user_id, artist_id);
+        this.db.commit();
         // return success!
         ret.put("tracked artists", this.db.queryTracking(user_id, false));
         return MoshiUtil.serialize(ret, "success");
@@ -118,6 +119,7 @@ public class TrackHandler implements Route {
         // !add && alreadyTracking
         // should delete!
         this.db.removeTracking(user_id, artist_id);
+        this.db.commit();
         // return success!
         ret.put("tracked artists", this.db.queryTracking(user_id, false));
         return MoshiUtil.serialize(ret, "success");
@@ -129,7 +131,7 @@ public class TrackHandler implements Route {
       }
     } catch (Exception e) {
       System.out.println(e.getMessage());
-      return null;
+      return MoshiUtil.serialize(ret, "ERROR: " + e.getMessage());
     }
   }
 }

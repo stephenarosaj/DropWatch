@@ -21,11 +21,10 @@ public class UserDataHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         // the return map, will be turned into JSON
+        Map<String, Object> ret = new HashMap<String, Object>();
+        // add our params to the map!
+        ret.put("params", request.queryMap().toMap());
         try {
-            Map<String, Object> ret = new HashMap<String, Object>();
-            // add our params to the map!
-            ret.put("params", request.queryMap().toMap());
-
             // grab input params
             String userToken = request.queryParams("user_token");
             String urlString = "https://api.spotify.com/v1/me/following?"
@@ -43,7 +42,7 @@ public class UserDataHandler implements Route {
             return MoshiUtil.serialize(ret, "success");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return null;
+            return MoshiUtil.serialize(ret, "ERROR: " + e.getMessage());
         }
     }
 }
