@@ -24,10 +24,6 @@ import static java.lang.System.exit;
  *            that entry is removed from the table
  */
 public class TrackHandler implements Route {
-  //TODO: track some shit man
-  // each call to this is either an query of, addition to, or deletion from the
-  // user's currently tracked artists
-
   /**
    * The spotify data source for this UpdateHandler class - holds responses from the spotify API
    */
@@ -108,6 +104,7 @@ public class TrackHandler implements Route {
 
       // find out what artists we're already tracking
       ArrayList<String> currentArtist_ids = this.db.queryTracking(user_id, true);
+      // map of (artist_id, [link, first image, name of artist]) pairs
       HashMap<String, ArrayList<String>> currentArtistInfo = this.db.queryMultipleArtists(currentArtist_ids);
 
       // if just querying, return these artists' info

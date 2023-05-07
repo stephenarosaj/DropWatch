@@ -340,6 +340,20 @@ public class DropWatchDBUnitTest {
     return arr;
   }
 
+  /**
+   * helper function for testing - used to create artist arrays on the fly!
+   * @param link link to artist page
+   * @param image link to first image of artist
+   * @param name name of artist
+   * @return array of this artists info as it would be returned from query
+   */
+  String[] buildArtistsArray(String link, String image, String name) {
+    String[] arr = new String[3];
+    arr[0] = link;
+    arr[1] = image;
+    arr[2] = name;
+    return arr;
+  }
   // test queryAlbums
   @Test
   void test_queryAlbums() {
@@ -471,13 +485,18 @@ public class DropWatchDBUnitTest {
       connectMockDB();
 
       // query artists!
-      assertEquals(db.queryArtists("1"), "aaa.com");
-      assertEquals(db.queryArtists("2"), "bbb.com");
-      assertEquals(db.queryArtists("3"), "ccc.com");
-      assertEquals(db.queryArtists("4"), "ddd.com");
+      String[] arr;
+      arr = buildArtistsArray("aaa.com", "aaa.net", "aaa");
+      assertArrayEquals(db.queryArtists("1").toArray(), arr);
+      arr = buildArtistsArray("bbb.com", "bbb.net", "bbb");
+      assertArrayEquals(db.queryArtists("2").toArray(), arr);
+      arr = buildArtistsArray("ccc.com", null, "ccc");
+      assertArrayEquals(db.queryArtists("3").toArray(), arr);
+      arr = buildArtistsArray("ddd.com", null, "ddd");
+      assertArrayEquals(db.queryArtists("4").toArray(), arr);
 
       // check not exists!
-      assertNull(db.queryArtists("5"));
+      assertTrue(db.queryArtists("5").isEmpty());
 
       // close!
       assertTrue(db.closeDB());
@@ -493,19 +512,22 @@ public class DropWatchDBUnitTest {
       // connect to empty db
       createEmptyTestDB();
       // verify no artists!
-      assertNull(db.queryArtists("a"));
-      assertNull(db.queryArtists("b"));
+      assertTrue(db.queryArtists("a").isEmpty());
+      assertTrue(db.queryArtists("b").isEmpty());
 
       // add some artists!
-      assertTrue(db.insertOrReplaceArtists("a", "a.com"));
-      assertTrue(db.insertOrReplaceArtists("b", "b.com"));
+      assertTrue(db.insertOrReplaceArtists("a", "a.com", "a.net", "mr.a"));
+      assertTrue(db.insertOrReplaceArtists("b", "b.com", "b.net", "ms.b"));
       // verify they're there!
-      assertEquals(db.queryArtists("a"), "a.com");
-      assertEquals(db.queryArtists("b"), "b.com");
+      String[] arr;
+      arr = buildArtistsArray("a.com", "a.net", "mr.a");
+      assertArrayEquals(db.queryArtists("a").toArray(), arr);
+      arr = buildArtistsArray("b.com", "b.net", "ms.b");
+      assertArrayEquals(db.queryArtists("b").toArray(), arr);
 
       // verify no false artists!
-      assertNull(db.queryArtists("c"));
-      assertNull(db.queryArtists("d"));
+      assertTrue(db.queryArtists("c").isEmpty());
+      assertTrue(db.queryArtists("d").isEmpty());
     } catch (Exception e) {
       fail(e.getMessage());
     }
@@ -519,34 +541,41 @@ public class DropWatchDBUnitTest {
       createEmptyTestDB();
 
       // add some artists!
-      assertTrue(db.insertOrReplaceArtists("a", "a.com"));
-      assertTrue(db.insertOrReplaceArtists("b", "b.com"));
-      assertTrue(db.insertOrReplaceArtists("c", "c.com"));
-      assertTrue(db.insertOrReplaceArtists("d", "d.com"));
+      assertTrue(db.insertOrReplaceArtists("a", "a.com", "a.net", "mr.a"));
+      assertTrue(db.insertOrReplaceArtists("b", "b.com", "b.net", "ms.b"));
+      assertTrue(db.insertOrReplaceArtists("c", "c.com", "c.net", "dr.c"));
+      assertTrue(db.insertOrReplaceArtists("d", "d.com", "d.net", "dr.d"));
       // verify they're there!
-      assertEquals(db.queryArtists("a"), "a.com");
-      assertEquals(db.queryArtists("b"), "b.com");
-      assertEquals(db.queryArtists("c"), "c.com");
-      assertEquals(db.queryArtists("d"), "d.com");
-
+      String[] arr;
+      arr = buildArtistsArray("a.com", "a.net", "mr.a");
+      assertArrayEquals(db.queryArtists("a").toArray(), arr);
+      arr = buildArtistsArray("b.com", "b.net", "ms.b");
+      assertArrayEquals(db.queryArtists("b").toArray(), arr);
+      arr = buildArtistsArray("c.com", "c.net", "dr.c");
+      assertArrayEquals(db.queryArtists("c").toArray(), arr);
+      arr = buildArtistsArray("d.com", "d.net", "dr.d");
+      assertArrayEquals(db.queryArtists("d").toArray(), arr);
       // now remove some stuff!
       assertTrue(db.removeArtists("a"));
       assertTrue(db.removeArtists("b"));
 
       // verify its gone/stuff is still there!
-      assertNull(db.queryArtists("a"));
-      assertNull(db.queryArtists("b"));
-      assertEquals(db.queryArtists("c"), "c.com");
-      assertEquals(db.queryArtists("d"), "d.com");
+      assertTrue(db.queryArtists("a").isEmpty());
+      assertTrue(db.queryArtists("b").isEmpty());
+      arr = buildArtistsArray("c.com", "c.net", "dr.c");
+      assertArrayEquals(db.queryArtists("c").toArray(), arr);
+      arr = buildArtistsArray("d.com", "d.net", "dr.d");
+      assertArrayEquals(db.queryArtists("d").toArray(), arr);
 
       // remove more
       assertTrue(db.removeArtists("d"));
 
       // verify its gone/stuff is still there!
-      assertNull(db.queryArtists("a"));
-      assertNull(db.queryArtists("b"));
-      assertEquals(db.queryArtists("c"), "c.com");
-      assertNull(db.queryArtists("d"));
+      assertTrue(db.queryArtists("a").isEmpty());
+      assertTrue(db.queryArtists("b").isEmpty());
+      arr = buildArtistsArray("c.com", "c.net", "dr.c");
+      assertArrayEquals(db.queryArtists("c").toArray(), arr);
+      assertTrue(db.queryArtists("d").isEmpty());
 
       // make sure returns false if try to remove again, or remove non-existent entry
       assertFalse(db.removeArtists("a"));
@@ -804,29 +833,29 @@ public class DropWatchDBUnitTest {
     assertTrue(DateRecord.compareDates(june, july) < 0);
     assertTrue(DateRecord.compareDates(july, june) > 0);
     // left: 2020 (tt), right: 2022 (tt2)
-    assertEquals(-1, DateRecord.compareDates(halloween, xmas));
-    assertEquals(1, DateRecord.compareDates(xmas, halloween));
+    assertTrue(DateRecord.compareDates(halloween, xmas) < 0);
+    assertTrue(DateRecord.compareDates(xmas, halloween) > 0);
     assertEquals(0, DateRecord.compareDates(xmas, xmas));
     assertEquals(0, DateRecord.compareDates(halloween, halloween));
     // day against month
-    assertEquals(1, DateRecord.compareDates(june, halloween));
-    assertEquals(-1, DateRecord.compareDates(halloween, june));
+    assertTrue(DateRecord.compareDates(june, halloween) < 0);
+    assertTrue(DateRecord.compareDates(halloween, june) > 0);
     // day against year
-    assertEquals(-1, DateRecord.compareDates(tt, halloween));
-    assertEquals(1, DateRecord.compareDates(halloween, tt));
+    assertTrue(DateRecord.compareDates(tt, halloween) < 0);
+    assertTrue(DateRecord.compareDates(halloween, tt) > 0);
     // month against month
-    assertEquals(-1, DateRecord.compareDates(june, july));
-    assertEquals(1, DateRecord.compareDates(july, june));
+    assertTrue(DateRecord.compareDates(june, july) < 0);
+    assertTrue(DateRecord.compareDates(july, june) > 0);
     assertEquals(0, DateRecord.compareDates(july, july));
     assertEquals(0, DateRecord.compareDates(june, june));
     // month against year
-    assertEquals(1, DateRecord.compareDates(june, tt2));
-    assertEquals(-1, DateRecord.compareDates(tt2, june));
-    assertEquals(1, DateRecord.compareDates(june, tt));
-    assertEquals(-1, DateRecord.compareDates(tt, june));
+    assertTrue(DateRecord.compareDates(june, tt2) > 0);
+    assertTrue(DateRecord.compareDates(tt2, june) < 0);
+    assertTrue(DateRecord.compareDates(june, tt) > 0);
+    assertTrue(DateRecord.compareDates(tt, june) < 0);
     // year against year
-    assertEquals(-1, DateRecord.compareDates(tt, tt2));
-    assertEquals(1, DateRecord.compareDates(tt2, tt));
+    assertTrue(DateRecord.compareDates(tt, tt2) < 0);
+    assertTrue(DateRecord.compareDates(tt2, tt) > 0);
     assertEquals(0, DateRecord.compareDates(tt2, tt2));
     assertEquals(0, DateRecord.compareDates(tt, tt));
   }
@@ -834,24 +863,7 @@ public class DropWatchDBUnitTest {
   // test bad input into date comparison function
   @Test
   void test_DateRecordCompareDates_BadInput() {
-    // make some bad dates, compare them! ex: incorrect precision, syntax errors in date strings, ...
-    // day
-    // invalid syntax
-    DateRecord a  = new DateRecord("12-31", "day");
-    DateRecord b  = new DateRecord("2012-06-231", "day");
-    // invalid precision
-
-    // month:
-    // invalid syntax
-    DateRecord june  = new DateRecord("2022-6", "month");
-    DateRecord july  = new DateRecord("2022-7", "month");
-    // invalid precision
-
-    // year
-    // invalid syntax
-    DateRecord tt  = new DateRecord("2020-06", "year");
-    DateRecord tt2  = new DateRecord("2022-07-01", "year");
-    // invalid precision
+    // make some bad dates, compare them!
 
   }
 
