@@ -322,22 +322,25 @@ public class DropWatchDB {
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not query tracking table
    */
-  public ArrayList<String[]> queryAlbums(String album_id) throws SQLException, ClassNotFoundException {
+  public String[] queryAlbums(String album_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
       "SELECT releaseDate, precision, link FROM albums " +
       "WHERE album_id  = \"" + album_id + "\";";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
-      // collect the results as a list
-      ArrayList<String[]> ret = new ArrayList<>();
-      while (result.next()) {
-        String[] arr = new String[3];
-        arr[0] = result.getString(1);
-        arr[1] = result.getString(2);
-        arr[2] = result.getString(3);
-        ret.add(arr);
+      // collect the results as an array
+      String[] ret;
+      if (result.next()) {
+        // we have resulst!
+        ret = new String[3];
+        ret[0] = result.getString(1);
+        ret[1] = result.getString(2);
+        ret[2] = result.getString(3);
+      } else {
+        // we don't have results!
+        ret = new String[0];
       }
-      // return our results!
+      // return our result!
       result.close();
       return ret;
     }
@@ -353,7 +356,7 @@ public class DropWatchDB {
    */
   public boolean removeAlbums(String album_id) throws SQLException, ClassNotFoundException {
     // make sure entry exists
-    if (queryAlbums(album_id).size() == 0) {
+    if (queryAlbums(album_id).length == 0) {
       return false;
     }
 
@@ -617,7 +620,7 @@ public class DropWatchDB {
     // grab all albums given by album_ids - [releaseDate, precision, link]
     ArrayList<String[]> albums = new ArrayList<>();
     for (String album_id: album_ids) {
-      albums.addAll(queryAlbums(album_id));
+      albums.add(queryAlbums(album_id));
     }
 
     // hold the latest date in DateRecord!

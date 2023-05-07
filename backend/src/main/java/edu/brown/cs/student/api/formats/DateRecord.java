@@ -15,8 +15,8 @@ public record DateRecord(
   /**
    * Comparison function for dates. Returns an int indicating which date is more recent, or 0 if they are the same.
    * If the precision are the same (for example, we have 1-2-3 and 4-5-6)
-   *    - (+1) if left MORE RECENT than right
-   *    - (-1) if left LESS RECENT than right
+   *    - (> 0) if left MORE RECENT than right
+   *    - (< 0) if left LESS RECENT than right
    *    - (0) if left == right
    * If the precisions are different, the date is filled in with 1's. For example, a date of "2023-04" (april 2023) becomes
    * "2023-04-1", and "2020" would become "2020-01-01"

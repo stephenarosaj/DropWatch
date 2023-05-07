@@ -345,36 +345,29 @@ public class DropWatchDBUnitTest {
       // connect to mock db
       connectMockDB();
       // collect albums in list!
-      ArrayList<String[]> albums = new ArrayList<>();
+      String[] album;
 
       // query albums!
-      albums.add(buildAlbumsArray("2002-02-09", "day", "rosa.com"));
-      assertArrayEquals(db.queryAlbums("1").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2002-03-21", "day", "bry.com"));
-      assertArrayEquals(db.queryAlbums("2").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2002-07", "month", "aku.com"));
-      assertArrayEquals(db.queryAlbums("3").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2002", "year", "maia.com"));
-      assertArrayEquals(db.queryAlbums("4").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2002-02", "month", "rosashort.com"));
-      assertArrayEquals(db.queryAlbums("5").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2002-03", "month", "bryshort.com"));
-      assertArrayEquals(db.queryAlbums("6").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2001", "year", "2001.com"));
-      assertArrayEquals(db.queryAlbums("7").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2003", "year", "2003.com"));
-      assertArrayEquals(db.queryAlbums("8").toArray(), albums.toArray());
+      album = buildAlbumsArray("2002-02-09", "day", "rosa.com");
+      assertArrayEquals(db.queryAlbums("1"), album);
+      album = buildAlbumsArray("2002-03-21", "day", "bry.com");
+      assertArrayEquals(db.queryAlbums("2"), album);
+      album = buildAlbumsArray("2002-07", "month", "aku.com");
+      assertArrayEquals(db.queryAlbums("3"), album);
+      album = buildAlbumsArray("2002", "year", "maia.com");
+      assertArrayEquals(db.queryAlbums("4"), album);
+      album = buildAlbumsArray("2002-02", "month", "rosashort.com");
+      assertArrayEquals(db.queryAlbums("5"), album);
+      album = buildAlbumsArray("2002-03", "month", "bryshort.com");
+      assertArrayEquals(db.queryAlbums("6"), album);
+      album = buildAlbumsArray("2001", "year", "2001.com");
+      assertArrayEquals(db.queryAlbums("7"), album);
+      album = buildAlbumsArray("2003", "year", "2003.com");
+      assertArrayEquals(db.queryAlbums("8"), album);
 
       // check not exists!
-      albums.remove(0);
-      assertArrayEquals(db.queryAlbums("9").toArray(), albums.toArray());
+      album = new String[0];
+      assertArrayEquals(db.queryAlbums("9"), album);
 
       // close!
       assertTrue(db.closeDB());
@@ -390,7 +383,7 @@ public class DropWatchDBUnitTest {
       // connect to empty db
       createEmptyTestDB();
       // verify no albums!
-      assertTrue(db.queryAlbums("a").isEmpty());
+      assertEquals(0, db.queryAlbums("a").length);
 
       // add some albums!
       assertTrue(db.insertOrReplaceAlbums("a", "2020", "year", "a.com"));
@@ -398,19 +391,17 @@ public class DropWatchDBUnitTest {
       assertTrue(db.insertOrReplaceAlbums("c", "2022", "year", "c.com"));
 
       // verify they're there!
-      ArrayList<String[]> albums = new ArrayList<>();
-      albums.add(buildAlbumsArray("2020", "year", "a.com"));
-      assertArrayEquals(db.queryAlbums("a").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2021", "year", "b.com"));
-      assertArrayEquals(db.queryAlbums("b").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2022", "year", "c.com"));
-      assertArrayEquals(db.queryAlbums("c").toArray(), albums.toArray());
+      String[] album;
+      album = buildAlbumsArray("2020", "year", "a.com");
+      assertArrayEquals(db.queryAlbums("a"), album);
+      album = buildAlbumsArray("2021", "year", "b.com");
+      assertArrayEquals(db.queryAlbums("b"), album);
+      album = buildAlbumsArray("2022", "year", "c.com");
+      assertArrayEquals(db.queryAlbums("c"), album);
 
       // verify no false albums!
-      albums.remove(0);
-      assertArrayEquals(db.queryAlbums("d").toArray(), albums.toArray());
+      album = new String[0];
+      assertArrayEquals(db.queryAlbums("d"), album);
     } catch (Exception e) {
       fail(e.getMessage());
     }
@@ -423,7 +414,7 @@ public class DropWatchDBUnitTest {
       // connect to empty db
       createEmptyTestDB();
       // verify no albums!
-      assertTrue(db.queryAlbums("a").isEmpty());
+      assertEquals(0, db.queryAlbums("a").length);
 
       // add some albums!
       assertTrue(db.insertOrReplaceAlbums("a", "2020", "year", "a.com"));
@@ -431,37 +422,34 @@ public class DropWatchDBUnitTest {
       assertTrue(db.insertOrReplaceAlbums("c", "2022", "year", "c.com"));
 
       // verify they're there!
-      ArrayList<String[]> albums = new ArrayList<>();
-      albums.add(buildAlbumsArray("2020", "year", "a.com"));
-      assertArrayEquals(db.queryAlbums("a").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2021", "year", "b.com"));
-      assertArrayEquals(db.queryAlbums("b").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2022", "year", "c.com"));
-      assertArrayEquals(db.queryAlbums("c").toArray(), albums.toArray());
+      String[] album;
+      album = buildAlbumsArray("2020", "year", "a.com");
+      assertArrayEquals(db.queryAlbums("a"), album);
+      album = buildAlbumsArray("2021", "year", "b.com");
+      assertArrayEquals(db.queryAlbums("b"), album);
+      album = buildAlbumsArray("2022", "year", "c.com");
+      assertArrayEquals(db.queryAlbums("c"), album);
 
       // now remove some stuff!
       assertTrue(db.removeAlbums("a"));
 
       // verify its gone/stuff is still there!
-      albums.remove(0);
-      assertArrayEquals(db.queryAlbums("a").toArray(), albums.toArray());
-      albums.add(buildAlbumsArray("2021", "year", "b.com"));
-      assertArrayEquals(db.queryAlbums("b").toArray(), albums.toArray());
-      albums.remove(0);
-      albums.add(buildAlbumsArray("2022", "year", "c.com"));
-      assertArrayEquals(db.queryAlbums("c").toArray(), albums.toArray());
+      album = new String[0];
+      assertArrayEquals(db.queryAlbums("a"), album);
+      album = buildAlbumsArray("2021", "year", "b.com");
+      assertArrayEquals(db.queryAlbums("b"), album);
+      album = buildAlbumsArray("2022", "year", "c.com");
+      assertArrayEquals(db.queryAlbums("c"), album);
 
       // remove more
       assertTrue(db.removeAlbums("c"));
 
       // verify its gone/stuff is still there!
-      albums.remove(0);
-      assertArrayEquals(db.queryAlbums("a").toArray(), albums.toArray());
-      assertArrayEquals(db.queryAlbums("c").toArray(), albums.toArray());
-      albums.add(buildAlbumsArray("2021", "year", "b.com"));
-      assertArrayEquals(db.queryAlbums("b").toArray(), albums.toArray());
+      album = new String[0];
+      assertArrayEquals(db.queryAlbums("a"), album);
+      assertArrayEquals(db.queryAlbums("c"), album);
+      album = buildAlbumsArray("2021", "year", "b.com");
+      assertArrayEquals(db.queryAlbums("b"), album);
 
       // make sure returns false if try to remove again, or remove non-existent entry
       assertFalse(db.removeAlbums("a"));
@@ -809,12 +797,12 @@ public class DropWatchDBUnitTest {
 
     // left: halloween, right: xmas
     // day against day
-    assertEquals(-1, DateRecord.compareDates(halloween, xmas));
-    assertEquals(1, DateRecord.compareDates(xmas, halloween));
+    assertTrue(DateRecord.compareDates(halloween, xmas) < 0);
+    assertTrue(DateRecord.compareDates(xmas, halloween) > 0);
     // left: june, july
     // month against month
-    assertEquals(-1, DateRecord.compareDates(june, july));
-    assertEquals(1, DateRecord.compareDates(july, june));
+    assertTrue(DateRecord.compareDates(june, july) < 0);
+    assertTrue(DateRecord.compareDates(july, june) > 0);
     // left: 2020 (tt), right: 2022 (tt2)
 
   }
