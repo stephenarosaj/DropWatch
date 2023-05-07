@@ -6,14 +6,12 @@ function Playlist(props) {
     <Container fluid>
       <Row xs={2}>
         <Col className='playlist-image-col'>
-          <Image className="playlist-image" src={props.playlist.images[0].url}/>
+          <Image alt={props.playlist.name + "playlist"} className="playlist-image" src={props.playlist.images[0].url}/>
         </Col>
         <Col className="playlist-name-col">
           <Card className="playlist-name">
-            <Card.Text>
-              {props.playlist.name} <br/>
-              {props.playlist.owner.display_name}
-            </Card.Text>
+              <p aria-label="playlist name">{props.playlist.name}</p>
+              <p aria-label="playlist owner">{props.playlist.owner.display_name}</p>
           </Card>
         </Col>
       </Row>

@@ -13,7 +13,9 @@ function Drop(props) {
     <Container fluid>
       <Row xs={2}>
         <Col className='drop-image-col'>
-          <Image className="drop-image" src={'https://i.scdn.co/image/ab67616d0000b27337906edcfbfde42b203097f2'}/>
+          <Image 
+            className="drop-image" 
+            src={'https://i.scdn.co/image/ab67616d0000b27337906edcfbfde42b203097f2'}/>
         </Col>
         <Col className="drop-name-col">
           <Card className="drop-name">
