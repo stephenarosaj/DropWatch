@@ -2,6 +2,7 @@ package edu.brown.cs.student.api.endpointHandlers;
 
 import edu.brown.cs.student.api.MoshiUtil;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
+import edu.brown.cs.student.api.formats.ArtistFollowRecord;
 import edu.brown.cs.student.api.formats.SearchRecord;
 import okio.Buffer;
 import spark.Request;
@@ -27,16 +28,16 @@ public class UserDataHandler implements Route {
         try {
             // grab input params
             String userToken = request.queryParams("user_token");
-            String urlString = "https://api.spotify.com/v1/me/playlists?limit=10";
+            String urlString = "https://api.spotify.com/v1/me/following?type=artist&limit=10";
 
-            SpotifyAPIRequester.setAccessToken("BQCHhFkbgXJiwcIUBvIm66fihghfMHZfV9smt9vgv-k9tjtLxab1i0ddynbavOj9uAu1e8JBubp04gbxWk_7GeKRcZSsqbhx5zpqGLhrBCNBgjOfGBd0StFta-iM8jkZatwxDnUSV-3KvNf9R7ItuxI_QXB7fr2TVVOgcsJ7Sj6d1aZR7ir5UTelxEcRHJEFiXy0Lq1SlDc8tK7wgHfV");
+            SpotifyAPIRequester.setAccessToken(userToken);
             Buffer buf = this.SpotifyAPIRequester.getData(urlString);
 
             // deserialize the api's JSON response
-            SearchRecord searchResponse = MoshiUtil.deserializeSearch(buf);
+            ArtistFollowRecord artistFollowResponse = MoshiUtil.deserializeArtistsFollow(buf);
 
             // add the data to our response map
-            ret.put("data", searchResponse);
+            ret.put("data", artistFollowResponse.artistsJSON().artists());
 
             // return our response map!
             return MoshiUtil.serialize(ret, "success");

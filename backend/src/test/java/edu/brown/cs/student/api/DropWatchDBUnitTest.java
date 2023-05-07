@@ -796,8 +796,6 @@ public class DropWatchDBUnitTest {
     DateRecord tt  = new DateRecord("2020-01-01", "year");
     DateRecord tt2  = new DateRecord("2022-01-01", "year");
 
-
-    // left: halloween, right: xmas
     // day against day
     assertTrue(DateRecord.compareDates(halloween, xmas) < 0);
     assertTrue(DateRecord.compareDates(xmas, halloween) > 0);
@@ -806,7 +804,31 @@ public class DropWatchDBUnitTest {
     assertTrue(DateRecord.compareDates(june, july) < 0);
     assertTrue(DateRecord.compareDates(july, june) > 0);
     // left: 2020 (tt), right: 2022 (tt2)
-
+    assertEquals(-1, DateRecord.compareDates(halloween, xmas));
+    assertEquals(1, DateRecord.compareDates(xmas, halloween));
+    assertEquals(0, DateRecord.compareDates(xmas, xmas));
+    assertEquals(0, DateRecord.compareDates(halloween, halloween));
+    // day against month
+    assertEquals(1, DateRecord.compareDates(june, halloween));
+    assertEquals(-1, DateRecord.compareDates(halloween, june));
+    // day against year
+    assertEquals(-1, DateRecord.compareDates(tt, halloween));
+    assertEquals(1, DateRecord.compareDates(halloween, tt));
+    // month against month
+    assertEquals(-1, DateRecord.compareDates(june, july));
+    assertEquals(1, DateRecord.compareDates(july, june));
+    assertEquals(0, DateRecord.compareDates(july, july));
+    assertEquals(0, DateRecord.compareDates(june, june));
+    // month against year
+    assertEquals(-1, DateRecord.compareDates(june, tt2));
+    assertEquals(-1, DateRecord.compareDates(tt2, june));
+    assertEquals(1, DateRecord.compareDates(june, tt));
+    assertEquals(1, DateRecord.compareDates(tt, june));
+    // year against year
+    assertEquals(-1, DateRecord.compareDates(tt, tt2));
+    assertEquals(1, DateRecord.compareDates(tt2, tt));
+    assertEquals(0, DateRecord.compareDates(tt2, tt2));
+    assertEquals(0, DateRecord.compareDates(tt, tt));
   }
 
   // test bad input into date comparison function

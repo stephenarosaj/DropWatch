@@ -1,10 +1,4 @@
-function sortPopularity(results) {
-  const sorted = [...results]
-  sorted.sort((a,b) => b.popularity - a.popularity)
-  return(sorted)
-}
-
-export default async function search(query) {
+export default async function track(query) {
   return new Promise((resolve, reject) => {
         const data =
         fetch("http://localhost:3232/search?query=" + query + "&offset=0")

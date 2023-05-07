@@ -72,4 +72,15 @@ public class MoshiUtil {
       throw new DeserializeException(e.getMessage());
     }
   }
+
+  public static ArtistFollowRecord deserializeArtistsFollow(Buffer buf) throws DeserializeException {
+    try {
+      Moshi moshi = new Moshi.Builder().build();
+      JsonAdapter<ArtistFollowRecord> adapter = moshi.adapter(
+              Types.newParameterizedType(ArtistFollowRecord.class, ArtistFollowRecord.ArtistsJSON.class, Artists.class));
+      return adapter.fromJson(buf);
+    } catch (Exception e) {
+      throw new DeserializeException(e.getMessage());
+    }
+  }
 }

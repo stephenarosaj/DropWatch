@@ -18,7 +18,7 @@ function Artist(props) {
         </Col>
         <Col className={props.class + '-name-col'}>
           <Card className={props.class + '-name'}>
-            <Card.Text>
+            <Card.Text aria-label="Artist name">
               {props.artist.name}
             </Card.Text>
           </Card>

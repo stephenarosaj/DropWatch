@@ -5,6 +5,7 @@ export async function getPlaylists(setPlaylists) {
   fetch("https://api.spotify.com/v1/me/playlists?limit=10", headers)
     .then((response) => {
       if (!response.ok) {
+        console.log(response);
         throw new Error("HTTP status" + response.status);
       }
       return response.json();
