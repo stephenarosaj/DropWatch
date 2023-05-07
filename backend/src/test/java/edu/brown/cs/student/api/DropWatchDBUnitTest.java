@@ -791,8 +791,8 @@ public class DropWatchDBUnitTest {
     // make some dates, compare them!
     DateRecord halloween  = new DateRecord("2022-10-31", "day");
     DateRecord xmas  = new DateRecord("2022-12-25", "day");
-    DateRecord june  = new DateRecord("2022-06-1", "month");
-    DateRecord july  = new DateRecord("2022-07-1", "month");
+    DateRecord june  = new DateRecord("2022-06", "month");
+    DateRecord july  = new DateRecord("2022-07", "month");
     DateRecord tt  = new DateRecord("2020", "year");
     DateRecord tt2  = new DateRecord("2022", "year");
 
@@ -834,16 +834,24 @@ public class DropWatchDBUnitTest {
   // test bad input into date comparison function
   @Test
   void test_DateRecordCompareDates_BadInput() {
-    // make some bad dates, compare them!
-    // day: invalid format, non-existent date, ...
-    DateRecord a  = new DateRecord("31", "day");
-    DateRecord b  = new DateRecord("12-12", "day");
-    // month
-    DateRecord c  = new DateRecord("3022-06-1", "month");
-    DateRecord d  = new DateRecord("2022-07-1", "month");
+    // make some bad dates, compare them! ex: incorrect precision, syntax errors in date strings, ...
+    // day
+    // invalid syntax
+    DateRecord a  = new DateRecord("12-31", "day");
+    DateRecord b  = new DateRecord("2012-06-231", "day");
+    // invalid precision
+
+    // month:
+    // invalid syntax
+    DateRecord june  = new DateRecord("2022-6", "month");
+    DateRecord july  = new DateRecord("2022-7", "month");
+    // invalid precision
+
     // year
-    DateRecord e  = new DateRecord("2020-01-01", "year");
-    DateRecord f  = new DateRecord("2022-01-01", "year");
+    // invalid syntax
+    DateRecord tt  = new DateRecord("2020-06", "year");
+    DateRecord tt2  = new DateRecord("2022-07-01", "year");
+    // invalid precision
 
   }
 
