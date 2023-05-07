@@ -52,10 +52,10 @@ function DropWatch(props) {
         <Container>
           <Row>
             <Col>
-              <Button className='search'>Search Songs and Artists</Button>
+              <Button className='search-button'>Search Songs and Artists</Button>
             </Col>
             <Col>
-              <Button className='saved'>Your Saved Playlists</Button>
+              <Button className='saved-button'>Your Saved Playlists</Button>
             </Col>
             <Col>
               <Button className='followed-button'>Your Followed Artists</Button>

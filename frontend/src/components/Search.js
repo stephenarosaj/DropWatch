@@ -1,51 +1,75 @@
-// import { Card, Col, Container, Row} from "react-bootstrap";
-// import SearchResult from "./SearchResult";
+import { Button, Card, Col, Container, Row} from "react-bootstrap";
+import SearchResult from "./SearchResult";
 
-// function Search(props) {
-//   let middle = <div>
-//     hi
-//   </div>
-//   if(!props.isLoggedIn) {
-//     return (
-//       <div>
-//       </div>
-//     )
-//   }
-//   if(props.drops.length === 0) {
-//     middle =
-//       <Card className='search-results'>
-//         <Card.Text>
-//           <p>Your tracked artists haven't dropped anything new since you started tracking them... &lt;/3</p>
-//         </Card.Text>
-//       </Card>
-//   } else {
-//     middle = 
-//     <Card className='search-results'>
-//       <Card.Text>
-//         <Container className='search-results-container'>
-//           <Row xs={1} md={2} className="g-4">
-//             {props.drops.map((item) => (
-//               <Col>
-//                 <SearchResult artist={item}/>
-//               </Col>
-//             ))}
-//           </Row>
-//         </Container>
-//       </Card.Text>
-//     </Card>
-//   }
-  
-//   return(
-//     <div className='search'>
-//       <div className='search-text'>
-//         <h1 >Your Recent Drops</h1>
-//         <p> These are the songs that have dropped from your Watched Artists since you started watching them! </p>
-//       </div>
-//       <div>
-//         {middle}
-//       </div>
-//     </div>
-//   )
-// }
+function Search(props) {
+  const [textBox, setTextBox] = useState("")
+  let middle = null
 
-// export default Search
+  async function handleSubmit() {
+    console.log("textBox: " + textBox)
+    let results = await search(textBox)
+    console.log(results)
+    renderResults(results)
+    setTextBox("")
+  }
+
+  function renderResults(results) {
+    if(results.length === 0) {
+      middle =
+        <Card className='search-results'>
+            <p>No results found D:</p>
+        </Card>
+    } else {
+      middle = 
+      <Card className='search-results'>
+          <Container className='search-results-container'>
+            <Row xs={1} md={2} className="g-4">
+              {props.artists.map((item, i) => (
+                <Col key={i}>
+                  <SearchResult 
+                  image={item.images[0].url} 
+                  artist={item.artists[0].name}
+                  type={item.type}
+                  name={item.name}
+                  />
+                </Col>
+              ))}
+            </Row>
+          </Container>
+      </Card>
+    }
+  }
+
+
+
+  return(
+    <div className='search'>
+      <div className='search-text'>
+        <h1>Search Songs and Artists</h1>
+        <p>Search for music and artists to track!</p>
+      </div>
+      <div>
+        <input
+          // aria-label={input_box_accessible_name}
+          aria-description={"Search for songs and artists here!"}
+          aria-live={"off"}
+          role={"textbox"}
+          type="text"
+          placeholder={"Search"}
+          className="search-input-box" 
+          value={textBox}
+          id="repl-input" 
+          onChange={(e => setTextBox(e.target.value))}
+          onKeyUp={(e) => {
+            if (e.key === "Enter") {
+              handleSubmit()
+            }
+          }}
+        />
+        <Button className='search-section-button' onClick={() => handleSubmit()}>Search</Button>
+      </div>
+    </div>
+  )
+}
+
+export default Search
