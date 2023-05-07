@@ -793,8 +793,8 @@ public class DropWatchDBUnitTest {
     DateRecord xmas  = new DateRecord("2022-12-25", "day");
     DateRecord june  = new DateRecord("2022-06-1", "month");
     DateRecord july  = new DateRecord("2022-07-1", "month");
-    DateRecord tt  = new DateRecord("2020-01-01", "year");
-    DateRecord tt2  = new DateRecord("2022-01-01", "year");
+    DateRecord tt  = new DateRecord("2020", "year");
+    DateRecord tt2  = new DateRecord("2022", "year");
 
     // day against day
     assertTrue(DateRecord.compareDates(halloween, xmas) < 0);
@@ -820,10 +820,10 @@ public class DropWatchDBUnitTest {
     assertEquals(0, DateRecord.compareDates(july, july));
     assertEquals(0, DateRecord.compareDates(june, june));
     // month against year
-    assertEquals(-1, DateRecord.compareDates(june, tt2));
+    assertEquals(1, DateRecord.compareDates(june, tt2));
     assertEquals(-1, DateRecord.compareDates(tt2, june));
     assertEquals(1, DateRecord.compareDates(june, tt));
-    assertEquals(1, DateRecord.compareDates(tt, june));
+    assertEquals(-1, DateRecord.compareDates(tt, june));
     // year against year
     assertEquals(-1, DateRecord.compareDates(tt, tt2));
     assertEquals(1, DateRecord.compareDates(tt2, tt));
@@ -835,6 +835,15 @@ public class DropWatchDBUnitTest {
   @Test
   void test_DateRecordCompareDates_BadInput() {
     // make some bad dates, compare them!
+    // day: invalid format, non-existent date, ...
+    DateRecord a  = new DateRecord("31", "day");
+    DateRecord b  = new DateRecord("12-12", "day");
+    // month
+    DateRecord c  = new DateRecord("3022-06-1", "month");
+    DateRecord d  = new DateRecord("2022-07-1", "month");
+    // year
+    DateRecord e  = new DateRecord("2020-01-01", "year");
+    DateRecord f  = new DateRecord("2022-01-01", "year");
 
   }
 
