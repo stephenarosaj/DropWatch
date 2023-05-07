@@ -20,13 +20,12 @@ function Followed(props) {
   }
   if(props.followed_artists.length === 0) {
     middle =
-      <Card className='followed-artists'>
-          <p>You're not tracking any artists yet! Let's fix that.</p>
-          <p>Click one of the buttons below and track some artists!</p>
+      <Card aria-label='Followed Artists' className='followed-artists'>
+          <p>You're not following any artists on your Spotify account.</p>
       </Card>
   } else {
     middle = 
-    <Card className='followed-artists'>
+    <Card aria-label='Followed Artists' className='followed-artists'>
         <Container className='followed-artists-container'>
           <Row xs={1} md={2} className="g-4">
             {props.followed_artists.map((item, i) => (
