@@ -123,7 +123,7 @@ function App() {
       <Welcome isLoggedIn={isLoggedIn} username={username}/>
       <DropWatch artists={artists} isLoggedIn={isLoggedIn}/>
       {/* <RecentDrops drops={drops} isLoggedIn={isLoggedIn}/> */}
-      {/* <Search isLoggedIn={isLoggedIn}/> */}
+      <Search isLoggedIn={isLoggedIn}/>
       <SavedPlaylists isLoggedIn={isLoggedIn} playlists={playlists}/>
       <Followed isLoggedIn={isLoggedIn} followed_artists={followed}/>
     </div>

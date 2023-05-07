@@ -1,10 +1,18 @@
 import { Button, Card, Col, Container, Row} from "react-bootstrap";
 import SearchResult from "./SearchResult";
+import { useState } from "react";
+import { search } from "../functions/search";
 
 function Search(props) {
   const [textBox, setTextBox] = useState("")
   let middle = null
 
+  if(!props.isLoggedIn) {
+    return (
+      <div></div>
+    )
+  }
+  
   async function handleSubmit() {
     console.log("textBox: " + textBox)
     let results = await search(textBox)
@@ -50,7 +58,6 @@ function Search(props) {
       </div>
       <div>
         <input
-          // aria-label={input_box_accessible_name}
           aria-description={"Search for songs and artists here!"}
           aria-live={"off"}
           role={"textbox"}
@@ -67,6 +74,9 @@ function Search(props) {
           }}
         />
         <Button className='search-section-button' onClick={() => handleSubmit()}>Search</Button>
+      </div>
+      <div>
+        {middle}
       </div>
     </div>
   )
