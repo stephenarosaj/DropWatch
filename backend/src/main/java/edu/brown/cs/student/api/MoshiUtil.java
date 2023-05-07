@@ -10,7 +10,6 @@ import edu.brown.cs.student.api.formats.AlbumRecord;
 import edu.brown.cs.student.api.formats.ArtistRecord;
 import edu.brown.cs.student.api.formats.SearchRecord;
 import edu.brown.cs.student.api.formats.SearchRecord.*;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
 
@@ -54,17 +53,25 @@ public class MoshiUtil {
     }
   }
 
-  public static AlbumRecord deserializeUpdate(Buffer buf) throws IOException {
-    Moshi moshi = new Moshi.Builder().build();
-    JsonAdapter<AlbumRecord> adapter = moshi.adapter(
-            Types.newParameterizedType(AlbumRecord.class));
-    return adapter.fromJson(buf);
+  public static AlbumRecord deserializeUpdate(Buffer buf) throws DeserializeException {
+    try {
+      Moshi moshi = new Moshi.Builder().build();
+      JsonAdapter<AlbumRecord> adapter = moshi.adapter(
+              Types.newParameterizedType(AlbumRecord.class));
+      return adapter.fromJson(buf);
+    } catch (Exception e) {
+      throw new DeserializeException(e.getMessage());
+    }
   }
 
-  public static Map<String, String> deserializeToken(Buffer buf) throws IOException {
-    Moshi moshi = new Moshi.Builder().build();
-    JsonAdapter<Map<String, String>> adapter = moshi.adapter(
-        Types.newParameterizedType(Map.class, String.class, String.class));
-    return adapter.fromJson(buf);
+  public static Map<String, String> deserializeToken(Buffer buf) throws DeserializeException {
+    try {
+      Moshi moshi = new Moshi.Builder().build();
+      JsonAdapter<Map<String, String>> adapter = moshi.adapter(
+              Types.newParameterizedType(Map.class, String.class, String.class));
+      return adapter.fromJson(buf);
+    } catch (Exception e) {
+      throw new DeserializeException(e.getMessage());
+    }
   }
 }

@@ -4,6 +4,7 @@ import edu.brown.cs.student.api.MoshiUtil;
 import edu.brown.cs.student.api.database.DropWatchDB;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
 import edu.brown.cs.student.api.exceptions.APIRequestException;
+import edu.brown.cs.student.api.exceptions.DeserializeException;
 import edu.brown.cs.student.api.formats.AlbumRecord;
 import edu.brown.cs.student.api.formats.DateRecord;
 import okio.Buffer;
@@ -62,7 +63,7 @@ public class UpdateHandler implements Route {
      * the old release date and the second is the newest release date, or null if
      * there is no new release, and the third value is the precision of the new date
      */
-    public ArrayList<String> checkNewRelease(String artist_id) throws APIRequestException, IOException, SQLException, ClassNotFoundException {
+    public ArrayList<String> checkNewRelease(String artist_id) throws APIRequestException, DeserializeException {
         // make the request!
         // we want just 1 album - the most recent one!
         String urlString = "https://api.spotify.com/v1/artists/"
