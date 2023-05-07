@@ -17,7 +17,15 @@ This app allows a user to login with their Spotify account and track/untrack art
 
 In order to run the backend, navigate to Dropwatch/backend and enter ./run in a terminal (make sure to run mvn package first!) The backend will run on https://localhost:3232.
 
-In order to run the frontend, navigate to Dropwatch/frontend and enter npm start in a terminal. The frontend will run on https://localhost:3000. 
+Any endpoint can be called as such: https://localhost:3232/endpoint?query_param_1=blah&query_param_2=bluh
+The backend currently serves five endpoints:
+/search, with query params artist and offset that allow a user to search Spotify and get a list of the results.
+/update, with query param user_id that takes a user_id, checks if there has been an update by the artists they follow, and returns the updated new dorps, and updates this info in the database.
+/user_data which serves user data such as name, followed artists, playlists, etc. when accessed with the right authorization. 
+/track, with query params user_id, artist_id, and operation which allows a user to track/untrack an artist and updates this info in the database.
+
+
+In order to run the frontend, navigate to DropWatch/frontend and enter npm start in a terminal. The frontend will run on https://localhost:3000. 
 
 ## Design Choices:
 Our design is composed of three major components: the frontend, the backend, and the database.
