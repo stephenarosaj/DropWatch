@@ -56,6 +56,7 @@
             "release_date": "2022-10-31",
             "release_date_precision": "day",
             "album_type": "album",
+            "album_group": "album",
             "artists": [
               {
                 "name": "JID",
@@ -124,6 +125,7 @@
             "release_date": "2021-10-28",
             "release_date_precision": "day",
             "album_type": "single",
+            "album_group": "single",
             "artists": [
               {
                 "name": "Imagine Dragons",
@@ -186,6 +188,7 @@
             "release_date": "2018-11-26",
             "release_date_precision": "day",
             "album_type": "album",
+            "album_group": "album",
             "artists": [
               {
                 "name": "JID",
@@ -254,6 +257,7 @@
             "release_date": "2022-07-01",
             "release_date_precision": "day",
             "album_type": "album",
+            "album_group": "album",
             "artists": [
               {
                 "name": "Imagine Dragons",
@@ -310,6 +314,7 @@
             "release_date": "2022-10-31",
             "release_date_precision": "day",
             "album_type": "album",
+            "album_group": "album",
             "artists": [
               {
                 "name": "JID",
@@ -366,6 +371,7 @@
             "release_date": "2018-11-26",
             "release_date_precision": "day",
             "album_type": "album",
+            "album_group": "album",
             "artists": [
               {
                 "name": "JID",
@@ -440,6 +446,7 @@
             "release_date": "2022-03-31",
             "release_date_precision": "day",
             "album_type": "album",
+            "album_group": "album",
             "artists": [
               {
                 "name": "Dreamville",
@@ -514,6 +521,7 @@
             "release_date": "2023-05-02",
             "release_date_precision": "day",
             "album_type": "compilation",
+            "album_group": "compilation",
             "artists": [
               {
                 "name": "Various Artists",
@@ -788,6 +796,7 @@
           "release_date": "2022-10-31",
           "release_date_precision": "day",
           "album_type": "album",
+          "album_group": "album",
           "artists": [
             {
               "name": "JID",
@@ -823,6 +832,7 @@
           "release_date": "2018-11-26",
           "release_date_precision": "day",
           "album_type": "album",
+          "album_group": "album",
           "artists": [
             {
               "name": "JID",
@@ -858,6 +868,7 @@
           "release_date": "2017-03-10",
           "release_date_precision": "day",
           "album_type": "album",
+          "album_group": "album",
           "artists": [
             {
               "name": "JID",
@@ -893,6 +904,7 @@
           "release_date": "2021-10-28",
           "release_date_precision": "day",
           "album_type": "single",
+          "album_group": "single",
           "artists": [
             {
               "name": "Imagine Dragons",
@@ -940,6 +952,7 @@
           "release_date": "2019-07-05",
           "release_date_precision": "day",
           "album_type": "album",
+          "album_group": "album",
           "artists": [
             {
               "name": "Dreamville",
@@ -981,6 +994,7 @@
           "release_date": "2020-09-25",
           "release_date_precision": "day",
           "album_type": "album",
+          "album_group": "album",
           "artists": [
             {
               "name": "Spillage Village",
@@ -1028,6 +1042,7 @@
           "release_date": "2021-04-16",
           "release_date_precision": "day",
           "album_type": "album",
+          "album_group": "album",
           "artists": [
             {
               "name": "Conway the Machine",
@@ -1063,6 +1078,7 @@
           "release_date": "2023-02-03",
           "release_date_precision": "day",
           "album_type": "single",
+          "album_group": "single",
           "artists": [
             {
               "name": "Dreamville",

@@ -96,7 +96,7 @@ public class TrackHandler implements Route {
       }
 
       // find out what artists we're already tracking
-      ArrayList<String> artist_ids = this.db.queryTracking(user_id, false);
+      ArrayList<String> artist_ids = this.db.queryTracking(user_id, true);
 
       // check if we already track this artist!
       boolean alreadyTracking = artist_ids.contains(artist_id);
@@ -113,7 +113,7 @@ public class TrackHandler implements Route {
         this.db.addTracking(user_id, artist_id);
         this.db.commit();
         // return success!
-        ret.put("tracked artists", this.db.queryTracking(user_id, false));
+        ret.put("tracked artists", this.db.queryTracking(user_id, true));
         return MoshiUtil.serialize(ret, "success");
       } else if (alreadyTracking) {
         // !add && alreadyTracking
@@ -121,7 +121,7 @@ public class TrackHandler implements Route {
         this.db.removeTracking(user_id, artist_id);
         this.db.commit();
         // return success!
-        ret.put("tracked artists", this.db.queryTracking(user_id, false));
+        ret.put("tracked artists", this.db.queryTracking(user_id, true));
         return MoshiUtil.serialize(ret, "success");
       } else {
         // !add && !alreadyTracking

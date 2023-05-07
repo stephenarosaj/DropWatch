@@ -122,7 +122,7 @@ public class UpdateHandler implements Route {
 
         try {
             // grab input params
-            String user = request.queryParams("user_id");
+            String user_id = request.queryParams("user_id");
 
             // number of params
             int nParams = request.queryParams().size();
@@ -133,13 +133,13 @@ public class UpdateHandler implements Route {
             }
 
             // error check params - we should have user
-            if (user == null) {
+            if (user_id == null) {
                 // return error!
                 return MoshiUtil.serialize(ret, "ERROR: /update endpoint requires param 'user_id', but did not receive it");
             }
 
             // query db for list of artist ids being tracked by this user
-            ArrayList<String> artist_ids = this.db.queryTracking(user, true);
+            ArrayList<String> artist_ids = this.db.queryTracking(user_id, true);
 
             // map containing new drops!
             HashMap<String, ArrayList<AlbumRecord>> drops = new HashMap<String, ArrayList<AlbumRecord>>();

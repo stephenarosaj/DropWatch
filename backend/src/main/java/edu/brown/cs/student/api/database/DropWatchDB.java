@@ -52,6 +52,24 @@ public class DropWatchDB {
   }
 
   /**
+   * Method to close our DB connection!
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not commit :(
+   */
+  public boolean closeDB() throws SQLException, ClassNotFoundException {
+    return this.db.closeDB();
+  }
+
+  /**
+   * Method to check our DB's conn!
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not commit :(
+   */
+  public boolean connIsNull() throws SQLException, ClassNotFoundException {
+    return this.db.connIsNull();
+  }
+
+  /**
    * Method to commit our DB's changes!
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not commit :(
@@ -196,7 +214,7 @@ public class DropWatchDB {
   public boolean isUserTrackingArtist(String user_id, String artist_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
-      "SELECT count(*) FROM tracking WHERE user_id = \"" + user_id + "\" AND artist_id = \"" + artist_id + "\"";
+      "SELECT * FROM tracking WHERE user_id = \"" + user_id + "\" AND artist_id = \"" + artist_id + "\"";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // return whether there is a single entry of this user_id tracking this artist_id
       boolean ret = result.next();
@@ -211,16 +229,16 @@ public class DropWatchDB {
    *  - the artists a user is tracking, returning their artist_ids as a list
    *  - the users tracking an artist, returning their user_ids as a list
    * @param id the artist/user to look up in the db
-   * @param selectUsers indicates whether we're selecting users (true) or artists (false)
+   * @param isUser_id indicates whether we're selecting users (true) or artists (false)
    * @return an array list of ids (empty if none)
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not query tracking table
    */
-  public ArrayList<String> queryTracking(String id, boolean selectUsers) throws SQLException, ClassNotFoundException {
+  public ArrayList<String> queryTracking(String id, boolean isUser_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
-      "SELECT " + (selectUsers ? "user_id" : "artist_id") + " FROM tracking " +
-      "WHERE " + (selectUsers ? "artist_id" : "user_id") + " = \"" + id + "\";";
+      "SELECT " + (isUser_id ? "artist_id" : "user_id") + " FROM tracking " +
+      "WHERE " + (isUser_id ? "user_id" : "artist_id") + " = \"" + id + "\";";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // collect the results as a list
       ArrayList<String> ret = new ArrayList<>();
@@ -372,7 +390,7 @@ public class DropWatchDB {
     // make our statement!
     String SQLStatement = "" +
       "INSERT OR REPLACE INTO albums VALUES (" +
-      "\"" + album_id + "\", \"" + releaseDate + "\", \"" + precision + "\"" + link + "\");";
+      "\"" + album_id + "\", \"" + releaseDate + "\", \"" + precision + "\", \"" + link + "\");";
 
     // execute our statement!
     Pair<Boolean, Statement> ret;
@@ -391,21 +409,22 @@ public class DropWatchDB {
   /**
    * method that queries the db for artists by searching artist_id
    * @param artist_id the artist_id to look up in the db
-   * @return an arrayList of links (empty if none)
+   * @return the link of this artist (null if none)
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not query artists table
    */
-  public ArrayList<String> queryArtists(String artist_id) throws SQLException, ClassNotFoundException {
+  public String queryArtists(String artist_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
       "SELECT link FROM artists " +
       "WHERE artist_id  = \"" + artist_id + "\";";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
-      // collect the results as a list
-      ArrayList<String> ret = new ArrayList<>();
-      while (result.next()) {
-        ret.add(result.getString(1));
+      // return result link, or null if not exist
+      if (!result.next()) {
+        result.close();
+        return null;
       }
+      String ret = result.getString(1);
       // return our results!
       result.close();
       return ret;
@@ -422,7 +441,7 @@ public class DropWatchDB {
    */
   public boolean removeArtists(String artist_id) throws SQLException, ClassNotFoundException {
     // make sure entry exists
-    if (queryArtists(artist_id).size() == 0) {
+    if (queryArtists(artist_id) == null) {
       return false;
     }
 
@@ -481,7 +500,7 @@ public class DropWatchDB {
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not query artists table
    */
-  public ArrayList<String> queryArtistAlbums_byOneID(String id, boolean isArtist_id) throws SQLException, ClassNotFoundException {
+  public ArrayList<String> queryArtistAlbums(String id, boolean isArtist_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
       "SELECT " + (isArtist_id ? "album_id" : "artist_id") + " FROM artistAlbums " +
@@ -506,17 +525,14 @@ public class DropWatchDB {
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not query artists table
    */
-  public ArrayList<String> queryArtistAlbums_byPair(String artist_id, String album_id) throws SQLException, ClassNotFoundException {
+  public boolean artistAlbumRelationshipExists(String artist_id, String album_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
       "SELECT * FROM artistAlbums " +
       "WHERE artist_id = \"" + artist_id + "\" AND album_id = \"" + album_id + "\";";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // collect the results as a list
-      ArrayList<String> ret = new ArrayList<>();
-      while (result.next()) {
-        ret.add(result.getString(1));
-      }
+      boolean ret = result.next();
       // return our results!
       result.close();
       return ret;
@@ -534,7 +550,7 @@ public class DropWatchDB {
    */
   public boolean removeArtistAlbums(String artist_id, String album_id) throws SQLException, ClassNotFoundException {
     // make sure entry exists
-    if (queryArtistAlbums_byPair(artist_id, album_id).size() == 0) {
+    if (!artistAlbumRelationshipExists(artist_id, album_id)) {
       return false;
     }
 
@@ -591,7 +607,7 @@ public class DropWatchDB {
    */
   public DateRecord findLatestRelease(String artist_id) throws SQLException, ClassNotFoundException {
     // grab all album_ids of artist
-    ArrayList<String> album_ids = queryArtistAlbums_byOneID(artist_id, true);
+    ArrayList<String> album_ids = queryArtistAlbums(artist_id, true);
     // if we have no albums, return null
     if (album_ids.size() == 0) {
       return null;
@@ -639,12 +655,7 @@ public class DropWatchDB {
   }
 
   // TODO: MORE!?
-  // findLatestRelease - use these tables to calculate latest release date for an artist
-  //   - given artist_id, find all albums by that artist from artistAlbums table
-  //   - then, with those album_ids, find release dates from albums table
   // addNewAlbum - add an album and update all tables accordingly
-  //   - add to albums table
-  //   - add to artistAlbums table
   //   - should get called on 4 most recent albums whenever we track a new artist
   //   - should get called when we run checkreleases and see new releases
 }
