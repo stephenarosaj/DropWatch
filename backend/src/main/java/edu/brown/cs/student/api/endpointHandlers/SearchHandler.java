@@ -93,11 +93,6 @@ public class SearchHandler implements Route {
         + "&limit=8"
         + "&offset=" + offset;
       Buffer buf = this.SpotifyAPIRequester.getData(urlString);
-      try (BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
-        writer.write(new String(buf.readByteArray()));
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
 
       // deserialize the api's JSON response
       SearchRecord searchResponse = MoshiUtil.deserializeSearch(buf);

@@ -176,8 +176,8 @@ public class DropWatchDB {
       "artist_id VARCHAR(100)," + // artist_id - the unique spotify id of the artist
       "album_id VARCHAR(100)," + // album_id - the unique spotify id of the album
       "PRIMARY KEY (artist_id, album_id)," + // primary key is tuple of columns
-      "FOREIGN KEY artist_id REFERENCES artists(artist_id)," + // ids are from other tables!
-      "FOREIGN KEY album_id REFERENCES albums(album_id)"; // ids are from other tables!
+      "FOREIGN KEY (artist_id) REFERENCES artists(artist_id)," + // ids are from other tables!
+      "FOREIGN KEY (album_id) REFERENCES albums(album_id)"; // ids are from other tables!
     if (!db.tableExists(artistAlbumsName)) {
       db.createNewTable(artistAlbumsName, artistAlbumsSchema);
     }
