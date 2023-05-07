@@ -1,6 +1,15 @@
 import {Card, Col, Row, Container} from 'react-bootstrap';
 import Artist from './Artist';
 
+/**
+ * Component to generate the section for Followed artists
+ * @param {prop} props - props containing a boolean to indicate login status and the list of followed artist 
+ * @returns 
+ */
+
+// TRACK: ONLY RENDER UNTRACK BUTTON IF THE ARTIST IS IN OUR TRACKED ARTISTS ALREADY
+// ONLY RENDER TRACK BUTTON IF THE ARTIST IS NOT IN OUR TRACKED ARTISTS
+
 function Followed(props) {
   let middle = null
   if(!props.isLoggedIn) {

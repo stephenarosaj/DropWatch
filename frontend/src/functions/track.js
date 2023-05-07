@@ -1,4 +1,4 @@
-export default async function track(query) {
+export default async function track(query, isTracking) {
   return new Promise((resolve, reject) => {
         const data =
         fetch("http://localhost:3232/search?query=" + query + "&offset=0")
