@@ -20,11 +20,14 @@ export async function getFollowed(setFollowed) {
       //     setFollowed(artists.items);
       //   }
       // }
-
-      let artists = followingResponse.data;
-      if (artists !== undefined) {
-        console.log(artists);
-        setFollowed(artists);
+      if (followingResponse.result == "success") {
+        let artists = followingResponse.data;
+        if (artists !== undefined) {
+          console.log(artists);
+          setFollowed(artists);
+        }
+      } else {
+        console.log(followingResponse.result);
       }
     });
 }
