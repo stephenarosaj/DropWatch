@@ -3,6 +3,8 @@ package edu.brown.cs.student.api.endpointHandlers;
 import edu.brown.cs.student.api.MoshiUtil;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyAPIRequester;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
+import edu.brown.cs.student.api.exceptions.APIRequestException;
+import edu.brown.cs.student.api.exceptions.DeserializeException;
 import edu.brown.cs.student.api.formats.SearchRecord;
 
 import java.io.BufferedWriter;
@@ -102,9 +104,12 @@ public class SearchHandler implements Route {
 
       // return our response map!
       return MoshiUtil.serialize(ret, "success");
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-      return MoshiUtil.serialize(ret, "ERROR: " + e.getMessage());
+    } catch (APIRequestException e) {
+      return MoshiUtil.serialize(ret, "ERROR (API Request to Search): "
+              + e.getMessage());
+    } catch (DeserializeException e) {
+      return MoshiUtil.serialize(ret, "ERROR (Deserializing Search): "
+              + e.getMessage());
     }
   }
 }

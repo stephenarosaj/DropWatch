@@ -1,3 +1,8 @@
+
+/**
+ * 
+ * @param {*} setPlaylists 
+ */
 export async function getPlaylists(setPlaylists) {
   let access_token = localStorage.getItem("access_token");
   let headers = { headers: { Authorization: "Bearer " + access_token } };

@@ -15,18 +15,7 @@ import artistData from "./data/artists.json";
 
 const redirect_uri = "http://localhost:3000/callback"
 
-/**  
- * TODO:
- * Comments PLEASE COMMENT GIRL
- * ARIA Labels
- * Accessibility - check zoom, add alt strings for images look up other things
- * Add track buttons to search results
- * Add untrack buttons to tracked artists
- * figure out when to populate the initial drops and tracked artists
- * Add navigation for search, saved playlists, and followed artists
- * On login, just get the tracked artists and drops automatically
- * - Maybe refactor the fetch accesss token stuff to just be a big login func
-*/
+
 
 /**
  * @function getCode - a function to get the authorization code returned from Spotify API upon authorization
@@ -97,7 +86,10 @@ function App() {
                   <p className='subtitle'>Let us do the checking for you ;&#41;</p>
                   <hr/>
                   <h3>What is DropWatch?</h3>
-                  <p className='subtitle'>DropWatch is a...</p>
+                  <p className='subtitle'>
+                    DropWatch is a webapp that allows you to stay up to date with your favorite artists' new music. 
+                    Through DropWatch, you can choose artists to track, and DropWatch will provide a centralized place to let you know about all the latest releases from these artists. 
+                  </p>
                 </div>
               </div>
             </Col>
@@ -109,10 +101,10 @@ function App() {
                   <Card.Text style={{textAlign: 'left'}}>
                     What data does DropWatch collect? <br/>
 
-                    DropWatch asks you to log into spotify so that... <br /> 
-                    We collect your...<br /> 
-                    We do not collect your...<br /> 
-                    We will never share your...
+                    DropWatch asks you to log into Spotify so that you can browse your playlists and followed artists to choose new artists to track <br /> 
+                    We collect your username, saved playlists, and followed artists associated with your Spotify account.<br /> 
+                    We do not collect your email, password, or other personal data stored in your account. <br /> 
+                    We will never share this collected information with any other platforms. This is collected solely to display the information to you.
                   </Card.Text>
                 </Card.Body>
               </Card>

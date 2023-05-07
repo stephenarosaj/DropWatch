@@ -7,6 +7,10 @@ const client_secret = clientSecretID;
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 const TOKEN = "https://accounts.spotify.com/api/token";
 
+
+/**
+ * Function to request authorization for accessing user data from the Spotify API
+ */
 export function requestAuthorization() {
   console.log("clicked");
   localStorage.setItem("client_id", client_id);
@@ -24,27 +28,15 @@ export function requestAuthorization() {
 
   window.location.href = url; //redirect to spotify authorization screen
 }
-
 /**
- * Function to build the body of parameters to supply to get the access token
- * @param {*} code - the authorization code provdied to us from requestAuthorization
- */
-// export function fetchAccessToken(code, setLogin, setRefreshToken, setUsername) {
-//   let body = "grant_type=authorization_code";
-//   body += "&code=" + code;
-//   body += "&redirect_uri=" + redirect_uri;
-//   body += "&client_id-=" + client_id;
-//   body += "&client_secret=" + client_secret;
-//   callAuthorizationApi(body, setLogin, setRefreshToken, setUsername);
-// }
-
-// callAuthorizationApi(body) {
-//   console.log("hi");
-// }
-
-/**
- * Function to call the spotify api to get the access token
- * @param {*} body - the parameters to be provided to the api request
+ * Function to retrieve the access token for the user from the spotify API and set the necessary
+ * state variables upon login
+ * @param {String} code - the access code recieved from requesting authorization in requestAuthorization()
+ * @param {function} setLogin - the function to update the isLoggedIn state variable
+ * @param {function} setRefreshToken - the function to update the refreshToken state variable
+ * @param {function} setUsername - the function to update the username state variable
+ * @param {function} setPlaylists - the function to update the playlists state variable
+ * @param {function} setFollowed - the function to update the followed state variable
  */
 export async function fetchAccessToken(
   code,
@@ -88,10 +80,6 @@ export async function fetchAccessToken(
         setRefreshToken(refresh_token);
       }
       setLogin(true);
-      // console.log("setPlaylists")
-      // getUserInfo('playlists?limit=10', setPlaylists)
-      // console.log("setFollowed")
-      // getUserInfo('following?type=artist&limit=10', setFollowed)
       getUsername(setUsername);
       getPlaylists(setPlaylists);
       getFollowed(setFollowed);
@@ -101,6 +89,10 @@ export async function fetchAccessToken(
     });
 }
 
+/**
+ * Function to retrieve the logged in user's Spotify username from the API
+ * @param {function} setUsername - function to update the username state variable
+ */
 async function getUsername(setUsername) {
   let access_token = localStorage.getItem("access_token");
   let headers = { headers: { Authorization: "Bearer " + access_token } };
