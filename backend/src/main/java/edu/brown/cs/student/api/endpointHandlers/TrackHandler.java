@@ -7,6 +7,8 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +48,16 @@ public class TrackHandler implements Route {
    */
   public TrackHandler() {
     try {
-      this.db = new DropWatchDB(filepath);
+      // check for mac or windows file path
+      if (new File(filepath).exists()) {
+        // windows project root = .../DropWatch/backend
+        this.db = new DropWatchDB(filepath);
+      } else if (new File("backend/" + filepath).exists()) {
+        // mac project root = .../DropWatch
+        this.db = new DropWatchDB("backend/" + filepath);
+      } else {
+        throw new SQLException("ERROR: Couldn't find DropWatchDB.db file!");
+      }
     } catch (Exception e) {
       System.out.println("CRITICAL ERROR: COULD NOT SET UP CONNECTION TO DB '" + filepath + "', ABORTING TrackHandler()!\n");
       System.out.println(e.getMessage());
