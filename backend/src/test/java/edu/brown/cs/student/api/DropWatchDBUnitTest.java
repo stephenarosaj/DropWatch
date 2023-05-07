@@ -2,6 +2,7 @@ package edu.brown.cs.student.api;
 
 import edu.brown.cs.student.api.database.DropWatchDB;
 import edu.brown.cs.student.api.database.sqliteDB;
+import edu.brown.cs.student.api.formats.DateRecord;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -789,10 +790,32 @@ public class DropWatchDBUnitTest {
     }
   }
 
+  //notes:
+//  - (+1) if left MORE RECENT than right
+//   *    - (-1) if left LESS RECENT than right
+//   *    - (0) if left == right
+
   // test good input into date comparison function
   @Test
   void test_DateRecordCompareDates_GoodInput() {
     // make some dates, compare them!
+    DateRecord halloween  = new DateRecord("2022-10-31", "day");
+    DateRecord xmas  = new DateRecord("2022-12-25", "day");
+    DateRecord june  = new DateRecord("2022-06-1", "month");
+    DateRecord july  = new DateRecord("2022-07-1", "month");
+    DateRecord tt  = new DateRecord("2020-01-01", "year");
+    DateRecord tt2  = new DateRecord("2022-01-01", "year");
+
+
+    // left: halloween, right: xmas
+    // day against day
+    assertEquals(-1, DateRecord.compareDates(halloween, xmas));
+    assertEquals(1, DateRecord.compareDates(xmas, halloween));
+    // left: june, july
+    // month against month
+    assertEquals(-1, DateRecord.compareDates(june, july));
+    assertEquals(1, DateRecord.compareDates(july, june));
+    // left: 2020 (tt), right: 2022 (tt2)
 
   }
 

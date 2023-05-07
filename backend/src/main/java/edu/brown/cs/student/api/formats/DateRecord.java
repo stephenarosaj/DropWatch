@@ -12,12 +12,6 @@ public record DateRecord(
         @Json(name = "release_date") String release_date,
         @Json(name = "release_date_precision") String release_date_precision) {
 
-    // note: precision is the format of the string release_date, it can be "day", "month", or "year",
-    // while dates can look like: "4/20/2023", "4/20", "23"
-
-    // TODO: should there be a consideration between the dates of Tracks and Albums? Tracks are apart of albums,
-    //  but can be released separately and thus have different release dates right? ...I could be overthinking
-
   /**
    * Comparison function for dates. Returns an int indicating which date is more recent, or 0 if they are the same.
    * If the precision are the same (for example, we have 1-2-3 and 4-5-6)
