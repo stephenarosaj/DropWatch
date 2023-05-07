@@ -81,9 +81,9 @@ public class UpdateHandler implements Route {
 
         // grab stored latest release date
         // TODO: implement DropWatchDB.findLatestRelease()
-        String[] oldDateList = this.db.findLatestRelease(artist_id);
-        String oldDate = oldDateList[0];
-        String oldDatePrecision = oldDateList[1];
+        DateRecord oldDateRecord = this.db.findLatestRelease(artist_id);
+        String oldDate = oldDateRecord.release_date();
+        String oldDatePrecision = oldDateRecord.release_date_precision();
 
         // TODO: do something inside these if statements
         // compare old and new dates. if there is a new release, return both!

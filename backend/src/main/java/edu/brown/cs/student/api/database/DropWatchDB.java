@@ -1,4 +1,5 @@
 package edu.brown.cs.student.api.database;
+import edu.brown.cs.student.api.formats.DateRecord;
 import org.testng.internal.collections.Pair;
 
 import java.sql.ResultSet;
@@ -95,36 +96,34 @@ public class DropWatchDB {
   /**
    * Helper to create the artists table. this table is for keeping track of artists,
    * EXAMPLE:
-   *                  artists
-   * artist_id |    date    | precision | link
-   *    JID    |   2022-10  |   month   |  a
-   *   Smino   | 2023-09-16 |    day    |  b
-   *   Tyler   |    2021    |    year   |  c
+   *      artists
+   * artist_id | link
+   *    JID    |  a
+   *   Smino   |  b
+   *   Tyler   |  c
    * artists(artist_id = JID) --> (2022-10, month, a)
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not check for/create tracking table
    */
   private void createArtists() throws SQLException, ClassNotFoundException {
     // make the table in the db (if it doesn't exist)
-    String latestReleaseName = "artists";
-    String latestReleaseSchema = "" +
+    String artistsName = "artists";
+    String artistsSchema = "" +
       "artist_id VARCHAR(100) PRIMARY KEY," + // artist_id - the unique spotify id of the artist - our primary key
-      "date VARCHAR(10)," + // date - the latest release date for this artist
-      "precision VARCHAR(5)," + // precision - the precision of the latest release date - year, month, or day
       "link VARCHAR(100)"; // link - the link to grab more data on an artist
-    if (!db.tableExists(latestReleaseName)) {
-      db.createNewTable(latestReleaseName, latestReleaseSchema);
+    if (!db.tableExists(artistsName)) {
+      db.createNewTable(artistsName, artistsSchema);
     }
     // update tables field
-    this.tables.put(latestReleaseName, latestReleaseSchema);
+    this.tables.put(artistsName, artistsSchema);
   }
 
   /**
-   * Helper to create the tracking table. this table is for keeping track of albums
+   * Helper to create the albums table. this table is for keeping track of albums
    * artists release
    * EXAMPLE:
    *                    albums
-   * album_id | release_date | precision | link
+   * album_id | releaseDate | precision | link
    *    1     |  2020-10-06  |    day    |  a
    *    2     |     04-05    |   month   |  b
    *    3     |     2021     |   year    |  c
@@ -137,7 +136,7 @@ public class DropWatchDB {
     String albumsName = "albums";
     String albumsSchema = "" +
       "album_id VARCHAR(100) PRIMARY KEY," + // album_id - the unique spotify id of the album
-      "date VARCHAR(10)," + // date - the latest release date for this artist
+      "releaseDate VARCHAR(10)," + // releaseDate - the latest release date for this artist
       "precision VARCHAR(5)," + // precision - the precision of the latest release date - year, month, or day
       "link VARCHAR(100)"; // link - the link to get more info about an album
     if (!db.tableExists(albumsName)) {
@@ -288,20 +287,108 @@ public class DropWatchDB {
   }
 
   /**
-   * method that queries the db for albums by searching either album_id (one result) or artist_id (up to 4 results)
-   * @param id the album_id/artist_id to look up in the db
-   * @param isAlbum_id indicates whether we're selecting 1 album (true) or 4 (false)
-   * @return an array album links (empty if none)
+   * method that queries the db for albums by searching album_id
+   * @param album_id the album_id to look up in the db
+   * @return an arrayList of (releaseDate, precision, link) lists (empty if none)
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not query tracking table
    */
-  public ArrayList<String> queryAlbums(String id, boolean isAlbum_id) throws SQLException, ClassNotFoundException {
+  public ArrayList<String[]> queryAlbums(String album_id) throws SQLException, ClassNotFoundException {
     // execute our query!
-    String oneAlbum = "= \"" + id + "\"";
-    String fourAlbum = "IN (SELECT album_id FROM artistAlbums WHERE artist_id = \"" + id + "\")";
     String sqlQuery = "" +
-      "SELECT release_date, precision, link FROM albums" +
-      "WHERE album_id " + (isAlbum_id ? oneAlbum : fourAlbum) + ";";
+      "SELECT releaseDate, precision, link FROM albums" +
+      "WHERE album_id  = \"" + album_id + "\";";
+    try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
+      // collect the results as a list
+      ArrayList<String[]> ret = new ArrayList<>();
+      while (result.next()) {
+        String[] arr = new String[3];
+        arr[0] = result.getString(1);
+        arr[1] = result.getString(2);
+        arr[2] = result.getString(3);
+        ret.add(arr);
+      }
+      // return our results!
+      result.close();
+      return ret;
+    }
+  }
+
+  /**
+   * method that removes an album row from the albums table!
+   * @param album_id the album we want to remove
+   * @return boolean indicating successful removal - true means it was present and removed,
+   *         false means it was not present and thus not removed
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not delete album from albums table
+   */
+  public boolean removeAlbums(String album_id) throws SQLException, ClassNotFoundException {
+    // make sure entry exists
+    if (queryAlbums(album_id).size() == 0) {
+      return false;
+    }
+
+    // make our statement!
+    String SQLStatement = "" +
+      "DELETE FROM albums WHERE " +
+      "album_id = \"" + album_id + "\";";
+
+    // execute our statement!
+    Pair<Boolean, Statement> ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+        // result set returned or wrong number for updateCount - ERROR!
+        statement.close();
+        throw new SQLException("ERROR: Delete from DropWatchDB albums table '" + album_id + "' FAILED");
+      }
+      // executed successfully
+      statement.close();
+      return true;
+    }
+  }
+
+  /**
+   * method to update the albums table
+   * @param album_id the album_id of the album whose data we're adding
+   * @param releaseDate the release date
+   * @param precision the precision of the release date - "day", "month", or "year"
+   * @param link the link to get more info about the album
+   * @return a boolean indicating success or failure
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not insert into latest release table
+   */
+  public boolean insertOrReplaceAlbums(String album_id, String releaseDate, String precision, String link) throws SQLException, ClassNotFoundException {
+    // make our statement!
+    String SQLStatement = "" +
+      "INSERT OR REPLACE INTO albums VALUES (" +
+      "\"" + album_id + "\", \"" + releaseDate + "\", \"" + precision + "\"" + link + "\");";
+
+    // execute our statement!
+    Pair<Boolean, Statement> ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+        // result set returned or wrong number for updateCount - ERROR!
+        statement.close();
+        throw new SQLException("ERROR: Insert into DropWatchDB albums table ('" + album_id + "', '" + releaseDate + "', '" + precision + "', " + link + "') FAILED");
+      }
+      // executed successfully
+      statement.close();
+      return true;
+    }
+  }
+
+  /**
+   * method that queries the db for artists by searching artist_id
+   * @param artist_id the artist_id to look up in the db
+   * @return an arrayList of links (empty if none)
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not query artists table
+   */
+  public ArrayList<String> queryArtists(String artist_id) throws SQLException, ClassNotFoundException {
+    // execute our query!
+    String sqlQuery = "" +
+      "SELECT link FROM artists" +
+      "WHERE artist_id  = \"" + artist_id + "\";";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // collect the results as a list
       ArrayList<String> ret = new ArrayList<>();
@@ -315,20 +402,23 @@ public class DropWatchDB {
   }
 
   /**
-   * method to update the albums table
-   * @param album_id the album_id of the album whose data we're adding
-   * @param date the release date
-   * @param precision the precision of the release date - "day", "month", or "year"
-   * @param link the link to get more info about the album
-   * @return a boolean indicating success or failure
+   * method that removes an artist row from the artists table!
+   * @param artist_id the artist we want to remove
+   * @return boolean indicating successful removal - true means it was present and removed,
+   *         false means it was not present and thus not removed
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
-   * @throws SQLException if could not insert into latest release table
+   * @throws SQLException if could not delete artist from artists table
    */
-  public boolean insertOrReplaceAlbums(String album_id, String date, String precision, String link) throws SQLException, ClassNotFoundException {
+  public boolean removeArtists(String artist_id) throws SQLException, ClassNotFoundException {
+    // make sure entry exists
+    if (queryArtists(artist_id).size() == 0) {
+      return false;
+    }
+
     // make our statement!
     String SQLStatement = "" +
-      "INSERT OR REPLACE INTO albums VALUES (" +
-      "\"" + album_id + "\", \"" + date + "\", \"" + precision + "\"" + link + "\");";
+      "DELETE FROM artists WHERE " +
+      "artist_id = \"" + artist_id + "\";";
 
     // execute our statement!
     Pair<Boolean, Statement> ret;
@@ -336,7 +426,7 @@ public class DropWatchDB {
       if (ret.first() || (statement.getUpdateCount() != 1)) {
         // result set returned or wrong number for updateCount - ERROR!
         statement.close();
-        throw new SQLException("ERROR: Insert into DropWatchDB albums table ('" + album_id + "', '" + date + "', '" + precision + "', " + link + "') FAILED");
+        throw new SQLException("ERROR: Delete from DropWatchDB artists table '" + artist_id + "' FAILED");
       }
       // executed successfully
       statement.close();
@@ -344,27 +434,177 @@ public class DropWatchDB {
     }
   }
 
-  // add new album to albums and artistAlbums tables
-  public String[] findLatestRelease(String artist_id) {
-    String[] ret = new String[3];
-    ret[0] = null;
-    ret[1] = null;
-    ret[2] = null;
-    return ret;
+  /**
+   * method to update the artists table
+   * @param artist_id the artist_id of the artist whose data we're adding
+   * @param link the link to get more info about the artist
+   * @return a boolean indicating success or failure
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not insert into latest release table
+   */
+  public boolean insertOrReplaceArtists(String artist_id, String link) throws SQLException, ClassNotFoundException {
+    // make our statement!
+    String SQLStatement = "" +
+      "INSERT OR REPLACE INTO artists VALUES (" +
+      "\"" + artist_id + "\", \"" + link + "\");";
+
+    // execute our statement!
+    Pair<Boolean, Statement> ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+        // result set returned or wrong number for updateCount - ERROR!
+        statement.close();
+        throw new SQLException("ERROR: Insert into DropWatchDB artists table ('" + artist_id + "', '" + link + "') FAILED");
+      }
+      // executed successfully
+      statement.close();
+      return true;
+    }
   }
 
-  // add new album to albums and artistAlbums tables
-  public void addNewAlbum(String artist_id, String album_id, String newDate, String newDatePrecision, String link) {
-    return;
+  /**
+   * method that queries the db for multiple artist-album relationships by searching for one artist_id/album_id
+   * @param id the artist_id/album_id to look up in the db
+   * @param isArtist_id indicates whether id is an artist_id or not (if not, it's album_id)
+   * @return an arrayList of album_ids/artist_ids (empty if none)
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not query artists table
+   */
+  public ArrayList<String> queryArtistAlbums_byOneID(String id, boolean isArtist_id) throws SQLException, ClassNotFoundException {
+    // execute our query!
+    String sqlQuery = "" +
+      "SELECT " + (isArtist_id ? "album_id" : "artist_id") + " FROM artistAlbums" +
+      "WHERE " + (isArtist_id ? "artist_id" : "album_id") + "  = \"" + id + "\";";
+    try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
+      // collect the results as a list
+      ArrayList<String> ret = new ArrayList<>();
+      while (result.next()) {
+        ret.add(result.getString(1));
+      }
+      // return our results!
+      result.close();
+      return ret;
+    }
   }
 
+  /**
+   * method that queries the db for one artist-album relationship by searching for an (artist_id, album_id) pair
+   * @param artist_id the artist_id to look up in the DB
+   * @param album_id the album_id to look up in the DB
+   * @return an arrayList of album_ids/artist_ids (empty if none)
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not query artists table
+   */
+  public ArrayList<String> queryArtistAlbums_byPair(String artist_id, String album_id) throws SQLException, ClassNotFoundException {
+    // execute our query!
+    String sqlQuery = "" +
+      "SELECT * FROM artistAlbums" +
+      "WHERE artist_id = \"" + artist_id + "\" AND album_id = \"" + album_id + "\";";
+    try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
+      // collect the results as a list
+      ArrayList<String> ret = new ArrayList<>();
+      while (result.next()) {
+        ret.add(result.getString(1));
+      }
+      // return our results!
+      result.close();
+      return ret;
+    }
+  }
+
+  /**
+   * method that removes an artist-album relationship from the db (by pair)
+   * @param artist_id the artist_id to remove
+   * @param album_id the album_id to remove
+   * @return boolean indicating successful removal - true means it was present and removed,
+   *         false means it was not present and thus not removed
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not delete artist from artists table
+   */
+  public boolean removeArtistAlbums(String artist_id, String album_id) throws SQLException, ClassNotFoundException {
+    // make sure entry exists
+    if (queryArtistAlbums_byPair(artist_id, album_id).size() == 0) {
+      return false;
+    }
+
+    // make our statement!
+    String SQLStatement = "" +
+      "DELETE FROM albumArtists WHERE " +
+      "artist_id = \"" + artist_id + "\" AND album_id = \"" + album_id + "\";";
+
+    // execute our statement!
+    Pair<Boolean, Statement> ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+        // result set returned or wrong number for updateCount - ERROR!
+        statement.close();
+        throw new SQLException("ERROR: Delete from DropWatchDB artistAlbums table ('" + artist_id + "', '" + album_id + "') FAILED");
+      }
+      // executed successfully
+      statement.close();
+      return true;
+    }
+  }
+
+  /**
+   * method to update the artistAlbums table
+   * @param artist_id the artist_id of the artist whose data we're adding
+   * @param album_id the album_id of the album whose data we're adding
+   * @return a boolean indicating success or failure
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not insert into latest release table
+   */
+  public boolean insertOrReplaceArtistAlbums(String artist_id, String album_id) throws SQLException, ClassNotFoundException {
+    // make our statement!
+    String SQLStatement = "" +
+      "INSERT OR REPLACE INTO artistAlbums VALUES (" +
+      "\"" + artist_id + "\", \"" + album_id + "\");";
+
+    // execute our statement!
+    Pair<Boolean, Statement> ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+        // result set returned or wrong number for updateCount - ERROR!
+        statement.close();
+        throw new SQLException("ERROR: Insert into DropWatchDB artistAlbums table ('" + artist_id + "', '" + album_id + "') FAILED");
+      }
+      // executed successfully
+      statement.close();
+      return true;
+    }
+  }
+
+  /**
+   * method to find latest release date of an artist
+   * @param artist_id the artist whose latest release date we want to find
+   * @return a DateRecord containing the latest release date for thar artist
+   */
+  public DateRecord findLatestRelease(String artist_id) {
+    return null;
+  }
+
+  /**
+   * a method to add a new album to our database. this means adding it to our
+   * albums table and to our artistAlbums table
+   * @param artist_id the artist who is on the album
+   *                  NOTE: this is one of possibly many artists, we have to check the link for more artists before adding!
+   * @param album_id the album_id of the album
+   * @param releaseDate the date the album was released
+   * @param releaseDatePrecision the precision of the releaseDate ("day", "month", or "year")
+   * @param link a link to get more data about the album
+   * @return a boolean indicating success of adding this album to the db
+   */
+  public boolean addNewAlbum(String artist_id, String album_id, String releaseDate, String releaseDatePrecision, String link) {
+    return false;
+  }
 
   // TODO: MORE!?
-  // tracking done!
-  // insertOrRepalce albums - need to keep only 4 at a time, also update artistAlbums
-  // query artistAlbums
-  // insertOrReplace artistAlbums
-
   // findLatestRelease - use these tables to calculate latest release date for an artist
-  // addNewAlbum - use these tables to calculate latest release date for an artist
+  //   - given artist_id, find all albums by that artist from artistAlbums table
+  //   - then, with those album_ids, find release dates from albums table
+  // addNewAlbum - add an album and update all tables accordingly
+  //   - add to albums table
+  //   - add to artistAlbums table
+  //   - should get called on 4 most recent albums whenever we track a new artist
+  //   - should get called when we run checkreleases and see new releases
 }
