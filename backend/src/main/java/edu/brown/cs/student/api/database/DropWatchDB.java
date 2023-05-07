@@ -556,7 +556,7 @@ public class DropWatchDB {
 
     // make our statement!
     String SQLStatement = "" +
-      "DELETE FROM albumArtists WHERE " +
+      "DELETE FROM artistAlbums WHERE " +
       "artist_id = \"" + artist_id + "\" AND album_id = \"" + album_id + "\";";
 
     // execute our statement!
@@ -581,7 +581,7 @@ public class DropWatchDB {
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException           if could not insert into latest release table
    */
-  public void insertOrReplaceArtistAlbums(String artist_id, String album_id) throws SQLException, ClassNotFoundException {
+  public boolean insertOrReplaceArtistAlbums(String artist_id, String album_id) throws SQLException, ClassNotFoundException {
     // make our statement!
     String SQLStatement = "" +
       "INSERT OR REPLACE INTO artistAlbums VALUES (" +
@@ -597,6 +597,7 @@ public class DropWatchDB {
       }
       // executed successfully
       statement.close();
+      return true;
     }
   }
 
@@ -642,7 +643,7 @@ public class DropWatchDB {
    * @param releaseDatePrecision the precision of the releaseDate ("day", "month", or "year")
    * @param link a link to get more data about the album
    */
-  public void addNewAlbum(List<ArtistRecord> artist_ids, String album_id, String releaseDate, String releaseDatePrecision, String link) throws SQLException, ClassNotFoundException {
+  public boolean addNewAlbum(List<ArtistRecord> artist_ids, String album_id, String releaseDate, String releaseDatePrecision, String link) throws SQLException, ClassNotFoundException {
     // add the album to our db!
     insertOrReplaceAlbums(album_id, releaseDate, releaseDatePrecision, link);
     for (ArtistRecord artist: artist_ids) {
@@ -652,6 +653,7 @@ public class DropWatchDB {
       // add the artist to our relationship table if it's not already there
       insertOrReplaceArtistAlbums(artist.id(), album_id);
     }
+    return true;
   }
 
   // TODO: MORE!?

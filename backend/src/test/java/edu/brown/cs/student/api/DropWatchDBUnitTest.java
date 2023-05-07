@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Unit tests for DropWatchDB!
@@ -566,19 +567,77 @@ public class DropWatchDBUnitTest {
     }
   }
 
-  // test queryArtistAlbums_byOneID
+  // test queryArtistAlbums
   @Test
-  void test_queryArtistAlbums_byOneID() {
+  void test_queryArtistAlbums() {
     try {
       // connect to mock db
       connectMockDB();
-      // collect albums/artists in list!
-      ArrayList<String[]> albums = new ArrayList<>();
-      ArrayList<?> artists = new ArrayList<>();
+      // collect album_ids/artist_ids in list!
+      ArrayList<String> ids = new ArrayList<>();
 
       // query albums!
+      ids.add("1");
+      ids.add("2");
+      ArrayList<String> ret = db.queryArtistAlbums("1", true);
+      ret.sort(String::compareTo);
+      assertArrayEquals(ret.toArray(), ids.toArray());
+      ids.remove(0);
+      ids.remove(0);
+      ids.add("1");
+      ids.add("2");
+      ret = db.queryArtistAlbums("2", true);
+      ret.sort(String::compareTo);
+      assertArrayEquals(ret.toArray(), ids.toArray());
+      ids.remove(0);
+      ids.remove(0);
+      ids.add("1");
+      ids.add("3");
+      ret = db.queryArtistAlbums("3", true);
+      ret.sort(String::compareTo);
+      assertArrayEquals(ret.toArray(), ids.toArray());
+      ids.remove(0);
+      ids.remove(0);
+      ids.add("1");
+      ids.add("4");
+      ret = db.queryArtistAlbums("4", true);
+      ret.sort(String::compareTo);
+      assertArrayEquals(ret.toArray(), ids.toArray());
+      // query artists!
+      ids.remove(0);
+      ids.remove(0);
+      ids.add("1");
+      ids.add("2");
+      ids.add("3");
+      ids.add("4");
+      ret = db.queryArtistAlbums("1", false);
+      ret.sort(String::compareTo);
+      assertArrayEquals(ret.toArray(), ids.toArray());
+      ids.remove(0);
+      ids.remove(0);
+      ids.remove(0);
+      ids.remove(0);
+      ids.add("1");
+      ids.add("2");
+      ret = db.queryArtistAlbums("2", false);
+      ret.sort(String::compareTo);
+      assertArrayEquals(ret.toArray(), ids.toArray());
+      ids.remove(0);
+      ids.remove(0);
+      ids.add("3");
+      ret = db.queryArtistAlbums("3", false);
+      ret.sort(String::compareTo);
+      assertArrayEquals(ret.toArray(), ids.toArray());
+      ids.remove(0);
+      ids.add("4");
+      ret = db.queryArtistAlbums("4", false);
+      ret.sort(String::compareTo);
+      assertArrayEquals(ret.toArray(), ids.toArray());
 
       // check not exists!
+      ids.remove(0);
+      assertArrayEquals(db.queryArtistAlbums("5", true).toArray(), ids.toArray());
+      assertArrayEquals(db.queryArtistAlbums("5", false).toArray(), ids.toArray());
 
       // close!
       assertTrue(db.closeDB());
@@ -587,18 +646,30 @@ public class DropWatchDBUnitTest {
     }
   }
 
-  // test queryArtistAlbums_byPair
+  // test artistAlbumRelationshipExists
   @Test
-  void test_queryArtistAlbums_byPair() {
+  void test_artistAlbumRelationshipExists() {
     try {
       // connect to mock db
       connectMockDB();
-      // collect albums in list!
-      ArrayList<String[]> albums = new ArrayList<>();
 
-      // query albums!
+      // check if relationship exists!
+      assertTrue(db.artistAlbumRelationshipExists("1", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("2", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("3", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("4", "1"));
+
+      assertTrue(db.artistAlbumRelationshipExists("2", "2"));
+      assertTrue(db.artistAlbumRelationshipExists("3", "3"));
+      assertTrue(db.artistAlbumRelationshipExists("4", "4"));
+
+      assertTrue(db.artistAlbumRelationshipExists("1", "2"));
 
       // check not exists!
+      assertFalse(db.artistAlbumRelationshipExists("1", "4"));
+      assertFalse(db.artistAlbumRelationshipExists("3", "4"));
+      assertFalse(db.artistAlbumRelationshipExists("5", "1"));
+      assertFalse(db.artistAlbumRelationshipExists("1", "5"));
 
       // close!
       assertTrue(db.closeDB());
@@ -613,14 +684,36 @@ public class DropWatchDBUnitTest {
     try {
       // connect to empty db
       createEmptyTestDB();
-      // verify no albums!
+      // verify no relationships!
+      ArrayList<String> ids = new ArrayList<>();
+      assertArrayEquals(db.queryArtistAlbums("1", true).toArray(), ids.toArray());
+      assertArrayEquals(db.queryArtistAlbums("1", false).toArray(), ids.toArray());
+      assertArrayEquals(db.queryArtistAlbums("2", true).toArray(), ids.toArray());
+      assertArrayEquals(db.queryArtistAlbums("2", false).toArray(), ids.toArray());
 
-      // add some albums!
+      // add some relationships!
+      assertTrue(db.insertOrReplaceArtistAlbums("1", "1"));
+      assertTrue(db.insertOrReplaceArtistAlbums("1", "2"));
+      assertTrue(db.insertOrReplaceArtistAlbums("2", "1"));
+      assertTrue(db.insertOrReplaceArtistAlbums("2", "2"));
+      assertTrue(db.insertOrReplaceArtistAlbums("3", "1"));
+      assertTrue(db.insertOrReplaceArtistAlbums("3", "3"));
+      assertTrue(db.insertOrReplaceArtistAlbums("4", "1"));
+      assertTrue(db.insertOrReplaceArtistAlbums("4", "4"));
 
       // verify they're there!
+      assertTrue(db.artistAlbumRelationshipExists("1", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("1", "2"));
+      assertTrue(db.artistAlbumRelationshipExists("2", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("2", "2"));
+      assertTrue(db.artistAlbumRelationshipExists("3", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("3", "3"));
+      assertTrue(db.artistAlbumRelationshipExists("4", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("4", "4"));
 
-
-      // verify no false albums!
+      // verify no false relationships!
+      assertFalse(db.artistAlbumRelationshipExists("1", "5"));
+      assertFalse(db.artistAlbumRelationshipExists("5", "1"));
 
     } catch (Exception e) {
       fail(e.getMessage());
@@ -634,19 +727,107 @@ public class DropWatchDBUnitTest {
       // connect to empty db
       createEmptyTestDB();
 
-      // add some stuff
+      // add some relationships!
+      assertTrue(db.insertOrReplaceArtistAlbums("1", "1"));
+      assertTrue(db.insertOrReplaceArtistAlbums("1", "2"));
+      assertTrue(db.insertOrReplaceArtistAlbums("2", "1"));
+      assertTrue(db.insertOrReplaceArtistAlbums("2", "2"));
+      assertTrue(db.insertOrReplaceArtistAlbums("3", "1"));
+      assertTrue(db.insertOrReplaceArtistAlbums("3", "3"));
+      assertTrue(db.insertOrReplaceArtistAlbums("4", "1"));
+      assertTrue(db.insertOrReplaceArtistAlbums("4", "4"));
 
-      // verify its there
+      // verify they're there!
+      assertTrue(db.artistAlbumRelationshipExists("1", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("1", "2"));
+      assertTrue(db.artistAlbumRelationshipExists("2", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("2", "2"));
+      assertTrue(db.artistAlbumRelationshipExists("3", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("3", "3"));
+      assertTrue(db.artistAlbumRelationshipExists("4", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("4", "4"));
 
       // now remove some stuff!
+      assertTrue(db.removeArtistAlbums("1", "1"));
+      assertTrue(db.removeArtistAlbums("2", "1"));
+      assertTrue(db.removeArtistAlbums("3", "1"));
 
       // verify its gone/stuff is still there!
+      assertFalse(db.artistAlbumRelationshipExists("1", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("1", "2"));
+      assertFalse(db.artistAlbumRelationshipExists("2", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("2", "2"));
+      assertFalse(db.artistAlbumRelationshipExists("3", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("3", "3"));
+      assertTrue(db.artistAlbumRelationshipExists("4", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("4", "4"));
 
       // remove more
+      assertTrue(db.removeArtistAlbums("4", "4"));
+      assertTrue(db.removeArtistAlbums("4", "1"));
+      assertTrue(db.removeArtistAlbums("1", "2"));
 
       // verify its gone/stuff is still there!
+      assertFalse(db.artistAlbumRelationshipExists("1", "1"));
+      assertFalse(db.artistAlbumRelationshipExists("1", "2"));
+      assertFalse(db.artistAlbumRelationshipExists("2", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("2", "2"));
+      assertFalse(db.artistAlbumRelationshipExists("3", "1"));
+      assertTrue(db.artistAlbumRelationshipExists("3", "3"));
+      assertFalse(db.artistAlbumRelationshipExists("4", "1"));
+      assertFalse(db.artistAlbumRelationshipExists("4", "4"));
 
       // make sure returns false if try to remove again, or remove non-existent entry
+      assertFalse(db.removeArtistAlbums("1", "1"));
+      assertFalse(db.removeArtistAlbums("2", "1"));
+      assertFalse(db.removeArtistAlbums("3", "1"));
+      assertFalse(db.removeArtistAlbums("4", "1"));
+      assertFalse(db.removeArtistAlbums("5", "1"));
+      assertFalse(db.removeArtistAlbums("1", "5"));
+    } catch (Exception e) {
+      fail(e.getMessage());
+    }
+  }
+
+  // test good input into date comparison function
+  @Test
+  void test_DateRecordCompareDates_GoodInput() {
+    // make some dates, compare them!
+
+  }
+
+  // test bad input into date comparison function
+  @Test
+  void test_DateRecordCompareDates_BadInput() {
+    // make some bad dates, compare them!
+
+  }
+
+  // test findLatestRelease
+  @Test
+  void test_findLatestRelease() {
+    try {
+      // connect to mock db
+      connectMockDB();
+
+      // find latest release for a few artists, verify its correct
+
+    } catch (Exception e) {
+      fail(e.getMessage());
+    }
+  }
+
+  // test removeArtistAlbums
+  @Test
+  void test_addNewAlbum() {
+    try {
+      // connect to empty db
+      createEmptyTestDB();
+
+      // add some new albums
+
+      // verify all the right tables are populated properly!
+
     } catch (Exception e) {
       fail(e.getMessage());
     }
