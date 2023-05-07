@@ -66,12 +66,12 @@ function Search(props) {
     if(results !== undefined) {
       if(results.length === 0) {
         setMiddle(
-        <Card className='search-results'>
+        <Card aria-label='Search Results' className='search-results'>
           <p>No results found D:</p>
         </Card>)
       } else {
         setMiddle(
-          <Card className='search-results'>
+          <Card aria-label='Search Results' className='search-results'>
             <Container className='search-results-container'>
               <Row xs={1} md={2} className="g-4">
                 {results.map((item, i) => (

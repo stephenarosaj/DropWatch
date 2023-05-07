@@ -11,13 +11,12 @@ function SavedPlaylists(props) {
   }
   if(props.playlists.length === 0) {
     middle =
-      <Card className='playlists'>
-          <p>You're not tracking any artists yet! Let's fix that.</p>
-          <p>Click one of the buttons below and track some artists!</p>
+      <Card aria-label='Saved Playlists' className='playlists'>
+          <p>You don't have any playlists saved to your Spotify account.</p>
       </Card>
   } else {
     middle = 
-    <Card className='playlists'>
+    <Card aria-label='Saved Playlists' className='playlists'>
         <Container className='playlists-container'>
           <Row xs={1} md={2} className="g-4">
             {props.playlists.map((item, i) => (
