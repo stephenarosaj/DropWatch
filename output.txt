@@ -1,0 +1,1157 @@
+{
+  "albums" : {
+    "href" : "https://api.spotify.com/v1/search?query=smino&type=album&market=US&offset=0&limit=8",
+    "items" : [ {
+      "album_group" : "album",
+      "album_type" : "album",
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      } ],
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/album/6dtDTbVBQ9QwsNaqEnjsOT"
+      },
+      "href" : "https://api.spotify.com/v1/albums/6dtDTbVBQ9QwsNaqEnjsOT",
+      "id" : "6dtDTbVBQ9QwsNaqEnjsOT",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab67616d0000b273d7bae4ad0b91f65e0dd910c8",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/ab67616d00001e02d7bae4ad0b91f65e0dd910c8",
+        "width" : 300
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/ab67616d00004851d7bae4ad0b91f65e0dd910c8",
+        "width" : 64
+      } ],
+      "is_playable" : true,
+      "name" : "Luv 4 Rent",
+      "release_date" : "2022-10-28",
+      "release_date_precision" : "day",
+      "total_tracks" : 15,
+      "type" : "album",
+      "uri" : "spotify:album:6dtDTbVBQ9QwsNaqEnjsOT"
+    }, {
+      "album_group" : "album",
+      "album_type" : "album",
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      } ],
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/album/3bTjPEgPzm1XwXsNlMVHhs"
+      },
+      "href" : "https://api.spotify.com/v1/albums/3bTjPEgPzm1XwXsNlMVHhs",
+      "id" : "3bTjPEgPzm1XwXsNlMVHhs",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab67616d0000b2738be32b380765207f19d56435",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/ab67616d00001e028be32b380765207f19d56435",
+        "width" : 300
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/ab67616d000048518be32b380765207f19d56435",
+        "width" : 64
+      } ],
+      "is_playable" : true,
+      "name" : "blkswn",
+      "release_date" : "2017-03-14",
+      "release_date_precision" : "day",
+      "total_tracks" : 18,
+      "type" : "album",
+      "uri" : "spotify:album:3bTjPEgPzm1XwXsNlMVHhs"
+    }, {
+      "album_group" : "album",
+      "album_type" : "album",
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      } ],
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/album/5rVlqi2fHOmWB764N8PsWF"
+      },
+      "href" : "https://api.spotify.com/v1/albums/5rVlqi2fHOmWB764N8PsWF",
+      "id" : "5rVlqi2fHOmWB764N8PsWF",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab67616d0000b273418c202dda058a337ddb0f92",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/ab67616d00001e02418c202dda058a337ddb0f92",
+        "width" : 300
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/ab67616d00004851418c202dda058a337ddb0f92",
+        "width" : 64
+      } ],
+      "is_playable" : true,
+      "name" : "NOIR",
+      "release_date" : "2018-11-08",
+      "release_date_precision" : "day",
+      "total_tracks" : 18,
+      "type" : "album",
+      "uri" : "spotify:album:5rVlqi2fHOmWB764N8PsWF"
+    }, {
+      "album_group" : "single",
+      "album_type" : "single",
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      }, {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/6l3HvQ5sa6mXTsMTB19rO5"
+        },
+        "href" : "https://api.spotify.com/v1/artists/6l3HvQ5sa6mXTsMTB19rO5",
+        "id" : "6l3HvQ5sa6mXTsMTB19rO5",
+        "name" : "J. Cole",
+        "type" : "artist",
+        "uri" : "spotify:artist:6l3HvQ5sa6mXTsMTB19rO5"
+      } ],
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/album/4WS18QYpvlKrKB7LtcRg0u"
+      },
+      "href" : "https://api.spotify.com/v1/albums/4WS18QYpvlKrKB7LtcRg0u",
+      "id" : "4WS18QYpvlKrKB7LtcRg0u",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab67616d0000b27310e785d92d34ddb09fbeb3b3",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/ab67616d00001e0210e785d92d34ddb09fbeb3b3",
+        "width" : 300
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/ab67616d0000485110e785d92d34ddb09fbeb3b3",
+        "width" : 64
+      } ],
+      "is_playable" : true,
+      "name" : "90 Proof (with J. Cole)",
+      "release_date" : "2022-09-30",
+      "release_date_precision" : "day",
+      "total_tracks" : 1,
+      "type" : "album",
+      "uri" : "spotify:album:4WS18QYpvlKrKB7LtcRg0u"
+    }, {
+      "album_group" : "album",
+      "album_type" : "album",
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      } ],
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/album/1gIhUSOKHS9WoUCZeBR8Ao"
+      },
+      "href" : "https://api.spotify.com/v1/albums/1gIhUSOKHS9WoUCZeBR8Ao",
+      "id" : "1gIhUSOKHS9WoUCZeBR8Ao",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab67616d0000b273d7c46b8aed5ca611eec9dc25",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/ab67616d00001e02d7c46b8aed5ca611eec9dc25",
+        "width" : 300
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/ab67616d00004851d7c46b8aed5ca611eec9dc25",
+        "width" : 64
+      } ],
+      "is_playable" : true,
+      "name" : "Luv 4 Rent",
+      "release_date" : "2022-10-28",
+      "release_date_precision" : "day",
+      "total_tracks" : 15,
+      "type" : "album",
+      "uri" : "spotify:album:1gIhUSOKHS9WoUCZeBR8Ao"
+    }, {
+      "album_group" : "single",
+      "album_type" : "single",
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      } ],
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/album/1jCHZ0ggPkFnm5b1r5ZY8V"
+      },
+      "href" : "https://api.spotify.com/v1/albums/1jCHZ0ggPkFnm5b1r5ZY8V",
+      "id" : "1jCHZ0ggPkFnm5b1r5ZY8V",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab67616d0000b273aa9344be89f46bc45f105727",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/ab67616d00001e02aa9344be89f46bc45f105727",
+        "width" : 300
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/ab67616d00004851aa9344be89f46bc45f105727",
+        "width" : 64
+      } ],
+      "is_playable" : true,
+      "name" : "I Deserve (w/ NOS.)",
+      "release_date" : "2021-11-11",
+      "release_date_precision" : "day",
+      "total_tracks" : 1,
+      "type" : "album",
+      "uri" : "spotify:album:1jCHZ0ggPkFnm5b1r5ZY8V"
+    }, {
+      "album_group" : "single",
+      "album_type" : "single",
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      } ],
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/album/4kFIgF4fh0MdsyopIZD8Wn"
+      },
+      "href" : "https://api.spotify.com/v1/albums/4kFIgF4fh0MdsyopIZD8Wn",
+      "id" : "4kFIgF4fh0MdsyopIZD8Wn",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab67616d0000b273deddd15733116bb59086c969",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/ab67616d00001e02deddd15733116bb59086c969",
+        "width" : 300
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/ab67616d00004851deddd15733116bb59086c969",
+        "width" : 64
+      } ],
+      "is_playable" : true,
+      "name" : "Tempo",
+      "release_date" : "2020-03-30",
+      "release_date_precision" : "day",
+      "total_tracks" : 1,
+      "type" : "album",
+      "uri" : "spotify:album:4kFIgF4fh0MdsyopIZD8Wn"
+    }, {
+      "album_group" : "album",
+      "album_type" : "album",
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/6U3ybJ9UHNKEdsH7ktGBZ7"
+        },
+        "href" : "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7",
+        "id" : "6U3ybJ9UHNKEdsH7ktGBZ7",
+        "name" : "JID",
+        "type" : "artist",
+        "uri" : "spotify:artist:6U3ybJ9UHNKEdsH7ktGBZ7"
+      } ],
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/album/4rJDCELWL0fjdmN9Gn4f4g"
+      },
+      "href" : "https://api.spotify.com/v1/albums/4rJDCELWL0fjdmN9Gn4f4g",
+      "id" : "4rJDCELWL0fjdmN9Gn4f4g",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab67616d0000b273cae6e44dcc84e2035c3ad092",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/ab67616d00001e02cae6e44dcc84e2035c3ad092",
+        "width" : 300
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/ab67616d00004851cae6e44dcc84e2035c3ad092",
+        "width" : 64
+      } ],
+      "is_playable" : true,
+      "name" : "The Forever Story (Extended Version)",
+      "release_date" : "2022-10-31",
+      "release_date_precision" : "day",
+      "total_tracks" : 16,
+      "type" : "album",
+      "uri" : "spotify:album:4rJDCELWL0fjdmN9Gn4f4g"
+    } ],
+    "limit" : 8,
+    "next" : "https://api.spotify.com/v1/search?query=smino&type=album&market=US&offset=8&limit=8",
+    "offset" : 0,
+    "previous" : null,
+    "total" : 40
+  },
+  "artists" : {
+    "href" : "https://api.spotify.com/v1/search?query=smino&type=artist&market=US&offset=0&limit=8",
+    "items" : [ {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+      },
+      "followers" : {
+        "href" : null,
+        "total" : 794353
+      },
+      "genres" : [ "alternative r&b" ],
+      "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+      "id" : "1ybINI1qPiFbwDXamRtwxD",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab6761610000e5eb665eca0564934b82f47c49bc",
+        "width" : 640
+      }, {
+        "height" : 320,
+        "url" : "https://i.scdn.co/image/ab67616100005174665eca0564934b82f47c49bc",
+        "width" : 320
+      }, {
+        "height" : 160,
+        "url" : "https://i.scdn.co/image/ab6761610000f178665eca0564934b82f47c49bc",
+        "width" : 160
+      } ],
+      "name" : "Smino",
+      "popularity" : 69,
+      "type" : "artist",
+      "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+    }, {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/0sN6V0DZiCbB1exRjapMNo"
+      },
+      "followers" : {
+        "href" : null,
+        "total" : 118
+      },
+      "genres" : [ ],
+      "href" : "https://api.spotify.com/v1/artists/0sN6V0DZiCbB1exRjapMNo",
+      "id" : "0sN6V0DZiCbB1exRjapMNo",
+      "images" : [ ],
+      "name" : "Noname feat. Smino, Phoelix, Saba",
+      "popularity" : 36,
+      "type" : "artist",
+      "uri" : "spotify:artist:0sN6V0DZiCbB1exRjapMNo"
+    }, {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/6U3ybJ9UHNKEdsH7ktGBZ7"
+      },
+      "followers" : {
+        "href" : null,
+        "total" : 1215773
+      },
+      "genres" : [ "hip hop", "rap", "underground hip hop" ],
+      "href" : "https://api.spotify.com/v1/artists/6U3ybJ9UHNKEdsH7ktGBZ7",
+      "id" : "6U3ybJ9UHNKEdsH7ktGBZ7",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab6761610000e5eb8f0270ec23a53f3c1fe91849",
+        "width" : 640
+      }, {
+        "height" : 320,
+        "url" : "https://i.scdn.co/image/ab676161000051748f0270ec23a53f3c1fe91849",
+        "width" : 320
+      }, {
+        "height" : 160,
+        "url" : "https://i.scdn.co/image/ab6761610000f1788f0270ec23a53f3c1fe91849",
+        "width" : 160
+      } ],
+      "name" : "JID",
+      "popularity" : 78,
+      "type" : "artist",
+      "uri" : "spotify:artist:6U3ybJ9UHNKEdsH7ktGBZ7"
+    }, {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/7lpGctutZNeN7UKIyEFbPg"
+      },
+      "followers" : {
+        "href" : null,
+        "total" : 8530
+      },
+      "genres" : [ "maskandi" ],
+      "href" : "https://api.spotify.com/v1/artists/7lpGctutZNeN7UKIyEFbPg",
+      "id" : "7lpGctutZNeN7UKIyEFbPg",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab67616d0000b27393da4e44c6f454ab0ac02eff",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/ab67616d00001e0293da4e44c6f454ab0ac02eff",
+        "width" : 300
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/ab67616d0000485193da4e44c6f454ab0ac02eff",
+        "width" : 64
+      } ],
+      "name" : "Sminofu",
+      "popularity" : 28,
+      "type" : "artist",
+      "uri" : "spotify:artist:7lpGctutZNeN7UKIyEFbPg"
+    }, {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/0lawSNBxNgJFQYJnQzLH8c"
+      },
+      "followers" : {
+        "href" : null,
+        "total" : 550725
+      },
+      "genres" : [ "lo-fi rap", "pov: indie" ],
+      "href" : "https://api.spotify.com/v1/artists/0lawSNBxNgJFQYJnQzLH8c",
+      "id" : "0lawSNBxNgJFQYJnQzLH8c",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab6761610000e5ebb2832f950e436a01999ed58e",
+        "width" : 640
+      }, {
+        "height" : 320,
+        "url" : "https://i.scdn.co/image/ab67616100005174b2832f950e436a01999ed58e",
+        "width" : 320
+      }, {
+        "height" : 160,
+        "url" : "https://i.scdn.co/image/ab6761610000f178b2832f950e436a01999ed58e",
+        "width" : 160
+      } ],
+      "name" : "khai dreams",
+      "popularity" : 61,
+      "type" : "artist",
+      "uri" : "spotify:artist:0lawSNBxNgJFQYJnQzLH8c"
+    }, {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/6gwiUfJfC1mFeuMMCaGX64"
+      },
+      "followers" : {
+        "href" : null,
+        "total" : 0
+      },
+      "genres" : [ ],
+      "href" : "https://api.spotify.com/v1/artists/6gwiUfJfC1mFeuMMCaGX64",
+      "id" : "6gwiUfJfC1mFeuMMCaGX64",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab67616d0000b273b144712ad10097cf7874d8fe",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/ab67616d00001e02b144712ad10097cf7874d8fe",
+        "width" : 300
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/ab67616d00004851b144712ad10097cf7874d8fe",
+        "width" : 64
+      } ],
+      "name" : "GLC Smino",
+      "popularity" : 0,
+      "type" : "artist",
+      "uri" : "spotify:artist:6gwiUfJfC1mFeuMMCaGX64"
+    }, {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/7Hjbimq43OgxaBRpFXic4x"
+      },
+      "followers" : {
+        "href" : null,
+        "total" : 676638
+      },
+      "genres" : [ "alternative r&b", "chicago rap" ],
+      "href" : "https://api.spotify.com/v1/artists/7Hjbimq43OgxaBRpFXic4x",
+      "id" : "7Hjbimq43OgxaBRpFXic4x",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab6761610000e5ebcbf85bfa1a10a9c2f2aa5ea6",
+        "width" : 640
+      }, {
+        "height" : 320,
+        "url" : "https://i.scdn.co/image/ab67616100005174cbf85bfa1a10a9c2f2aa5ea6",
+        "width" : 320
+      }, {
+        "height" : 160,
+        "url" : "https://i.scdn.co/image/ab6761610000f178cbf85bfa1a10a9c2f2aa5ea6",
+        "width" : 160
+      } ],
+      "name" : "Saba",
+      "popularity" : 64,
+      "type" : "artist",
+      "uri" : "spotify:artist:7Hjbimq43OgxaBRpFXic4x"
+    }, {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/5FMLDJKZYhpJ3jMZuVRGaa"
+      },
+      "followers" : {
+        "href" : null,
+        "total" : 6
+      },
+      "genres" : [ ],
+      "href" : "https://api.spotify.com/v1/artists/5FMLDJKZYhpJ3jMZuVRGaa",
+      "id" : "5FMLDJKZYhpJ3jMZuVRGaa",
+      "images" : [ ],
+      "name" : "Sminorf",
+      "popularity" : 0,
+      "type" : "artist",
+      "uri" : "spotify:artist:5FMLDJKZYhpJ3jMZuVRGaa"
+    } ],
+    "limit" : 8,
+    "next" : "https://api.spotify.com/v1/search?query=smino&type=artist&market=US&offset=8&limit=8",
+    "offset" : 0,
+    "previous" : null,
+    "total" : 14
+  },
+  "tracks" : {
+    "href" : "https://api.spotify.com/v1/search?query=smino&type=track&market=US&offset=0&limit=8",
+    "items" : [ {
+      "album" : {
+        "album_group" : "album",
+        "album_type" : "album",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+          },
+          "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+          "id" : "1ybINI1qPiFbwDXamRtwxD",
+          "name" : "Smino",
+          "type" : "artist",
+          "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+        } ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/3bTjPEgPzm1XwXsNlMVHhs"
+        },
+        "href" : "https://api.spotify.com/v1/albums/3bTjPEgPzm1XwXsNlMVHhs",
+        "id" : "3bTjPEgPzm1XwXsNlMVHhs",
+        "images" : [ {
+          "height" : 640,
+          "url" : "https://i.scdn.co/image/ab67616d0000b2738be32b380765207f19d56435",
+          "width" : 640
+        }, {
+          "height" : 300,
+          "url" : "https://i.scdn.co/image/ab67616d00001e028be32b380765207f19d56435",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/ab67616d000048518be32b380765207f19d56435",
+          "width" : 64
+        } ],
+        "is_playable" : true,
+        "name" : "blkswn",
+        "release_date" : "2017-03-14",
+        "release_date_precision" : "day",
+        "total_tracks" : 18,
+        "type" : "album",
+        "uri" : "spotify:album:3bTjPEgPzm1XwXsNlMVHhs"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      } ],
+      "disc_number" : 1,
+      "duration_ms" : 169319,
+      "explicit" : true,
+      "external_ids" : {
+        "isrc" : "USUG11700151"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/6efkcs2aUBMFKxl0cl2JWQ"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/6efkcs2aUBMFKxl0cl2JWQ",
+      "id" : "6efkcs2aUBMFKxl0cl2JWQ",
+      "is_local" : false,
+      "is_playable" : true,
+      "name" : "Wild Irish Roses",
+      "popularity" : 69,
+      "preview_url" : null,
+      "track_number" : 1,
+      "type" : "track",
+      "uri" : "spotify:track:6efkcs2aUBMFKxl0cl2JWQ"
+    }, {
+      "album" : {
+        "album_group" : "album",
+        "album_type" : "album",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+          },
+          "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+          "id" : "1ybINI1qPiFbwDXamRtwxD",
+          "name" : "Smino",
+          "type" : "artist",
+          "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+        } ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/6dtDTbVBQ9QwsNaqEnjsOT"
+        },
+        "href" : "https://api.spotify.com/v1/albums/6dtDTbVBQ9QwsNaqEnjsOT",
+        "id" : "6dtDTbVBQ9QwsNaqEnjsOT",
+        "images" : [ {
+          "height" : 640,
+          "url" : "https://i.scdn.co/image/ab67616d0000b273d7bae4ad0b91f65e0dd910c8",
+          "width" : 640
+        }, {
+          "height" : 300,
+          "url" : "https://i.scdn.co/image/ab67616d00001e02d7bae4ad0b91f65e0dd910c8",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/ab67616d00004851d7bae4ad0b91f65e0dd910c8",
+          "width" : 64
+        } ],
+        "is_playable" : true,
+        "name" : "Luv 4 Rent",
+        "release_date" : "2022-10-28",
+        "release_date_precision" : "day",
+        "total_tracks" : 15,
+        "type" : "album",
+        "uri" : "spotify:album:6dtDTbVBQ9QwsNaqEnjsOT"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      } ],
+      "disc_number" : 1,
+      "duration_ms" : 175018,
+      "explicit" : true,
+      "external_ids" : {
+        "isrc" : "USUG12207589"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/12CNybio0Bxean3F3uYugU"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/12CNybio0Bxean3F3uYugU",
+      "id" : "12CNybio0Bxean3F3uYugU",
+      "is_local" : false,
+      "is_playable" : true,
+      "name" : "No L's",
+      "popularity" : 67,
+      "preview_url" : null,
+      "track_number" : 2,
+      "type" : "track",
+      "uri" : "spotify:track:12CNybio0Bxean3F3uYugU"
+    }, {
+      "album" : {
+        "album_group" : "album",
+        "album_type" : "album",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+          },
+          "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+          "id" : "1ybINI1qPiFbwDXamRtwxD",
+          "name" : "Smino",
+          "type" : "artist",
+          "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+        } ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/3bTjPEgPzm1XwXsNlMVHhs"
+        },
+        "href" : "https://api.spotify.com/v1/albums/3bTjPEgPzm1XwXsNlMVHhs",
+        "id" : "3bTjPEgPzm1XwXsNlMVHhs",
+        "images" : [ {
+          "height" : 640,
+          "url" : "https://i.scdn.co/image/ab67616d0000b2738be32b380765207f19d56435",
+          "width" : 640
+        }, {
+          "height" : 300,
+          "url" : "https://i.scdn.co/image/ab67616d00001e028be32b380765207f19d56435",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/ab67616d000048518be32b380765207f19d56435",
+          "width" : 64
+        } ],
+        "is_playable" : true,
+        "name" : "blkswn",
+        "release_date" : "2017-03-14",
+        "release_date_precision" : "day",
+        "total_tracks" : 18,
+        "type" : "album",
+        "uri" : "spotify:album:3bTjPEgPzm1XwXsNlMVHhs"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      } ],
+      "disc_number" : 1,
+      "duration_ms" : 469830,
+      "explicit" : true,
+      "external_ids" : {
+        "isrc" : "USUG11700177"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/3Zau3JcrZcBfw8aVjKGkSX"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/3Zau3JcrZcBfw8aVjKGkSX",
+      "id" : "3Zau3JcrZcBfw8aVjKGkSX",
+      "is_local" : false,
+      "is_playable" : true,
+      "name" : "Amphetamine",
+      "popularity" : 63,
+      "preview_url" : null,
+      "track_number" : 18,
+      "type" : "track",
+      "uri" : "spotify:track:3Zau3JcrZcBfw8aVjKGkSX"
+    }, {
+      "album" : {
+        "album_group" : "album",
+        "album_type" : "album",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+          },
+          "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+          "id" : "1ybINI1qPiFbwDXamRtwxD",
+          "name" : "Smino",
+          "type" : "artist",
+          "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+        } ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/5rVlqi2fHOmWB764N8PsWF"
+        },
+        "href" : "https://api.spotify.com/v1/albums/5rVlqi2fHOmWB764N8PsWF",
+        "id" : "5rVlqi2fHOmWB764N8PsWF",
+        "images" : [ {
+          "height" : 640,
+          "url" : "https://i.scdn.co/image/ab67616d0000b273418c202dda058a337ddb0f92",
+          "width" : 640
+        }, {
+          "height" : 300,
+          "url" : "https://i.scdn.co/image/ab67616d00001e02418c202dda058a337ddb0f92",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/ab67616d00004851418c202dda058a337ddb0f92",
+          "width" : 64
+        } ],
+        "is_playable" : true,
+        "name" : "NOIR",
+        "release_date" : "2018-11-08",
+        "release_date_precision" : "day",
+        "total_tracks" : 18,
+        "type" : "album",
+        "uri" : "spotify:album:5rVlqi2fHOmWB764N8PsWF"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      }, {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/3IrrjuvOPa1KFxq0Kk8pvN"
+        },
+        "href" : "https://api.spotify.com/v1/artists/3IrrjuvOPa1KFxq0Kk8pvN",
+        "id" : "3IrrjuvOPa1KFxq0Kk8pvN",
+        "name" : "Bari",
+        "type" : "artist",
+        "uri" : "spotify:artist:3IrrjuvOPa1KFxq0Kk8pvN"
+      }, {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/5RoJ70jcjGUibtNjye7DwO"
+        },
+        "href" : "https://api.spotify.com/v1/artists/5RoJ70jcjGUibtNjye7DwO",
+        "id" : "5RoJ70jcjGUibtNjye7DwO",
+        "name" : "Jay2",
+        "type" : "artist",
+        "uri" : "spotify:artist:5RoJ70jcjGUibtNjye7DwO"
+      } ],
+      "disc_number" : 1,
+      "duration_ms" : 162590,
+      "explicit" : true,
+      "external_ids" : {
+        "isrc" : "USUG11802513"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/3X6YJcqTinaNraRvojF62K"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/3X6YJcqTinaNraRvojF62K",
+      "id" : "3X6YJcqTinaNraRvojF62K",
+      "is_local" : false,
+      "is_playable" : true,
+      "name" : "Z4L (with Bari & Jay2)",
+      "popularity" : 66,
+      "preview_url" : null,
+      "track_number" : 7,
+      "type" : "track",
+      "uri" : "spotify:track:3X6YJcqTinaNraRvojF62K"
+    }, {
+      "album" : {
+        "album_group" : "album",
+        "album_type" : "album",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+          },
+          "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+          "id" : "1ybINI1qPiFbwDXamRtwxD",
+          "name" : "Smino",
+          "type" : "artist",
+          "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+        } ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/6dtDTbVBQ9QwsNaqEnjsOT"
+        },
+        "href" : "https://api.spotify.com/v1/albums/6dtDTbVBQ9QwsNaqEnjsOT",
+        "id" : "6dtDTbVBQ9QwsNaqEnjsOT",
+        "images" : [ {
+          "height" : 640,
+          "url" : "https://i.scdn.co/image/ab67616d0000b273d7bae4ad0b91f65e0dd910c8",
+          "width" : 640
+        }, {
+          "height" : 300,
+          "url" : "https://i.scdn.co/image/ab67616d00001e02d7bae4ad0b91f65e0dd910c8",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/ab67616d00004851d7bae4ad0b91f65e0dd910c8",
+          "width" : 64
+        } ],
+        "is_playable" : true,
+        "name" : "Luv 4 Rent",
+        "release_date" : "2022-10-28",
+        "release_date_precision" : "day",
+        "total_tracks" : 15,
+        "type" : "album",
+        "uri" : "spotify:album:6dtDTbVBQ9QwsNaqEnjsOT"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      }, {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/6l3HvQ5sa6mXTsMTB19rO5"
+        },
+        "href" : "https://api.spotify.com/v1/artists/6l3HvQ5sa6mXTsMTB19rO5",
+        "id" : "6l3HvQ5sa6mXTsMTB19rO5",
+        "name" : "J. Cole",
+        "type" : "artist",
+        "uri" : "spotify:artist:6l3HvQ5sa6mXTsMTB19rO5"
+      } ],
+      "disc_number" : 1,
+      "duration_ms" : 208269,
+      "explicit" : true,
+      "external_ids" : {
+        "isrc" : "USUG12207081"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/078lbDGGTqBuTKU3bypXxQ"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/078lbDGGTqBuTKU3bypXxQ",
+      "id" : "078lbDGGTqBuTKU3bypXxQ",
+      "is_local" : false,
+      "is_playable" : true,
+      "name" : "90 Proof (with J. Cole)",
+      "popularity" : 64,
+      "preview_url" : null,
+      "track_number" : 3,
+      "type" : "track",
+      "uri" : "spotify:track:078lbDGGTqBuTKU3bypXxQ"
+    }, {
+      "album" : {
+        "album_group" : "album",
+        "album_type" : "album",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/5cj0lLjcoR7YOSnhnX0Po5"
+          },
+          "href" : "https://api.spotify.com/v1/artists/5cj0lLjcoR7YOSnhnX0Po5",
+          "id" : "5cj0lLjcoR7YOSnhnX0Po5",
+          "name" : "Doja Cat",
+          "type" : "artist",
+          "uri" : "spotify:artist:5cj0lLjcoR7YOSnhnX0Po5"
+        } ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/1MmVkhiwTH0BkNOU3nw5d3"
+        },
+        "href" : "https://api.spotify.com/v1/albums/1MmVkhiwTH0BkNOU3nw5d3",
+        "id" : "1MmVkhiwTH0BkNOU3nw5d3",
+        "images" : [ {
+          "height" : 640,
+          "url" : "https://i.scdn.co/image/ab67616d0000b27382b243023b937fd579a35533",
+          "width" : 640
+        }, {
+          "height" : 300,
+          "url" : "https://i.scdn.co/image/ab67616d00001e0282b243023b937fd579a35533",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/ab67616d0000485182b243023b937fd579a35533",
+          "width" : 64
+        } ],
+        "is_playable" : true,
+        "name" : "Hot Pink",
+        "release_date" : "2019-11-07",
+        "release_date_precision" : "day",
+        "total_tracks" : 12,
+        "type" : "album",
+        "uri" : "spotify:album:1MmVkhiwTH0BkNOU3nw5d3"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/5cj0lLjcoR7YOSnhnX0Po5"
+        },
+        "href" : "https://api.spotify.com/v1/artists/5cj0lLjcoR7YOSnhnX0Po5",
+        "id" : "5cj0lLjcoR7YOSnhnX0Po5",
+        "name" : "Doja Cat",
+        "type" : "artist",
+        "uri" : "spotify:artist:5cj0lLjcoR7YOSnhnX0Po5"
+      }, {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      } ],
+      "disc_number" : 1,
+      "duration_ms" : 195213,
+      "explicit" : true,
+      "external_ids" : {
+        "isrc" : "USRC11903450"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/7k51pIqTGEHHZOnpI11Qq2"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/7k51pIqTGEHHZOnpI11Qq2",
+      "id" : "7k51pIqTGEHHZOnpI11Qq2",
+      "is_local" : false,
+      "is_playable" : true,
+      "name" : "Won't Bite (feat. Smino)",
+      "popularity" : 66,
+      "preview_url" : "https://p.scdn.co/mp3-preview/e161980c746504cec532de5479b7e73ba781569f?cid=1be4c1544f31438693f0c3b488f9ceee",
+      "track_number" : 2,
+      "type" : "track",
+      "uri" : "spotify:track:7k51pIqTGEHHZOnpI11Qq2"
+    }, {
+      "album" : {
+        "album_group" : "single",
+        "album_type" : "single",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+          },
+          "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+          "id" : "1ybINI1qPiFbwDXamRtwxD",
+          "name" : "Smino",
+          "type" : "artist",
+          "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+        }, {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/6l3HvQ5sa6mXTsMTB19rO5"
+          },
+          "href" : "https://api.spotify.com/v1/artists/6l3HvQ5sa6mXTsMTB19rO5",
+          "id" : "6l3HvQ5sa6mXTsMTB19rO5",
+          "name" : "J. Cole",
+          "type" : "artist",
+          "uri" : "spotify:artist:6l3HvQ5sa6mXTsMTB19rO5"
+        } ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/4WS18QYpvlKrKB7LtcRg0u"
+        },
+        "href" : "https://api.spotify.com/v1/albums/4WS18QYpvlKrKB7LtcRg0u",
+        "id" : "4WS18QYpvlKrKB7LtcRg0u",
+        "images" : [ {
+          "height" : 640,
+          "url" : "https://i.scdn.co/image/ab67616d0000b27310e785d92d34ddb09fbeb3b3",
+          "width" : 640
+        }, {
+          "height" : 300,
+          "url" : "https://i.scdn.co/image/ab67616d00001e0210e785d92d34ddb09fbeb3b3",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/ab67616d0000485110e785d92d34ddb09fbeb3b3",
+          "width" : 64
+        } ],
+        "is_playable" : true,
+        "name" : "90 Proof (with J. Cole)",
+        "release_date" : "2022-09-30",
+        "release_date_precision" : "day",
+        "total_tracks" : 1,
+        "type" : "album",
+        "uri" : "spotify:album:4WS18QYpvlKrKB7LtcRg0u"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      }, {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/6l3HvQ5sa6mXTsMTB19rO5"
+        },
+        "href" : "https://api.spotify.com/v1/artists/6l3HvQ5sa6mXTsMTB19rO5",
+        "id" : "6l3HvQ5sa6mXTsMTB19rO5",
+        "name" : "J. Cole",
+        "type" : "artist",
+        "uri" : "spotify:artist:6l3HvQ5sa6mXTsMTB19rO5"
+      } ],
+      "disc_number" : 1,
+      "duration_ms" : 208269,
+      "explicit" : true,
+      "external_ids" : {
+        "isrc" : "USUG12207081"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/0vbmYCIWENdYyJ36Q4CdSz"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/0vbmYCIWENdYyJ36Q4CdSz",
+      "id" : "0vbmYCIWENdYyJ36Q4CdSz",
+      "is_local" : false,
+      "is_playable" : true,
+      "name" : "90 Proof (with J. Cole)",
+      "popularity" : 61,
+      "preview_url" : null,
+      "track_number" : 1,
+      "type" : "track",
+      "uri" : "spotify:track:0vbmYCIWENdYyJ36Q4CdSz"
+    }, {
+      "album" : {
+        "album_group" : "single",
+        "album_type" : "single",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+          },
+          "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+          "id" : "1ybINI1qPiFbwDXamRtwxD",
+          "name" : "Smino",
+          "type" : "artist",
+          "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+        } ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/1jCHZ0ggPkFnm5b1r5ZY8V"
+        },
+        "href" : "https://api.spotify.com/v1/albums/1jCHZ0ggPkFnm5b1r5ZY8V",
+        "id" : "1jCHZ0ggPkFnm5b1r5ZY8V",
+        "images" : [ {
+          "height" : 640,
+          "url" : "https://i.scdn.co/image/ab67616d0000b273aa9344be89f46bc45f105727",
+          "width" : 640
+        }, {
+          "height" : 300,
+          "url" : "https://i.scdn.co/image/ab67616d00001e02aa9344be89f46bc45f105727",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/ab67616d00004851aa9344be89f46bc45f105727",
+          "width" : 64
+        } ],
+        "is_playable" : true,
+        "name" : "I Deserve (w/ NOS.)",
+        "release_date" : "2021-11-11",
+        "release_date_precision" : "day",
+        "total_tracks" : 1,
+        "type" : "album",
+        "uri" : "spotify:album:1jCHZ0ggPkFnm5b1r5ZY8V"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1ybINI1qPiFbwDXamRtwxD"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1ybINI1qPiFbwDXamRtwxD",
+        "id" : "1ybINI1qPiFbwDXamRtwxD",
+        "name" : "Smino",
+        "type" : "artist",
+        "uri" : "spotify:artist:1ybINI1qPiFbwDXamRtwxD"
+      }, {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/7iRauMPdOJBF3RiDHKrXTB"
+        },
+        "href" : "https://api.spotify.com/v1/artists/7iRauMPdOJBF3RiDHKrXTB",
+        "id" : "7iRauMPdOJBF3RiDHKrXTB",
+        "name" : "NOS.",
+        "type" : "artist",
+        "uri" : "spotify:artist:7iRauMPdOJBF3RiDHKrXTB"
+      } ],
+      "disc_number" : 1,
+      "duration_ms" : 162858,
+      "explicit" : true,
+      "external_ids" : {
+        "isrc" : "USUM72119182"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/4SqPtAd2irUOyLoLcOFtkl"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/4SqPtAd2irUOyLoLcOFtkl",
+      "id" : "4SqPtAd2irUOyLoLcOFtkl",
+      "is_local" : false,
+      "is_playable" : true,
+      "name" : "I Deserve (w/ NOS.)",
+      "popularity" : 59,
+      "preview_url" : null,
+      "track_number" : 1,
+      "type" : "track",
+      "uri" : "spotify:track:4SqPtAd2irUOyLoLcOFtkl"
+    } ],
+    "limit" : 8,
+    "next" : "https://api.spotify.com/v1/search?query=smino&type=track&market=US&offset=8&limit=8",
+    "offset" : 0,
+    "previous" : null,
+    "total" : 57
+  }
+}

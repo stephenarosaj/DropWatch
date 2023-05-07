@@ -27,9 +27,9 @@ public class Server {
         });
 
     Spark.get("search", new SearchHandler(new SpotifyAPIRequester()));
-    Spark.get("update", new UpdateHandler());
+//    Spark.get("update", new UpdateHandler());
     Spark.get("user_data", new UserDataHandler(new SpotifyAPIRequester()));
-    Spark.get("track", new TrackHandler());
+//    Spark.get("track", new TrackHandler());
 
     Spark.init();
     Spark.awaitInitialization();
