@@ -52,5 +52,4 @@ public record AlbumRecord(
   @Json(name = "artists") List<ArtistRecord> artists,
   @Json(name = "tracks") List<TrackRecord> tracks // NOT returned by search!!!!
 
-) {
-}
+) {}

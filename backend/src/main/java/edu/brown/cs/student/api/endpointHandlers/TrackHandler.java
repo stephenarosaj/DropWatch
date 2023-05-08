@@ -146,7 +146,7 @@ public class TrackHandler implements Route {
         }
         // if not empty, add their releases to our db!
         for (AlbumRecord drop: artistDrops) {
-          this.db.addNewAlbum(drop.artists(), drop.id(), drop.release_date(), drop.release_date_precision(), drop.href(), (drop.images() == null || drop.images().length == 0 ? null : drop.images()[0].url()), drop.name(), drop.type());
+          this.db.addNewAlbum(drop.artists(), drop.id(), drop.release_date(), drop.release_date_precision(), drop.href(), (drop.images() == null || drop.images().length == 0 ? null : drop.images()[0].url()), drop.name(), drop.album_type());
         }
         // commit changes and return
         this.db.commit();

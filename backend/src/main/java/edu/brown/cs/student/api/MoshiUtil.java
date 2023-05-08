@@ -33,10 +33,10 @@ public class MoshiUtil {
   }
 
   /**
-   * Deserializes a buffer JSON into a Location record.
+   * Deserializes a buffer JSON into a SearchRecord.
    *
-   * @param buf A Buffer representing the JSON of the NWS location endpoint.
-   * @return A Location record storing this JSON's attributes.
+   * @param buf A Buffer representing the JSON of the Search results
+   * @return A SearchRecord containing hte search results as objects
    * @throws DeserializeException If an exception has occurred in moshi's methods.
    */
   public static SearchRecord deserializeSearch(Buffer buf) throws DeserializeException {
@@ -45,6 +45,25 @@ public class MoshiUtil {
       Moshi moshi = new Moshi.Builder().build();
       JsonAdapter<SearchRecord> adapter = moshi.adapter(
           Types.newParameterizedType(SearchRecord.class, Artists.class, ArtistRecord.class, Albums.class, AlbumRecord.class, Tracks.class, TrackRecord.class, ImageRecord.class));
+      return adapter.fromJson(buf);
+    } catch (Exception e) {
+      throw new DeserializeException(e.getMessage());
+    }
+  }
+
+  /**
+   * Deserializes a buffer JSON into a ArtistRecord.
+   *
+   * @param buf A Buffer representing the JSON of the /get artist endpoitn results
+   * @return A SearchRecord containing the artist record json as an object
+   * @throws DeserializeException If an exception has occurred in moshi's methods.
+   */
+  public static ArtistRecord deserializeArtistRecord(Buffer buf) throws DeserializeException {
+    try {
+      // make a new moshi adapter and
+      Moshi moshi = new Moshi.Builder().build();
+      JsonAdapter<ArtistRecord> adapter = moshi.adapter(
+        Types.newParameterizedType(ArtistRecord.class, ImageRecord.class));
       return adapter.fromJson(buf);
     } catch (Exception e) {
       throw new DeserializeException(e.getMessage());

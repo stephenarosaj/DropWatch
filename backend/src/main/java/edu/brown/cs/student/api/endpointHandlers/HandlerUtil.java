@@ -6,10 +6,7 @@ import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyAPIRequester
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
 import edu.brown.cs.student.api.exceptions.APIRequestException;
 import edu.brown.cs.student.api.exceptions.DeserializeException;
-import edu.brown.cs.student.api.formats.AlbumRecord;
-import edu.brown.cs.student.api.formats.Albums;
-import edu.brown.cs.student.api.formats.DateRecord;
-import edu.brown.cs.student.api.formats.SearchRecord;
+import edu.brown.cs.student.api.formats.*;
 import okio.Buffer;
 
 import java.io.File;
@@ -87,10 +84,12 @@ public class HandlerUtil {
         if (DateRecord.compareDates(fetchedDate, storedDate) > 0) {
           // fetched date is more recent than stored date!
           try {
+            // add image to our album!
+            album = this.populateAlbumArtistImages(album);
             // add to our list
             artistNewReleases.add(album);
             // add it to our db
-            this.db.addNewAlbum(album.artists(), album.id(), album.release_date(), album.release_date_precision(), album.href(), (album.images() == null || album.images().length == 0 ? null : album.images()[0].url()), album.artists().get(0).name(), album.type());
+            this.db.addNewAlbum(album.artists(), album.id(), album.release_date(), album.release_date_precision(), album.href(), (album.images() == null || album.images().length == 0 ? null : album.images()[0].url()), album.artists().get(0).name(), album.album_group());
           } catch (Exception e) {
             // remove the latest album, continue!
             artistNewReleases.remove(artistNewReleases.size() - 1);
@@ -99,5 +98,24 @@ public class HandlerUtil {
       }
     }
     return artistNewReleases;
+  }
+
+  /**
+   * Helper function that makes request to grab artist images and fill them into
+   * the album object supplied, since spotify's api doesn't give images sometimes
+   * @param album the album whose artist images we want to fill in
+   * @return the same AlbumRecord, but with the images filled in
+   */
+  public AlbumRecord populateAlbumArtistImages(AlbumRecord album) throws APIRequestException, DeserializeException {
+    // collect fixed artists in a List
+    ArrayList<ArtistRecord> fullArtists = new ArrayList<>();
+    // for each artist, make request to their link and grab image!
+    for (int i = 0; i < album.artists().size(); i++) {
+      // make the request and grab results
+      Buffer buf = this.SpotifyAPIRequester.getData(album.artists().get(i).href());
+      ArtistRecord fullArtist = MoshiUtil.deserializeArtistRecord(buf);
+      fullArtists.add(fullArtist);
+    }
+    return new AlbumRecord(album.name(), album.id(), album.type(), album.popularity(), album.href(), album.genres(), album.images(), album.total_tracks(), album.release_date(), album.release_date_precision(), album.restrictions(), album.album_type(), album.album_group(), fullArtists, album.tracks());
   }
 }
