@@ -3,6 +3,8 @@ package edu.brown.cs.student.api.endpointHandlers;
 import edu.brown.cs.student.api.MoshiUtil;
 import edu.brown.cs.student.api.database.DropWatchDB;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
+import edu.brown.cs.student.api.formats.AlbumRecord;
+import edu.brown.cs.student.api.formats.DateRecord;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -40,6 +42,11 @@ public class TrackHandler implements Route {
   private DropWatchDB db;
 
   /**
+   * A few helper methods in this util!
+   */
+  private HandlerUtil util;
+
+  /**
    * Constructor for this class
    */
   public TrackHandler() {
@@ -54,6 +61,8 @@ public class TrackHandler implements Route {
       } else {
         throw new SQLException("ERROR: Couldn't find DropWatchDB.db file!");
       }
+      // give our handler this db!
+      this.util = new HandlerUtil(this.db);
     } catch (Exception e) {
       System.out.println("CRITICAL ERROR: COULD NOT SET UP CONNECTION TO DB '" + filepath + "', ABORTING TrackHandler()!\n");
       System.out.println(e.getMessage());
@@ -126,6 +135,20 @@ public class TrackHandler implements Route {
         // add && !alreadyTracking
         // add to db
         this.db.addTracking(user_id, artist_id);
+        // now check new releases for this artist
+        ArrayList<AlbumRecord> artistDrops = new ArrayList<>();
+        if (this.db.queryArtists(artist_id).size() == 0) {
+          // we don't have this artist in our db yet - need to look at all music as new
+          artistDrops = util.checkNewRelease(artist_id, new DateRecord("0000-00-00", "day"));
+        } else {
+          // this artist already in our db - new music is only from after stored latest release
+          artistDrops = util.checkNewRelease(artist_id, this.db.findLatestRelease(artist_id));
+        }
+        // if not empty, add their releases to our db!
+        for (AlbumRecord drop: artistDrops) {
+          this.db.addNewAlbum(drop.artists(), drop.id(), drop.release_date(), drop.release_date_precision(), drop.href(), (drop.images() == null || drop.images().length == 0 ? null : drop.images()[0].url()), drop.name(), drop.type());
+        }
+        // commit changes and return
         this.db.commit();
         // return success!
         ret.put("data", this.db.queryMultipleArtists(this.db.queryTracking(user_id, true)));

@@ -73,7 +73,7 @@ public record DateRecord(
         // lists are [first image, name of artist, name of album, album type, link, releaseDate, precision]
         DateRecord left = new DateRecord(list1.get(5), list1.get(6));
         DateRecord right = new DateRecord(list2.get(5), list2.get(6));
-        return DateRecord.compareDates(left, right);
+        return DateRecord.compareDates(right, left);
       }
     };
 

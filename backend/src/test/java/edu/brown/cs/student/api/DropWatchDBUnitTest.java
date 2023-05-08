@@ -1,10 +1,8 @@
 package edu.brown.cs.student.api;
 
 import edu.brown.cs.student.api.database.DropWatchDB;
-import edu.brown.cs.student.api.database.sqliteDB;
 import edu.brown.cs.student.api.formats.DateRecord;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -325,18 +323,20 @@ public class DropWatchDBUnitTest {
 
   /**
    * helper function for testing - used to create album arrays on the fly!
-   * @param releaseDate release date of array
-   * @param precision preicsion of release date of array
-   * @param link link in array
+   * @param releaseDate release date of album
+   * @param precision preicsion of release date of album
+   * @param link link in album
+   * @param type the type of the album
    * @return an array representing the album array that would be returned from a query to albums
    */
-  String[] buildAlbumsArray(String releaseDate, String precision, String link, String image, String name) {
-    String[] arr = new String[5];
+  String[] buildAlbumsArray(String releaseDate, String precision, String link, String image, String name, String type) {
+    String[] arr = new String[6];
     arr[0] = releaseDate;
     arr[1] = precision;
     arr[2] = link;
     arr[3] = image;
     arr[4] = name;
+    arr[5] = type;
     return arr;
   }
 
@@ -364,21 +364,21 @@ public class DropWatchDBUnitTest {
       String[] album;
 
       // query albums!
-      album = buildAlbumsArray("2002-02-09", "day", "rosa.com", "rosa.net", "rosa");
+      album = buildAlbumsArray("2002-02-09", "day", "rosa.com", "rosa.net", "rosa", "single");
       assertArrayEquals(db.queryAlbums("1"), album);
-      album = buildAlbumsArray("2002-03-21", "day", "bry.com", "bry.net", "bry");
+      album = buildAlbumsArray("2002-03-21", "day", "bry.com", "bry.net", "bry", "album");
       assertArrayEquals(db.queryAlbums("2"), album);
-      album = buildAlbumsArray("2002-07", "month", "aku.com", "aku.net", "aku");
+      album = buildAlbumsArray("2002-07", "month", "aku.com", "aku.net", "aku", "single");
       assertArrayEquals(db.queryAlbums("3"), album);
-      album = buildAlbumsArray("2002", "year", "maia.com", "maia.net", "maia");
+      album = buildAlbumsArray("2002", "year", "maia.com", "maia.net", "maia", "album");
       assertArrayEquals(db.queryAlbums("4"), album);
-      album = buildAlbumsArray("2002-02", "month", "rosashort.com", "rosashort.net", "rosa");
+      album = buildAlbumsArray("2002-02", "month", "rosashort.com", "rosashort.net", "rosa", "single");
       assertArrayEquals(db.queryAlbums("5"), album);
-      album = buildAlbumsArray("2002-03", "month", "bryshort.com", "bryshort.net", "bry");
+      album = buildAlbumsArray("2002-03", "month", "bryshort.com", "bryshort.net", "bry", "album");
       assertArrayEquals(db.queryAlbums("6"), album);
-      album = buildAlbumsArray("2001", "year", "2001.com", null, "2001");
+      album = buildAlbumsArray("2001", "year", "2001.com", null, "2001", "compilation");
       assertArrayEquals(db.queryAlbums("7"), album);
-      album = buildAlbumsArray("2003", "year", "2003.com", null, "2003");
+      album = buildAlbumsArray("2003", "year", "2003.com", null, "2003", "compilation");
       assertArrayEquals(db.queryAlbums("8"), album);
 
       // check not exists!
@@ -402,17 +402,17 @@ public class DropWatchDBUnitTest {
       assertEquals(0, db.queryAlbums("a").length);
 
       // add some albums!
-      assertTrue(db.insertOrReplaceAlbums("a", "2020", "year", "a.com", "a.net", "mr.a"));
-      assertTrue(db.insertOrReplaceAlbums("b", "2021", "year", "b.com", "b.net", "ms.b"));
-      assertTrue(db.insertOrReplaceAlbums("c", "2022", "year", "c.com", "c.net", "dr.c"));
+      assertTrue(db.insertOrReplaceAlbums("a", "2020", "year", "a.com", "a.net", "mr.a", "single"));
+      assertTrue(db.insertOrReplaceAlbums("b", "2021", "year", "b.com", "b.net", "ms.b", "album"));
+      assertTrue(db.insertOrReplaceAlbums("c", "2022", "year", "c.com", "c.net", "dr.c", "single"));
 
       // verify they're there!
       String[] album;
-      album = buildAlbumsArray("2020", "year", "a.com", "a.net", "mr.a");
+      album = buildAlbumsArray("2020", "year", "a.com", "a.net", "mr.a", "single");
       assertArrayEquals(db.queryAlbums("a"), album);
-      album = buildAlbumsArray("2021", "year", "b.com", "b.net", "ms.b");
+      album = buildAlbumsArray("2021", "year", "b.com", "b.net", "ms.b", "album");
       assertArrayEquals(db.queryAlbums("b"), album);
-      album = buildAlbumsArray("2022", "year", "c.com", "c.net", "dr.c");
+      album = buildAlbumsArray("2022", "year", "c.com", "c.net", "dr.c", "single");
       assertArrayEquals(db.queryAlbums("c"), album);
 
       // verify no false albums!
@@ -433,17 +433,17 @@ public class DropWatchDBUnitTest {
       assertEquals(0, db.queryAlbums("a").length);
 
       // add some albums!
-      assertTrue(db.insertOrReplaceAlbums("a", "2020", "year", "a.com", "a.net", "mr.a"));
-      assertTrue(db.insertOrReplaceAlbums("b", "2021", "year", "b.com", "b.net", "ms.b"));
-      assertTrue(db.insertOrReplaceAlbums("c", "2022", "year", "c.com", "c.net", "dr.c"));
+      assertTrue(db.insertOrReplaceAlbums("a", "2020", "year", "a.com", "a.net", "mr.a", "single"));
+      assertTrue(db.insertOrReplaceAlbums("b", "2021", "year", "b.com", "b.net", "ms.b", "album"));
+      assertTrue(db.insertOrReplaceAlbums("c", "2022", "year", "c.com", "c.net", "dr.c", "single"));
 
       // verify they're there!
       String[] album;
-      album = buildAlbumsArray("2020", "year", "a.com", "a.net", "mr.a");
+      album = buildAlbumsArray("2020", "year", "a.com", "a.net", "mr.a", "single");
       assertArrayEquals(db.queryAlbums("a"), album);
-      album = buildAlbumsArray("2021", "year", "b.com", "b.net", "ms.b");
+      album = buildAlbumsArray("2021", "year", "b.com", "b.net", "ms.b", "album");
       assertArrayEquals(db.queryAlbums("b"), album);
-      album = buildAlbumsArray("2022", "year", "c.com", "c.net", "dr.c");
+      album = buildAlbumsArray("2022", "year", "c.com", "c.net", "dr.c", "single");
       assertArrayEquals(db.queryAlbums("c"), album);
 
       // now remove some stuff!
@@ -452,9 +452,9 @@ public class DropWatchDBUnitTest {
       // verify its gone/stuff is still there!
       album = new String[0];
       assertArrayEquals(db.queryAlbums("a"), album);
-      album = buildAlbumsArray("2021", "year", "b.com", "b.net", "ms.b");
+      album = buildAlbumsArray("2021", "year", "b.com", "b.net", "ms.b", "album");
       assertArrayEquals(db.queryAlbums("b"), album);
-      album = buildAlbumsArray("2022", "year", "c.com", "c.net", "dr.c");
+      album = buildAlbumsArray("2022", "year", "c.com", "c.net", "dr.c", "single");
       assertArrayEquals(db.queryAlbums("c"), album);
 
       // remove more
@@ -464,7 +464,7 @@ public class DropWatchDBUnitTest {
       album = new String[0];
       assertArrayEquals(db.queryAlbums("a"), album);
       assertArrayEquals(db.queryAlbums("c"), album);
-      album = buildAlbumsArray("2021", "year", "b.com", "b.net", "ms.b");
+      album = buildAlbumsArray("2021", "year", "b.com", "b.net", "ms.b", "album");
       assertArrayEquals(db.queryAlbums("b"), album);
 
       // make sure returns false if try to remove again, or remove non-existent entry

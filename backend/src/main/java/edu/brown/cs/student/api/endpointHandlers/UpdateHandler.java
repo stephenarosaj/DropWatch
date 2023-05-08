@@ -46,6 +46,11 @@ public class UpdateHandler implements Route {
     private DropWatchDB db;
 
     /**
+     * A few helper methods in this util!
+     */
+    private HandlerUtil util;
+
+    /**
      * Constructor for this class
      */
     public UpdateHandler() {
@@ -60,6 +65,8 @@ public class UpdateHandler implements Route {
             } else {
                 throw new SQLException("ERROR: Couldn't find DropWatchDB.db file!");
             }
+            // give our handler this db!
+            this.util = new HandlerUtil(this.db);
         } catch (Exception e) {
             System.out.println("CRITICAL ERROR: COULD NOT SET UP CONNECTION TO DB '" + filepath + "', ABORTING UpdateHandler()!\n");
             System.out.println(e.getMessage());
@@ -67,55 +74,6 @@ public class UpdateHandler implements Route {
         }
     }
 
-    /**
-     * Function that checks for a new release
-     * @param artist_id the artist who we want to check
-     * @return if there is a new release, returns a list of DateRecords, the first
-     * entry being the new DateRecord and the second being the old DateRecord. null otherwise!
-     */
-    public ArrayList<AlbumRecord> checkNewRelease(String artist_id, DateRecord storedDate) throws APIRequestException, DeserializeException {
-        // make our return list
-        ArrayList<AlbumRecord> artistNewReleases = new ArrayList<>();
-        // make the request!
-        // we want just 1 album/single/appears_on/compilation - the most recent one!
-        String[] groups = new String[4];
-        groups[0] = "album";
-        groups[1] = "single";
-        groups[2] = "appears_on";
-        groups[3] = "compilation";
-        // for each group, check newest release
-        for (int i = 0; i < 4; i++) {
-            String urlString = "https://api.spotify.com/v1/artists/"
-              + artist_id + "/albums?"
-              + "&market=US"
-              + "&limit=" + 4
-              + "&offset=0"
-              + "&include_groups=" + groups[i];
-            // make the request and grab results
-            Buffer buf = this.SpotifyAPIRequester.getData(urlString);
-            SearchRecord.Albums albums = MoshiUtil.deserializeUpdate(buf);
-
-            // for each album in the results, if the release date is newer, add it to our db and artistNewReleases!
-            for (AlbumRecord album: albums.items()) {
-                // grab release date
-                DateRecord fetchedDate = new DateRecord(album.release_date(), album.release_date_precision());
-                // compare fetched and stored dates!
-                if (DateRecord.compareDates(fetchedDate, storedDate) > 0) {
-                    // fetched date is more recent than stored date!
-                    try {
-                        // add to our list
-                        artistNewReleases.add(album);
-                        // add it to our db
-                        this.db.addNewAlbum(album.artists(), album.id(), album.release_date(), album.release_date_precision(), album.href(), (album.images().length == 0 ? null : album.images()[0].url()), album.artists().get(0).name());
-                    } catch (Exception e) {
-                        // remove the latest album, continue!
-                        artistNewReleases.remove(artistNewReleases.size() - 1);
-                    }
-                }
-            }
-        }
-        return artistNewReleases;
-    }
 
     /***
      * Handles calls to update endpoint. Refreshes database to have most updated
@@ -142,7 +100,7 @@ public class UpdateHandler implements Route {
                 return MoshiUtil.serialize(ret, "ERROR: /update endpoint requires exactly 1 param, but received " + nParams);
             }
 
-            // error check params - we should have user
+            // error check params - we should have user_id
             if (user_id == null) {
                 // return error!
                 return MoshiUtil.serialize(ret, "ERROR: /update endpoint requires param 'user_id', but did not receive it");
@@ -161,7 +119,7 @@ public class UpdateHandler implements Route {
 
                 // collect new releases for this artist in a list!
                 ArrayList<AlbumRecord> artistNewReleases;
-                if ((artistNewReleases = checkNewRelease(artist_id, storedDate)).size() != 0) {
+                if ((artistNewReleases = util.checkNewRelease(artist_id, storedDate)).size() != 0) {
                     // update drops so that we can return the frontend some new info!
                     drops.put(artist_id, artistNewReleases);
                 }

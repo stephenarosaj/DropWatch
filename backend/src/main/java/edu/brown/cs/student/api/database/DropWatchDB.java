@@ -154,10 +154,10 @@ public class DropWatchDB {
    * artists release
    * EXAMPLE:
    *                    albums
-   * album_id |  releaseDate | precision |  link | image
-   *    1     |  2020-10-06  |    day    | a.com | a.net
-   *    2     |     04-05    |   month   | b.com | b.net
-   *    3     |     2021     |   year    | c.com | NULL
+   * album_id |  releaseDate | precision |  link | image |  type
+   *    1     |  2020-10-06  |    day    | a.com | a.net | single
+   *    2     |     04-05    |   month   | b.com | b.net | album
+   *    3     |     2021     |   year    | c.com | NULL  | single
    * albums(album_id = 1) --> (2020-10-06, day, a)
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not check for/create tracking table
@@ -171,7 +171,8 @@ public class DropWatchDB {
       "precision VARCHAR(5)," + // precision - the precision of the latest release date - year, month, or day
       "link VARCHAR(100)," + // link - the link to get more info about an album
       "image VARCHAR(100)," + // image - link to first image of album (null if none)
-      "name VARCHAR(100)"; // name - first name on album
+      "name VARCHAR(100)," + // name - first name on album
+      "type VARCHAR(11)"; // type - type of album - single or album
     if (!db.tableExists(albumsName)) {
       db.createNewTable(albumsName, albumsSchema);
     }
@@ -329,19 +330,20 @@ public class DropWatchDB {
   public String[] queryAlbums(String album_id) throws SQLException, ClassNotFoundException {
     // execute our query!
     String sqlQuery = "" +
-      "SELECT releaseDate, precision, link, image, name FROM albums " +
+      "SELECT releaseDate, precision, link, image, name, type FROM albums " +
       "WHERE album_id  = \"" + album_id + "\";";
     try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
       // collect the results as an array
       String[] ret;
       if (result.next()) {
         // we have resulst!
-        ret = new String[5];
+        ret = new String[6];
         ret[0] = result.getString(1);
         ret[1] = result.getString(2);
         ret[2] = result.getString(3);
         ret[3] = result.getString(4);
         ret[4] = result.getString(5);
+        ret[5] = result.getString(6);
       } else {
         // we don't have results!
         ret = new String[0];
@@ -393,15 +395,16 @@ public class DropWatchDB {
    * @param link the link to get more info about the album
    * @param image the link to the first image of the album (null if none)
    * @param name the first name on the album
+   * @param type the type of the album
    * @return a boolean indicating success or failure
    * @throws ClassNotFoundException if could not load SQLite JDBC driver
    * @throws SQLException if could not insert into latest release table
    */
-  public boolean insertOrReplaceAlbums(String album_id, String releaseDate, String precision, String link, String image, String name) throws SQLException, ClassNotFoundException {
+  public boolean insertOrReplaceAlbums(String album_id, String releaseDate, String precision, String link, String image, String name, String type) throws SQLException, ClassNotFoundException {
     // make our statement!
     String SQLStatement = "" +
       "INSERT OR REPLACE INTO albums VALUES (" +
-      "\"" + album_id + "\", \"" + releaseDate + "\", \"" + precision + "\", \"" + link + "\", \"" + (image == null ? "null" : image) + "\", \"" + name + "\");";
+      "\"" + album_id + "\", \"" + releaseDate + "\", \"" + precision + "\", \"" + link + "\", \"" + (image == null ? "null" : image) + "\", \"" + name + "\", \"" + type + "\");";
 
     // execute our statement!
     Pair<Boolean, Statement> ret;
@@ -409,7 +412,7 @@ public class DropWatchDB {
       if (ret.first() || (statement.getUpdateCount() != 1)) {
         // result set returned or wrong number for updateCount - ERROR!
         statement.close();
-        throw new SQLException("ERROR: Insert into DropWatchDB albums table ('" + album_id + "', '" + releaseDate + "', '" + precision + "', " + link + "', '" + (image == null ? "null" : image) + "', '" + name + "') FAILED");
+        throw new SQLException("ERROR: Insert into DropWatchDB albums table ('" + album_id + "', '" + releaseDate + "', '" + precision + "', " + link + "', '" + (image == null ? "null" : image) + "', '" + name + "', '" + type + "') FAILED");
       }
       // executed successfully
       statement.close();
@@ -682,15 +685,18 @@ public class DropWatchDB {
    * @param link a link to get more data about the album
    * @param image a link to the first image of the album
    * @param name the name of the first artist of the album
+   * @param type the type of the album
    * @return boolean indicating success or failure
    */
-  public boolean addNewAlbum(List<ArtistRecord> artist_ids, String album_id, String releaseDate, String releaseDatePrecision, String link, String image, String name) throws SQLException, ClassNotFoundException {
+  public boolean addNewAlbum(List<ArtistRecord> artist_ids, String album_id, String releaseDate, String releaseDatePrecision, String link, String image, String name, String type) throws SQLException, ClassNotFoundException {
     // add the album to our db!
-    insertOrReplaceAlbums(album_id, releaseDate, releaseDatePrecision, link, image, name);
+    insertOrReplaceAlbums(album_id, releaseDate, releaseDatePrecision, link, image, name, type);
+
+    // now add the artists to our db, and the relationship between this album and that artist!
     for (ArtistRecord artist: artist_ids) {
       // for each artist:
       // add the artist to our db if it's not already there
-      insertOrReplaceArtists(artist.id(), artist.href(), (artist.images().length == 0 ? null : artist.images()[0].url()), artist.name());
+      insertOrReplaceArtists(artist.id(), artist.href(), (artist.images() == null || artist.images().length == 0 ? null : artist.images()[0].url()), artist.name());
       // add the artist to our relationship table if it's not already there
       insertOrReplaceArtistAlbums(artist.id(), album_id);
     }
