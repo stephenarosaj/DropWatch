@@ -4,11 +4,14 @@ import edu.brown.cs.student.api.database.sqliteDB;
 import org.junit.jupiter.api.*;
 import org.testng.internal.collections.Pair;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -780,6 +783,161 @@ public class SQLiteDBUnitTest {
       assertThrows(SQLException.class, () -> {
         db.executeSQLStatement(SQLStatement2);
       }, "ERROR: Couldn't execute SQLQuery\n" + "+'DROP TABLES \"test\"':\n" + "[SQLITE_ERROR] SQL error or missing database (near \"TABLES\": syntax error)");
+    } catch (Exception e) {
+      // shouldn't error...
+      fail(e.getMessage());
+    }
+  }
+
+  /**
+   * helper method to build random sqlite3 name
+   * @return the random name of random length
+   */
+  public String randomName() {
+    Random random = new Random();
+
+    int length = 5 + random.nextInt(15);
+
+    StringBuilder name = new StringBuilder();
+    for (int i = 0; i < length; i++) {
+      char[] character = new char[1];
+      int charTypeSelector = random.nextInt(3);
+      if (charTypeSelector == 0) {
+        // == 0 --> a-z
+        int dist = random.nextInt(26);
+        character[0] = (char) ('a' +  dist);
+      } else if (charTypeSelector == 1) {
+        // == 1 --> A-Z
+        int dist = random.nextInt(26);
+        character[0] = (char) ('A' +  dist);
+      } else {
+        // == 3 --> $ or _
+        if (i == 0) {
+          // if first letter, $ will cause an error for table name or column name
+          character[0] = '_';
+        } else {
+          // not first letter - do whatever
+          int dist = random.nextInt(2);
+          if (dist == 0) {
+            character[0] = '$';
+          } else {
+            character[0] = '_';
+          }
+        }
+      }
+      name.append(new String(character));
+    }
+    return name.toString();
+  }
+
+  /**
+   * generates a schema with a random # of columns, with random names, and
+   * random types (from preselected list)
+   * NOTE: the last column will always be a col named END$END$END with type NULL
+   * @return a string representing a random schema
+   */
+  public String randomSchema() {
+    Random random = new Random();
+
+    // pick random number of columns
+    int nCols = random.nextInt(15);
+
+    // create possible types
+    String[] types = new String[11];
+    types[0] = "INTEGER";
+    types[1] = "REAL";
+    types[2] = "NUMERIC";
+    types[3] = "TEXT";
+    types[4] = "BLOB";
+    types[5] = "VARCHAR(5)";
+    types[6] = "VARCHAR(10)";
+    types[7] = "VARCHAR(20)";
+    types[8] = "VARCHAR(50)";
+    types[9] = "VARCHAR(100)";
+    types[10] = "NULL";
+
+    // randomly pick names and types, and build schema
+    StringBuilder schema = new StringBuilder();
+    for (int j = 0; j < nCols - 1; j++) {
+      // pick random col name!
+      String colName = randomName();
+
+      // pick a random type
+      String type = types[random.nextInt(11)];
+      // add to schema!
+      schema.append(colName).append(" ").append(type).append(", ");
+    }
+    return schema.append("END$END$END NULL").toString();
+  }
+
+  @Test
+  void test_RandomCreate() {
+    // NOTE: Run this random test, then check the "randomCreate.txt" file in this
+    // test file's directory. the output will be of the form
+    //
+    // i   - <"SUCCESS" or "SQLException" or "CRITICAL ERROR">
+    //     Name: <table name>
+    //     Schema: <schema>
+    // Error: <error message, if any>
+    // <error message, cont.>
+    //
+    // where i is the # test ran out of nIterations, and the rest is self-explanatory
+    //
+    // It's expected that we have not have many SQLExceptions, because we're preventing
+    // ones that are common during random testing by removing the possibility of starting
+    // a name with "$" or letting a name be length 0. HOWEVER, we can still have them
+    // from collisions during name generation. This number should be small though -
+    // manually inspect to see if this is the case!
+    //
+    // Also, we should have NO CRITICAL ERRORS!
+
+    // grab windows/mac path
+    String randomCreateFilepath = "src/test/java/edu/brown/cs/student/api/randomCreate.txt";
+    if (!(new File(randomCreateFilepath).exists())) {
+      randomCreateFilepath = "backend/" + randomCreateFilepath;
+    }
+    // open file writer to write results
+    try (FileWriter fileWriter = new FileWriter(randomCreateFilepath, false);
+         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)){
+      // remove DB if it exists, then remake it, then check it really exists
+      createEmptyTestDB();
+      // create source of randomness
+      Random random = new Random();
+
+      // iterate n times
+      int nIterations = 1000;
+      for (int i = 0; i < nIterations; i++) {
+
+        // pick random table name!
+        String tableName = randomName();
+
+        // generate random schema
+        String schema = randomSchema();
+
+        // create table!
+        String output = null;
+        String errorMessage = null;
+        try {
+          db.createNewTable(tableName, schema);
+        } catch (SQLException e) {
+          output = "SQLException";
+          errorMessage = e.getMessage();
+        } catch (Exception e) {
+          output = "CRITICAL ERROR";
+          errorMessage = e.getMessage();
+        } finally {
+          // write input and output!
+          String formattedOutput = String.format("%1$-12s", (output == null ? "SUCCESS" : output));
+          String formattedIndex = String.format("%1$-3s", i);
+          String toWrite = "\n---================================---\n\n" +
+                           formattedIndex + " - " + formattedOutput + "\n" +
+                           "    Name: " + tableName + "\n" +
+                           "    Schema: " + schema + "\n" +
+                           (errorMessage == null ? "" : "Error: " + errorMessage + "\n");
+          bufferedWriter.write(toWrite);
+        }
+      }
+
     } catch (Exception e) {
       // shouldn't error...
       fail(e.getMessage());
