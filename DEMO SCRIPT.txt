@@ -1,0 +1,56 @@
+Track Tyler: 
+http://localhost:3232/track?user_id=☯nataliaa☯&artist_id=4V8LLVI7PbaPR0K2TGSxFF&operation=add
+
+---------------------------------------------------------------------------------------------------
+
+Track JID: 
+http://localhost:3232/track?user_id=☯nataliaa☯&artist_id=6U3ybJ9UHNKEdsH7ktGBZ7&operation=add
+
+---------------------------------------------------------------------------------------------------
+
+Track 21: 
+http://localhost:3232/track?user_id=☯nataliaa☯&artist_id=1URnnhqYAYcrqrcwql10ft&operation=add
+
+---------------------------------------------------------------------------------------------------
+
+Query Tracking: 
+http://localhost:3232/track?user_id=☯nataliaa☯&artist_id=null&operation=query
+
+---------------------------------------------------------------------------------------------------
+
+Delete 21: 
+http://localhost:3232/track?user_id=☯nataliaa☯&artist_id=1URnnhqYAYcrqrcwql10ft&operation=delete
+
+---------------------------------------------------------------------------------------------------
+
+Delete JID: 
+http://localhost:3232/track?user_id=☯nataliaa☯&artist_id=6U3ybJ9UHNKEdsH7ktGBZ7&operation=delete
+
+---------------------------------------------------------------------------------------------------
+
+Query Tracking: 
+http://localhost:3232/track?user_id=☯nataliaa☯&artist_id=null&operation=query
+
+---------------------------------------------------------------------------------------------------
+
+Check drops: 
+http://localhost:3232/drops?user_id=☯nataliaa☯
+
+---------------------------------------------------------------------------------------------------
+
+Update new drops: 
+http://localhost:3232/update?user_id=☯nataliaa☯
+
+-- DELETE 4 MOST RECENT TYLER ALBUMS:    
+WITH recentAlbums AS (
+    SELECT album_id FROM albums
+    ORDER BY releaseDate DESC
+    LIMIT 4
+)
+DELETE FROM "albums" WHERE 
+    album_id IN recentAlbums;
+
+---------------------------------------------------------------------------------------------------
+
+Update new drops: 
+http://localhost:3232/update?user_id=☯nataliaa☯
