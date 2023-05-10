@@ -116,9 +116,13 @@ function App() {
       <Welcome isLoggedIn={isLoggedIn} username={username}/>
       <DropWatch artists={artists} isLoggedIn={isLoggedIn} setArtists={setArtists}/>
       {/* <RecentDrops drops={drops} isLoggedIn={isLoggedIn}/> */}
-      <Search isLoggedIn={isLoggedIn}/>
+      <Search isLoggedIn={isLoggedIn} trackedArtists={artists} setArtists={setArtists}/>
       <SavedPlaylists isLoggedIn={isLoggedIn} playlists={playlists}/>
-      <Followed isLoggedIn={isLoggedIn} followed_artists={followed}/>
+      <Followed 
+        isLoggedIn={isLoggedIn} 
+        followed_artists={followed} 
+        trackedArtists={artists} 
+        setArtists={setArtists}/>
     </div>
 
     

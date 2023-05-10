@@ -87,7 +87,7 @@ export async function fetchAccessToken(
         .then(response => {
           console.log("LOGIN: ")
           console.log(response)
-          // setArtists([...response])
+          setArtists([...response])
           
         }
         )

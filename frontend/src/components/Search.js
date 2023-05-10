@@ -15,18 +15,24 @@ function Search(props) {
       <div></div>
     )
   }
+
+  function isTracked(id) {
+    let tracked = false
+    let tracked_artists = props.trackedArtists
+    let i = 0
+    while(!tracked && i < tracked_artists.length) {
+      tracked = props.trackedArtists[i][0].includes(id)
+      i+=1
+    }
+    return tracked
+  }
   
   async function handleSubmit() {
-    console.log("textBox: " + textBox)
 
     search(textBox).then(response => {
-        console.log(response)
         renderResults(response)
       }
     )
-    // let results = await search(textBox)
-    // console.log(results)
-    // renderResults(results)
     setTextBox("")
   }
 
@@ -35,19 +41,19 @@ function Search(props) {
     let artist= null 
     let type = item.type
     let name = null
+    let artistTracked = false
     if(type === "track") {
-      console.log("length: " + item.album.images.length)
       if(item.album.images.length !== 0) {
         image = item.album.images[0].url
       }
-      artist = item.artists[0].name
+      artist = item.artists[0]
       name = item.name
     } else {
-      console.log(item)
       if(item.images.length !== 0) {
         image = item.images[0].url
       }
-      artist = item.name
+      artist = item
+      artistTracked = isTracked(artist.id)
     }
     return (
       <Col key={i}>
@@ -56,13 +62,15 @@ function Search(props) {
           artist={artist}
           type={type}
           name={name}
+          trackedArtists={props.trackedArtists}
+          setArtists={props.setArtists}
+          isTracked={artistTracked}
         />
       </Col>
     )
   }
 
   function renderResults(results) {
-    console.log(results)
     if(results !== undefined) {
       if(results.length === 0) {
         setMiddle(
@@ -98,9 +106,8 @@ function Search(props) {
       </div>
       <div>
         <input
-          aria-description={"Search for songs and artists here!"}
           aria-live={"off"}
-          role={"textbox"}
+          aria-label="Search for artists and songs here!"
           type="text"
           placeholder={"Search"}
           className="search-input-box" 

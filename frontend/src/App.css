@@ -475,6 +475,7 @@ h3 {
 ::placeholder {
   color: black;
 }
-.not-done {
-  color: #ffffff
+
+.track-button {
+  margin: 10px;
 }

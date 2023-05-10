@@ -1,5 +1,5 @@
 import {Card, Col, Row, Container} from 'react-bootstrap';
-import Artist from './Artist';
+import FollowedArtist from './FollowedArtist';
 
 /**
  * Component to generate the section for Followed artists
@@ -10,8 +10,22 @@ import Artist from './Artist';
 // TRACK: ONLY RENDER UNTRACK BUTTON IF THE ARTIST IS IN OUR TRACKED ARTISTS ALREADY
 // ONLY RENDER TRACK BUTTON IF THE ARTIST IS NOT IN OUR TRACKED ARTISTS
 
+
 function Followed(props) {
+
+  function isTracked(id) {
+    let tracked = false
+    let tracked_artists = props.trackedArtists
+    let i = 0
+    while(!tracked && i < tracked_artists.length) {
+      tracked = props.trackedArtists[i][0].includes(id)
+      i+=1
+    }
+    return tracked
+  }
+
   let middle = null
+
   if(!props.isLoggedIn) {
     return (
       <div>
@@ -30,7 +44,13 @@ function Followed(props) {
           <Row xs={1} md={2} className="g-4">
             {props.followed_artists.map((item, i) => (
               <Col key={i}>
-                <Artist artist={item} class='followed-artist'/>
+                <FollowedArtist 
+                  name={item.name} 
+                  image={item.images[0].url}
+                  id={item.id}
+                  isTracked={isTracked(item.id)}
+                  setArtists={props.setArtists}
+                  class='followed-artist'/>
               </Col>
             ))}
           </Row>
