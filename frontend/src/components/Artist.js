@@ -7,18 +7,13 @@ import track from "../functions/track";
  * @returns an artist component that generates an image and name for an artist to be rendered
  */
 function Artist(props) {
-  console.log(props)
   async function handleTrack(operation) {
-    console.log(props)
     track(props.id, operation)
       .then(response => {
-        console.log(response)
         props.setArtists(response)
       }
       )
   }
-
-  // console.log(props.)
   return (
     <Container fluid>
       <Row xs={2}>
