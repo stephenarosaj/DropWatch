@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HandlerUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.endpointHandlers</a> &gt; <span class="el_source">HandlerUtil.java</span></div><h1>HandlerUtil.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api.endpointHandlers;
+
+import static java.lang.System.exit;
+
+import edu.brown.cs.student.api.MoshiUtil;
+import edu.brown.cs.student.api.database.DropWatchDB;
+import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyAPIRequester;
+import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
+import edu.brown.cs.student.api.exceptions.APIRequestException;
+import edu.brown.cs.student.api.exceptions.DeserializeException;
+import edu.brown.cs.student.api.formats.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import okio.Buffer;
+
+public class HandlerUtil {
+
+  /** The spotify data source for this UpdateHandler class - holds responses from the spotify API */
+  private SpotifyDataSource SpotifyAPIRequester;
+
+  /** The filepath for our DropWatchDB! */
+  private String filepath = &quot;data/DropWatchDB.db&quot;;
+
+  /** The db we use to store stuff! */
+  private DropWatchDB db;
+
+  /** Constructor for this class */
+  public HandlerUtil(DropWatchDB db) {
+<span class="nc" id="L29">    try {</span>
+      this.SpotifyAPIRequester = new SpotifyAPIRequester();
+      this.db = db;
+    } catch (Exception e) {
+      System.out.println(
+          &quot;CRITICAL ERROR: COULD NOT SET UP CONNECTION TO DB '&quot;
+              + filepath
+              + &quot;', ABORTING HandlerUtil() creation!\n&quot;);
+      System.out.println(e.getMessage());
+      exit(1);
+<span class="nc" id="L39">    }</span>
+  }
+<span class="nc" id="L41"></span>
+<span class="nc" id="L42">  /**</span>
+<span class="nc" id="L43">   * Function that checks for a new release</span>
+<span class="nc" id="L44">   *</span>
+<span class="nc" id="L45">   * @param artist_id the artist who we want to check</span>
+<span class="nc" id="L46">   * @return if there is a new release, returns a list of DateRecords, the first entry being the new</span>
+<span class="nc" id="L47">   *     DateRecord and the second being the old DateRecord. null otherwise!</span>
+<span class="nc" id="L48">   */</span>
+  public ArrayList&lt;AlbumRecord&gt; checkNewRelease(String artist_id, DateRecord storedDate)
+      throws APIRequestException, DeserializeException, SQLException, ClassNotFoundException {
+    // make our return list
+    ArrayList&lt;AlbumRecord&gt; artistNewReleases = new ArrayList&lt;&gt;();
+    // make the request!
+    // we want just 1 album/single/appears_on/compilation - the most recent one!
+    String[] groups = new String[4];
+    groups[0] = &quot;album&quot;;
+    groups[1] = &quot;single&quot;;
+<span class="nc" id="L58">    groups[2] = &quot;appears_on&quot;;</span>
+    groups[3] = &quot;compilation&quot;;
+    // for each group, check newest release
+<span class="nc" id="L61">    // NOTE: only check for first 2 because the other two bring in such bs results...</span>
+<span class="nc" id="L62">    for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L63">      String urlString =</span>
+<span class="nc" id="L64">          &quot;https://api.spotify.com/v1/artists/&quot;</span>
+<span class="nc" id="L65">              + artist_id</span>
+              + &quot;/albums?&quot;
+              + &quot;&amp;market=US&quot;
+<span class="nc bnc" id="L68" title="All 2 branches missed.">              + &quot;&amp;limit=&quot;</span>
+<span class="nc" id="L69">              + 4</span>
+              + &quot;&amp;offset=0&quot;
+              + &quot;&amp;include_groups=&quot;
+              + groups[i];
+      // make the request and grab results
+      Buffer buf = this.SpotifyAPIRequester.getData(urlString);
+      Albums albums = MoshiUtil.deserializeUpdate(buf);
+<span class="nc" id="L76"></span>
+<span class="nc" id="L77">      // for each album in the results, if the release date is newer, add it to our db and</span>
+      // artistNewReleases!
+      for (AlbumRecord album : albums.items()) {
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        // grab release date</span>
+        DateRecord fetchedDate =
+<span class="nc" id="L82">            new DateRecord(album.release_date(), album.release_date_precision());</span>
+        // compare fetched and stored dates!
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        if (DateRecord.compareDates(fetchedDate, storedDate) &gt; 0) {</span>
+          // fetched date is more recent than stored date!
+          try {
+            // add image to our album!
+<span class="nc" id="L88">            album = this.populateAlbumArtistImages(album);</span>
+            // add to our list
+<span class="nc" id="L90">            artistNewReleases.add(album);</span>
+            // add it to our db
+<span class="nc bnc" id="L92" title="All 4 branches missed.">            this.db.addNewAlbum(</span>
+<span class="nc" id="L93">                album.artists(),</span>
+                album.id(),
+<span class="nc" id="L95">                album.release_date(),</span>
+<span class="nc" id="L96">                album.release_date_precision(),</span>
+                album.href(),
+<span class="nc" id="L98">                (album.images() == null || album.images().length == 0</span>
+                    ? null
+<span class="nc" id="L100">                    : album.images()[0].url()),</span>
+                album.artists().get(0).name(),
+                album.album_group());
+          } catch (Exception e) {
+            // remove the latest album, continue!
+            artistNewReleases.remove(artistNewReleases.size() - 1);
+          }
+        }
+      }
+    }
+    return artistNewReleases;
+<span class="nc" id="L111">  }</span>
+
+<span class="nc bnc" id="L113" title="All 2 branches missed.">  /**</span>
+   * Helper function that makes request to grab artist images and fill them into the album object
+<span class="nc" id="L115">   * supplied, since spotify's api doesn't give images sometimes</span>
+<span class="nc" id="L116">   *</span>
+<span class="nc" id="L117">   * @param album the album whose artist images we want to fill in</span>
+   * @return the same AlbumRecord, but with the images filled in
+<span class="nc" id="L119">   */</span>
+  public AlbumRecord populateAlbumArtistImages(AlbumRecord album)
+      throws APIRequestException, DeserializeException {
+    // collect fixed artists in a List
+    ArrayList&lt;ArtistRecord&gt; fullArtists = new ArrayList&lt;&gt;();
+    // for each artist, make request to their link and grab image!
+    for (int i = 0; i &lt; album.artists().size(); i++) {
+      // make the request and grab results
+      Buffer buf = this.SpotifyAPIRequester.getData(album.artists().get(i).href());
+      ArtistRecord fullArtist = MoshiUtil.deserializeArtistRecord(buf);
+      fullArtists.add(fullArtist);
+    }
+    return new AlbumRecord(
+        album.name(),
+        album.id(),
+        album.type(),
+        album.popularity(),
+        album.href(),
+        album.genres(),
+        album.images(),
+        album.total_tracks(),
+        album.release_date(),
+        album.release_date_precision(),
+        album.restrictions(),
+        album.album_type(),
+        album.album_group(),
+        fullArtists,
+        album.tracks());
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

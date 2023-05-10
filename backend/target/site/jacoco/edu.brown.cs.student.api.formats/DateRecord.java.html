@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DateRecord.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.formats</a> &gt; <span class="el_source">DateRecord.java</span></div><h1>DateRecord.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api.formats;
+
+import com.squareup.moshi.Json;
+import java.util.ArrayList;
+import java.util.Comparator;
+
+/***
+ * Record to hold date information (for Tracks and Albums).
+ * REFERENCE: https://developer.spotify.com/documentation/web-api/reference/get-track
+ * @param release_date &quot;The date the album was first released.&quot;
+ * @param release_date_precision &quot;The precision with which release_date value is known.&quot;
+ */
+public record DateRecord(
+    @Json(name = &quot;release_date&quot;) String release_date,
+<span class="pc" id="L15">    @Json(name = &quot;release_date_precision&quot;) String release_date_precision) {</span>
+
+  /**
+   * Comparison function for dates. Returns an int indicating which date is more recent, or 0 if
+   * they are the same. If the precision are the same (for example, we have 1-2-3 and 4-5-6) - (&gt; 0)
+   * if left MORE RECENT than right - (&lt; 0) if left LESS RECENT than right - (0) if left == right If
+   * the precisions are different, the date is filled in with 1's. For example, a date of &quot;2023-04&quot;
+   * (april 2023) becomes &quot;2023-04-1&quot;, and &quot;2020&quot; would become &quot;2020-01-01&quot;
+   *
+   * @param left the first date to compare
+   * @param right the second date to compare
+   * @return int indicating which date is more recent. See above notes for explanation of returns!
+   */
+  public static int compareDates(DateRecord left, DateRecord right) {
+    // error check inputs
+    if (left == null
+        || right == null
+        || left.release_date == null
+<span class="pc bpc" id="L33" title="6 of 12 branches missed.">        || right.release_date == null</span>
+        || left.release_date_precision == null
+        || right.release_date_precision == null) {
+      // error!
+<span class="nc" id="L37">      throw new NullPointerException(&quot;ERROR: called DateRecord.compareDates() with null values!&quot;);</span>
+    }
+
+    // grab release dates
+<span class="fc" id="L41">    String leftDate = left.release_date;</span>
+<span class="fc" id="L42">    String rightDate = right.release_date;</span>
+
+    // check and fix precisions
+<span class="fc bfc" id="L45" title="All 3 branches covered.">    switch (left.release_date_precision) {</span>
+<span class="fc" id="L46">      case &quot;month&quot; -&gt; leftDate += &quot;-01&quot;;</span>
+<span class="fc" id="L47">      case &quot;year&quot; -&gt; leftDate += &quot;-01-01&quot;;</span>
+      default -&gt; {}
+    }
+<span class="fc bfc" id="L50" title="All 3 branches covered.">    switch (right.release_date_precision) {</span>
+<span class="fc" id="L51">      case &quot;month&quot; -&gt; rightDate += &quot;-01&quot;;</span>
+<span class="fc" id="L52">      case &quot;year&quot; -&gt; rightDate += &quot;-01-01&quot;;</span>
+      default -&gt; {}
+    }
+
+    // compare lexicographically!
+<span class="fc" id="L57">    return left.release_date.compareTo(right.release_date);</span>
+  }
+
+  /**
+   * method that filters down a list of artistDrops to the n most recent ones!
+   *
+   * @param artistDrops the drops of an artist to filter down - list of lists, where each inner list
+   *     looks like: [first image, name of artist, name of album, album type, link, releaseDate,
+   *     precision]
+   * @param n how many drops we want to return from this artist, max
+   * @return the (up to n) most recent drops from this artist
+   */
+  public static ArrayList&lt;ArrayList&lt;String&gt;&gt; filterMostRecent(
+<span class="nc" id="L70">      ArrayList&lt;ArrayList&lt;String&gt;&gt; artistDrops, int n) {</span>
+    // define a custom comparator to compare the release dates in the inner lists
+    Comparator&lt;ArrayList&lt;String&gt;&gt; dropComparator =
+        new Comparator&lt;ArrayList&lt;String&gt;&gt;() {
+<span class="nc" id="L74">          @Override</span>
+<span class="nc" id="L75">          public int compare(ArrayList&lt;String&gt; list1, ArrayList&lt;String&gt; list2) {</span>
+<span class="nc" id="L76">            // lists are [first image, name of artist, name of album, album type, link, releaseDate,</span>
+            // precision]
+            DateRecord left = new DateRecord(list1.get(5), list1.get(6));
+            DateRecord right = new DateRecord(list2.get(5), list2.get(6));
+            return DateRecord.compareDates(right, left);
+<span class="nc" id="L81">          }</span>
+        };
+
+<span class="nc" id="L84">    // Sort the albums list using the custom comparator</span>
+    artistDrops.sort(dropComparator);
+
+    // grab only the 4 most recent items!
+    return new ArrayList&lt;&gt;(artistDrops.subList(0, 4));
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

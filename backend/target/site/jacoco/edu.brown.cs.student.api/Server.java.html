@@ -2,57 +2,35 @@
 
 import static spark.Spark.after;
 
-import edu.brown.cs.student.api.endpointHandlers.GeoHandler;
-import edu.brown.cs.student.api.endpointHandlers.LoadHandler;
-import edu.brown.cs.student.api.endpointHandlers.SearchHandler;
-import edu.brown.cs.student.api.endpointHandlers.ViewHandler;
-import edu.brown.cs.student.api.endpointHandlers.WeatherHandler;
-import edu.brown.cs.student.api.weatherHelpers.WeatherRequestProxy;
-import java.io.IOException;
+import edu.brown.cs.student.api.endpointHandlers.*;
+import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyAPIRequester;
 import spark.Spark;
 
 /** Main class for the Server. */
-<span class="nc" id="L15">public class Server {</span>
-
-  /**
+public class Server {
+<span class="nc" id="L11">  /**</span>
    * Main method that handles setting up the server and endpoints.
    *
    * @param args Array of args passed into main.
    */
   public static void main(String[] args) {
-<span class="nc" id="L23">    Spark.port(3232);</span>
-
-<span class="nc" id="L25">    after(</span>
-        (request, response) -&gt; {
-<span class="nc" id="L27">          response.header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);</span>
-<span class="nc" id="L28">          response.header(&quot;Access-Control-Allow-Methods&quot;, &quot;*&quot;);</span>
-<span class="nc" id="L29">        });</span>
-
-<span class="nc" id="L31">    LoadHandler loadHandler = new LoadHandler();</span>
-<span class="nc" id="L32">    ViewHandler viewHandler = new ViewHandler(loadHandler);</span>
-<span class="nc" id="L33">    SearchHandler searchHandler = new SearchHandler(loadHandler);</span>
-
-    // cache with 20 spots, times out after 30 mins, c
-    // oordinates are close togther if they're within 0.4 miles
-<span class="nc" id="L37">    WeatherRequestProxy weatherRequestProxy = new WeatherRequestProxy(30, 20, 0.4);</span>
-<span class="nc" id="L38">    WeatherHandler weatherHandler = new WeatherHandler(weatherRequestProxy);</span>
-
-<span class="nc" id="L40">    Spark.get(&quot;loadcsv&quot;, loadHandler);</span>
-<span class="nc" id="L41">    Spark.get(&quot;viewcsv&quot;, viewHandler);</span>
-<span class="nc" id="L42">    Spark.get(&quot;searchcsv&quot;, searchHandler);</span>
-<span class="nc" id="L43">    Spark.get(&quot;weather&quot;, weatherHandler);</span>
-
-    try {
-<span class="nc" id="L46">      GeoHandler geoHandler = new GeoHandler(&quot;data/redlining.json&quot;);</span>
-<span class="nc" id="L47">      Spark.get(&quot;geo&quot;, geoHandler);</span>
-<span class="nc" id="L48">    } catch (IOException e) {</span>
-<span class="nc" id="L49">      System.out.println(&quot;Unable to setup GeoHandler&quot;);</span>
-<span class="nc" id="L50">      System.out.println(e.getMessage());</span>
-<span class="nc" id="L51">    }</span>
-
-<span class="nc" id="L53">    Spark.init();</span>
-<span class="nc" id="L54">    Spark.awaitInitialization();</span>
-<span class="nc" id="L55">    System.out.println(&quot;Server started.&quot;);</span>
-<span class="nc" id="L56">  }</span>
-}
+    Spark.port(3232);
+<span class="nc" id="L18"></span>
+    after(
+<span class="nc" id="L20">        (request, response) -&gt; {</span>
+          response.header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);
+<span class="nc" id="L22">          response.header(&quot;Access-Control-Allow-Methods&quot;, &quot;*&quot;);</span>
+<span class="nc" id="L23">        });</span>
+<span class="nc" id="L24"></span>
+    Spark.get(&quot;search&quot;, new SearchHandler(new SpotifyAPIRequester()));
+<span class="nc" id="L26">    Spark.get(&quot;update&quot;, new UpdateHandler());</span>
+<span class="nc" id="L27">    Spark.get(&quot;user_data&quot;, new UserDataHandler(new SpotifyAPIRequester()));</span>
+<span class="nc" id="L28">    Spark.get(&quot;track&quot;, new TrackHandler());</span>
+<span class="nc" id="L29">    Spark.get(&quot;drops&quot;, new DropsHandler());</span>
+<span class="nc" id="L30"></span>
+    Spark.init();
+<span class="nc" id="L32">    Spark.awaitInitialization();</span>
+<span class="nc" id="L33">    System.out.println(&quot;Server started.&quot;);</span>
+<span class="nc" id="L34">  }</span>
+<span class="nc" id="L35">}</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,26 +1,24 @@
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/weatherHelpers/format/HourlyForecast.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/star/StarCreator.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/star/Star.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/weatherHelpers/format/Location.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/rowCreation/FactoryFailureException.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/main/Main.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/weatherHelpers/Coordinates.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/CSVsearch/Searcher.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/Server.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/exceptions/DeserializeException.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/exceptions/BadColumnException.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/LoadHandler.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/ViewHandler.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/CSVparser/Parser.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/weatherHelpers/RequestAPI.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/WeatherHandler.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/SearchHandler.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/GeoHandler.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/MoshiUtil.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/weatherHelpers/WeatherRequestProxy.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/weatherHelpers/format/RLData.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/weatherHelpers/format/Pets.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/rowCreation/CreatorFromRow.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/exceptions/APIRequestException.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/CSVparser/DefaultRowCreator.java
-/Users/maiamongado/cs32/sprint-5-bmaizes-mmongado/backend/src/main/java/edu/brown/cs/student/api/JSONDeserializer.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/database/DropWatchDB.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/formats/TrackRecord.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/UserDataHandler.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/formats/ArtistFollowRecord.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/exceptions/APIRequestException.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/formats/ImageRecord.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/SearchHandler.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/UpdateHandler.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/Server.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/formats/Tracks.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/formats/Artists.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/exceptions/DeserializeException.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/MoshiUtil.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/formats/SearchRecord.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/TrackHandler.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/formats/Albums.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/ExternalAPI/SpotifyDataSource.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/formats/DateRecord.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/ExternalAPI/SpotifyAPIRequester.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/database/sqliteDB.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/formats/ArtistRecord.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/HandlerUtil.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/formats/AlbumRecord.java
+/Users/bryanna/Documents/Classes/Spring 2023/CS32/projects/DropWatch/backend/src/main/java/edu/brown/cs/student/api/endpointHandlers/DropsHandler.java

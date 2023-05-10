@@ -6,12 +6,6 @@ import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
 import edu.brown.cs.student.api.exceptions.APIRequestException;
 import edu.brown.cs.student.api.exceptions.DeserializeException;
 import edu.brown.cs.student.api.formats.SearchRecord;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import okio.Buffer;
@@ -19,20 +13,17 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-/**
- * Class for SearchHandler - handles searching spotify's api for artists, tracks, and albums!
- */
+/** Class for SearchHandler - handles searching spotify's api for artists, tracks, and albums! */
 public class SearchHandler implements Route {
 
-  /**
-   * The spotify data source for this SearchHandler class - holds responses from the spotify API
-   */
+  /** The spotify data source for this SearchHandler class - holds responses from the spotify API */
   SpotifyDataSource SpotifyAPIRequester;
 
   // EXAMPLE RESPONSES FROM SPOTIFY API CAN BE FOUND IN MOCKS!!!
 
   /**
    * Constructor for this class
+   *
    * @param SpotifyAPIRequester the buffer that represents data incoming from spotify's API
    */
   public SearchHandler(SpotifyDataSource SpotifyAPIRequester) {
@@ -40,8 +31,9 @@ public class SearchHandler implements Route {
   }
 
   /**
-   * Function that handles searching. Will take the users query params and use them
-   * to call the spotify API.
+   * Function that handles searching. Will take the users query params and use them to call the
+   * spotify API.
+   *
    * @param request the request made by the user to this endpoint
    * @param response the response to the user via this endpoint
    */
@@ -62,13 +54,16 @@ public class SearchHandler implements Route {
       // error check params - we should have exactly 2
       if (nParams != 2) {
         // return error!
-        return MoshiUtil.serialize(ret, "ERROR: /search endpoint requires exactly 2 params, but received " + nParams);
+        return MoshiUtil.serialize(
+            ret, "ERROR: /search endpoint requires exactly 2 params, but received " + nParams);
       }
 
       // error check params - we should have rawQuery and offset
       if (rawQuery == null || offset == null) {
         // return error!
-        return MoshiUtil.serialize(ret, "ERROR: /search endpoint requires params 'query' and 'offset', but did not receive them both");
+        return MoshiUtil.serialize(
+            ret,
+            "ERROR: /search endpoint requires params 'query' and 'offset', but did not receive them both");
       }
 
       // error check offset - should be an int!
@@ -80,7 +75,11 @@ public class SearchHandler implements Route {
       } catch (NumberFormatException e) {
         // offset is not a number!
         System.out.println(e.getMessage());
-        return MoshiUtil.serialize(ret, "ERROR: /search endpoint requires param 'offset' to be a number >= 0, but recevied '" + offset + "'");
+        return MoshiUtil.serialize(
+            ret,
+            "ERROR: /search endpoint requires param 'offset' to be a number >= 0, but recevied '"
+                + offset
+                + "'");
       }
 
       // our params are safe - let's execute a search!
@@ -88,12 +87,15 @@ public class SearchHandler implements Route {
       String query = rawQuery.replace(' ', '+');
 
       // make the request!
-      String urlString = "https://api.spotify.com/v1/search?"
-        + "query=" + query
-        + "&type=artist,album,track"
-        + "&market=US"
-        + "&limit=8"
-        + "&offset=" + offset;
+      String urlString =
+          "https://api.spotify.com/v1/search?"
+              + "query="
+              + query
+              + "&type=artist,album,track"
+              + "&market=US"
+              + "&limit=8"
+              + "&offset="
+              + offset;
       Buffer buf = this.SpotifyAPIRequester.getData(urlString);
 
       // deserialize the api's JSON response
@@ -105,11 +107,9 @@ public class SearchHandler implements Route {
       // return our response map!
       return MoshiUtil.serialize(ret, "success");
     } catch (APIRequestException e) {
-      return MoshiUtil.serialize(ret, "ERROR (API Request to Search): "
-              + e.getMessage());
+      return MoshiUtil.serialize(ret, "ERROR (API Request to Search): " + e.getMessage());
     } catch (DeserializeException e) {
-      return MoshiUtil.serialize(ret, "ERROR (Deserializing Search): "
-              + e.getMessage());
+      return MoshiUtil.serialize(ret, "ERROR (Deserializing Search): " + e.getMessage());
     }
   }
 }

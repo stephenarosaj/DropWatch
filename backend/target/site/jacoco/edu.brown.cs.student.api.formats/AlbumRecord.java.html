@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AlbumRecord.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.formats</a> &gt; <span class="el_source">AlbumRecord.java</span></div><h1>AlbumRecord.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api.formats;
+
+import com.squareup.moshi.Json;
+import java.util.List;
+
+/**
+ * Record to hold information on an Album Note that when one of these objects is returned via
+ * search, all fields are present (EXCEPT FOR &quot;tracks&quot;, since the object returned there is
+ * &quot;SimplifiedAlbumObject&quot;!) REFERENCE:
+ * https://developer.spotify.com/documentation/web-api/reference/get-an-album
+ *
+ * @param name &quot;The name of the album. In case of an album takedown, the value may be an empty
+ *     string.&quot;
+ * @param id &quot;The Spotify ID for the album.&quot;
+ * @param popularity &quot;The popularity of the album. The value will be between 0 and 100, with 100
+ *     being the most popular.&quot;
+ * @param href &quot;A link to the Web API endpoint providing full details of the album.&quot;
+ * @param type &quot;The object type.&quot; - Will always be &quot;artist&quot;
+ * @param genres &quot;A list of the genres the album is associated with. If not yet classified, the
+ *     array is empty.&quot;
+ * @param images &quot;The cover art for the album in various sizes, widest first.&quot;
+ * @param total_tracks &quot;The number of tracks in the album.&quot;
+ * @param release_date &quot;The date the album was first released.&quot;
+ * @param release_date_precision &quot;The precision with which release_date value is known.&quot; Allowed
+ *     values: &quot;year&quot;, &quot;month&quot;, or &quot;day&quot;
+ * @param restrictions &quot;Included in the response when a content restriction is applied.&quot; Allowed
+ *     values:&quot;market - The content item is not available in the given market. &quot;product&quot; - The
+ *     content item is not available for the user's subscription type. &quot;explicit&quot; - The content item
+ *     is explicit and the user's account is set to not play explicit content.
+ * @param album_type &quot;The type of the album.&quot; - USED ONLY IN /search Allowed values: &quot;album&quot;,
+ *     &quot;single&quot;, &quot;compilation&quot;
+ * @param album_group &quot;The field is present when getting an artist's albums. Compare to album_type
+ *     this field represents relationship between the artist and the album.&quot; - USED ONLY IN
+ *     /artists/{id}/albums Allowed values: &quot;album&quot;, &quot;single&quot;, &quot;compilation&quot;, &quot;appears_on&quot;
+ * @param artists &quot;The artists of the album.&quot; - Array of ArtistObject
+ * @param tracks &quot;The tracks of the album.&quot;
+<span class="nc" id="L37"> */</span>
+public record AlbumRecord(
+    @Json(name = &quot;name&quot;) String name,
+    @Json(name = &quot;id&quot;) String id,
+    @Json(name = &quot;type&quot;) String type,
+    @Json(name = &quot;popularity&quot;) Integer popularity,
+    @Json(name = &quot;href&quot;) String href,
+    @Json(name = &quot;genres&quot;) String[] genres,
+    @Json(name = &quot;images&quot;) ImageRecord[] images,
+    // array of ImageObjects: string url, int pixel height, int pixel width
+    @Json(name = &quot;total_tracks&quot;) Integer total_tracks,
+    @Json(name = &quot;release_date&quot;) String release_date,
+    @Json(name = &quot;release_date_precision&quot;) String release_date_precision,
+    @Json(name = &quot;restrictions&quot;) String restrictions,
+    @Json(name = &quot;album_type&quot;) String album_type,
+    @Json(name = &quot;album_group&quot;) String album_group,
+    @Json(name = &quot;artists&quot;) List&lt;ArtistRecord&gt; artists,
+    @Json(name = &quot;tracks&quot;) List&lt;TrackRecord&gt; tracks // NOT returned by search!!!!
+    ) {}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -23,7 +23,6 @@ public class MoshiUtilTest {
   @Test
   public void testForecastDeserialize() throws IOException, DeserializeException {
       String mockedString = Files.readString(Path.of("data/mockedData/mockSpotifyAPISearchResponse.json"));
-
     Buffer mockedBuffer = new Buffer().readFrom(new ByteArrayInputStream(mockedString.getBytes()));
     SearchRecord searchRecord = MoshiUtil.deserializeSearch(mockedBuffer);
     assertTrue(searchRecord.artists().items().get(0).name().equals("Doja Cat"));
@@ -64,4 +63,5 @@ public class MoshiUtilTest {
                   MoshiUtil.deserializeArtistRecord(mockedBuffer);
               });
   }
+
 }

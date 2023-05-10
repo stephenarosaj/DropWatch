@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UpdateHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.endpointHandlers</a> &gt; <span class="el_source">UpdateHandler.java</span></div><h1>UpdateHandler.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api.endpointHandlers;
+
+import static java.lang.System.exit;
+
+import edu.brown.cs.student.api.MoshiUtil;
+import edu.brown.cs.student.api.database.DropWatchDB;
+import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
+import edu.brown.cs.student.api.formats.AlbumRecord;
+import edu.brown.cs.student.api.formats.DateRecord;
+import java.io.File;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+
+/**
+ * Class for UpdateHandler - handles checking for new music releases! - a check for new music is
+ * made and new music is found - the artist's latest release date is updated in latest_release table
+ * - all the users in the artist's trackers table are notified
+ */
+public class UpdateHandler implements Route {
+
+  /** The spotify data source for this UpdateHandler class - holds responses from the spotify API */
+  private SpotifyDataSource SpotifyAPIRequester;
+
+  /** The filepath for our DropWatchDB! */
+  private String filepath = &quot;data/DropWatchDB.db&quot;;
+
+  /** The db we use to store stuff! */
+  private DropWatchDB db;
+
+  /** A few helper methods in this util! */
+  private HandlerUtil util;
+
+  /** Constructor for this class */
+  public UpdateHandler() {
+    try {
+<span class="nc" id="L41">      // check for mac or windows file path</span>
+      if (new File(filepath).exists()) {
+        // windows project root = .../DropWatch/backend
+        this.db = new DropWatchDB(filepath);
+      } else if (new File(&quot;backend/&quot; + filepath).exists()) {
+        // mac project root = .../DropWatch
+        this.db = new DropWatchDB(&quot;backend/&quot; + filepath);
+      } else {
+        throw new SQLException(&quot;ERROR: Couldn't find DropWatchDB.db file!&quot;);
+      }
+      // give our handler this db!
+      this.util = new HandlerUtil(this.db);
+    } catch (Exception e) {
+      System.out.println(
+          &quot;CRITICAL ERROR: COULD NOT SET UP CONNECTION TO DB '&quot;
+<span class="nc" id="L56">              + filepath</span>
+              + &quot;', ABORTING UpdateHandler()!\n&quot;);
+      System.out.println(e.getMessage());
+<span class="nc bnc" id="L59" title="All 2 branches missed.">      exit(1);</span>
+    }
+<span class="nc" id="L61">  }</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed."></span>
+  /***
+<span class="nc" id="L64">   * Handles calls to update endpoint. Refreshes database to have most updated</span>
+   * latest release data for specified artist.
+<span class="nc" id="L66">   * @param request - Request received from user.</span>
+   * @param response -
+   */
+<span class="nc" id="L69">  @Override</span>
+<span class="nc" id="L70">  public Object handle(Request request, Response response) {</span>
+<span class="nc" id="L71">    // the return map, will be turned into JSON</span>
+<span class="nc" id="L72">    Map&lt;String, Object&gt; ret = new HashMap&lt;String, Object&gt;();</span>
+<span class="nc" id="L73">    // add our params to the map!</span>
+<span class="nc" id="L74">    ret.put(&quot;params&quot;, request.queryMap().toMap());</span>
+<span class="nc" id="L75"></span>
+    try {
+      // grab input params
+      String user_id = request.queryParams(&quot;user_id&quot;);
+
+      // number of params
+      int nParams = request.queryParams().size();
+      // error check params - we should have exactly 1
+      if (nParams != 1) {
+        // return error!
+        return MoshiUtil.serialize(
+            ret, &quot;ERROR: /update endpoint requires exactly 1 param, but received &quot; + nParams);
+<span class="nc" id="L87">      }</span>
+
+<span class="nc" id="L89">      // error check params - we should have user_id</span>
+      if (user_id == null) {
+        // return error!
+        return MoshiUtil.serialize(
+<span class="nc" id="L93">            ret, &quot;ERROR: /update endpoint requires param 'user_id', but did not receive it&quot;);</span>
+      }
+
+<span class="nc" id="L96">      // query db for list of artist ids being tracked by this user</span>
+      ArrayList&lt;String&gt; artist_ids = this.db.queryTracking(user_id, true);
+<span class="nc bnc" id="L98" title="All 2 branches missed."></span>
+      // map containing new drops!
+<span class="nc" id="L100">      HashMap&lt;String, ArrayList&lt;AlbumRecord&gt;&gt; drops = new HashMap&lt;String, ArrayList&lt;AlbumRecord&gt;&gt;();</span>
+
+      // for each artist id, check for new music
+      for (String artist_id : artist_ids) {
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        // grab stored latest release date</span>
+        DateRecord storedDate = this.db.findLatestRelease(artist_id);
+<span class="nc" id="L106"></span>
+        // collect new releases for this artist in a list!
+        ArrayList&lt;AlbumRecord&gt; artistNewReleases;
+        if ((artistNewReleases = util.checkNewRelease(artist_id, storedDate)).size() != 0) {
+<span class="nc" id="L110">          // update drops so that we can return the frontend some new info!</span>
+          drops.put(artist_id, artistNewReleases);
+        }
+<span class="nc" id="L113">      }</span>
+
+      // add new drops to our map!
+<span class="nc bnc" id="L116" title="All 2 branches missed.">      ret.put(&quot;data&quot;, drops);</span>
+      // TODO: notify here? or somewhere else?
+<span class="nc" id="L118">      // notifyUser(user, drops);</span>
+      this.db.commit();
+      return MoshiUtil.serialize(ret, &quot;success&quot;);
+    } catch (Exception e) {
+<span class="nc bnc" id="L122" title="All 2 branches missed.">      System.out.println(e.getMessage());</span>
+      return MoshiUtil.serialize(ret, &quot;ERROR: &quot; + e.getMessage());
+<span class="nc" id="L124">    }</span>
+  }
+<span class="nc" id="L126">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

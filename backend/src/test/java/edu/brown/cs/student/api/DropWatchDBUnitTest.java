@@ -1,70 +1,38 @@
 package edu.brown.cs.student.api;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import edu.brown.cs.student.api.database.DropWatchDB;
 import edu.brown.cs.student.api.formats.DateRecord;
+import java.io.File;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
-/**
- * Unit tests for DropWatchDB!
- */
+/** Unit tests for DropWatchDB! */
 public class DropWatchDBUnitTest {
-  /**
-   * The Database Object we use for testing!
-   */
+  /** The Database Object we use for testing! */
   static DropWatchDB db = null;
 
-  /**
-   * Path to our testing DBs!
-   */
+  /** Path to our testing DBs! */
   static String testDWDBFilepath = "src/test/java/edu/brown/cs/student/api/testDWDB.db";
 
   /**
-   *   this one is DB with some mock data:
-   * albums: album_id | releaseDate | precision |  link
-   *            1     | 2002-02-09  |    day    | rosa.com
-   *            2     | 2002-03-21  |    day    | bry.com
-   *            3     | 2002-07     |   month   | aku.com
-   *            4     | 2002        |    year   | maia.com
-   *            5     | 2002-02     |   month   | rosashort.com
-   *            6     | 2002-03     |   month   | bryshort.com
-   *            7     | 2001        |    year   | 2001.com
-   *            8     | 2003        |    year   | 2003.com
-   * artists: arist_id |  link
-   *             1     | aaa.com
-   *             2     | bbb.com
-   *             3     | ccc.com
-   *             4     | ddd.com
-   * artistAlbums: arist_id | album_id
-   *                   1    |    1
-   *                   2    |    2
-   *                   3    |    3
-   *                   4    |    4
-   *                   2    |    1
-   *                   3    |    1
-   *                   4    |    1
-   *                   1    |    2
-   * tracking: user_id | artist_id
-   *              1    |    1
-   *              2    |    2
-   *              3    |    3
-   *              4    |    4
-   *              4    |    3
-   *              4    |    2
-   *              4    |    1
+   * this one is DB with some mock data: albums: album_id | releaseDate | precision | link 1 |
+   * 2002-02-09 | day | rosa.com 2 | 2002-03-21 | day | bry.com 3 | 2002-07 | month | aku.com 4 |
+   * 2002 | year | maia.com 5 | 2002-02 | month | rosashort.com 6 | 2002-03 | month | bryshort.com 7
+   * | 2001 | year | 2001.com 8 | 2003 | year | 2003.com artists: arist_id | link 1 | aaa.com 2 |
+   * bbb.com 3 | ccc.com 4 | ddd.com artistAlbums: arist_id | album_id 1 | 1 2 | 2 3 | 3 4 | 4 2 | 1
+   * 3 | 1 4 | 1 1 | 2 tracking: user_id | artist_id 1 | 1 2 | 2 3 | 3 4 | 4 4 | 3 4 | 2 4 | 1
    */
   static String mockDWDBFilePath = "data/mockedData/mockDWDB.db";
 
   /**
    * Helper function to make a new empty test DB for testing
+   *
    * @throws SQLException (shouldn't)
    * @throws ClassNotFoundException (shouldn't)
    */
@@ -91,6 +59,7 @@ public class DropWatchDBUnitTest {
 
   /**
    * Helper function to make a new empty test DB for testing
+   *
    * @throws SQLException (shouldn't)
    * @throws ClassNotFoundException (shouldn't)
    */
@@ -323,13 +292,15 @@ public class DropWatchDBUnitTest {
 
   /**
    * helper function for testing - used to create album arrays on the fly!
+   *
    * @param releaseDate release date of album
    * @param precision preicsion of release date of album
    * @param link link in album
    * @param type the type of the album
    * @return an array representing the album array that would be returned from a query to albums
    */
-  String[] buildAlbumsArray(String releaseDate, String precision, String link, String image, String name, String type) {
+  String[] buildAlbumsArray(
+      String releaseDate, String precision, String link, String image, String name, String type) {
     String[] arr = new String[6];
     arr[0] = releaseDate;
     arr[1] = precision;
@@ -342,6 +313,7 @@ public class DropWatchDBUnitTest {
 
   /**
    * helper function for testing - used to create artist arrays on the fly!
+   *
    * @param link link to artist page
    * @param image link to first image of artist
    * @param name name of artist
@@ -372,7 +344,8 @@ public class DropWatchDBUnitTest {
       assertArrayEquals(db.queryAlbums("3"), album);
       album = buildAlbumsArray("2002", "year", "maia.com", "maia.net", "maia", "album");
       assertArrayEquals(db.queryAlbums("4"), album);
-      album = buildAlbumsArray("2002-02", "month", "rosashort.com", "rosashort.net", "rosa", "single");
+      album =
+          buildAlbumsArray("2002-02", "month", "rosashort.com", "rosashort.net", "rosa", "single");
       assertArrayEquals(db.queryAlbums("5"), album);
       album = buildAlbumsArray("2002-03", "month", "bryshort.com", "bryshort.net", "bry", "album");
       assertArrayEquals(db.queryAlbums("6"), album);
@@ -475,7 +448,6 @@ public class DropWatchDBUnitTest {
       fail(e.getMessage());
     }
   }
-
 
   // test queryArtists
   @Test
@@ -809,21 +781,21 @@ public class DropWatchDBUnitTest {
     }
   }
 
-  //notes:
-//  - (+1) if left MORE RECENT than right
-//   *    - (-1) if left LESS RECENT than right
-//   *    - (0) if left == right
+  // notes:
+  //  - (+1) if left MORE RECENT than right
+  //   *    - (-1) if left LESS RECENT than right
+  //   *    - (0) if left == right
 
   // test good input into date comparison function
   @Test
   void test_DateRecordCompareDates_GoodInput() {
     // make some dates, compare them!
-    DateRecord halloween  = new DateRecord("2022-10-31", "day");
-    DateRecord xmas  = new DateRecord("2022-12-25", "day");
-    DateRecord june  = new DateRecord("2022-06", "month");
-    DateRecord july  = new DateRecord("2022-07", "month");
-    DateRecord tt  = new DateRecord("2020", "year");
-    DateRecord tt2  = new DateRecord("2022", "year");
+    DateRecord halloween = new DateRecord("2022-10-31", "day");
+    DateRecord xmas = new DateRecord("2022-12-25", "day");
+    DateRecord june = new DateRecord("2022-06", "month");
+    DateRecord july = new DateRecord("2022-07", "month");
+    DateRecord tt = new DateRecord("2020", "year");
+    DateRecord tt2 = new DateRecord("2022", "year");
 
     // day against day
     assertTrue(DateRecord.compareDates(halloween, xmas) < 0);

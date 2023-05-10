@@ -5,19 +5,17 @@ import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Moshi.Builder;
 import com.squareup.moshi.Types;
 import edu.brown.cs.student.api.exceptions.DeserializeException;
-import edu.brown.cs.student.api.weatherHelpers.format.HourlyForecast;
-import edu.brown.cs.student.api.weatherHelpers.format.HourlyForecast.HourlyProperty;
-import edu.brown.cs.student.api.weatherHelpers.format.HourlyForecast.HourlyProperty.Period;
-import edu.brown.cs.student.api.weatherHelpers.format.Location;
-import edu.brown.cs.student.api.weatherHelpers.format.Location.LocationProperty;
+import edu.brown.cs.student.api.formats.*;
+import edu.brown.cs.student.api.formats.SearchRecord.*;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
 import okio.Buffer;
 
 /** Util class for moshi serializing and deserializing. */
-<span class="nc" id="L18">public class MoshiUtil {</span>
+public class MoshiUtil {
 
-  /**
+<span class="nc" id="L18">  /**</span>
    * Serializes a given map with a response code.
    *
    * @param responseMap Map to populate.
@@ -25,47 +23,95 @@ import okio.Buffer;
    * @return String representation of the response map.
    */
   public static String serialize(Map&lt;String, Object&gt; responseMap, String responseCode) {
-<span class="fc" id="L28">    responseMap.put(&quot;result&quot;, responseCode);</span>
-<span class="fc" id="L29">    Moshi moshi = new Builder().build();</span>
-<span class="fc" id="L30">    Type responseMapType = Types.newParameterizedType(Map.class, String.class, Object.class);</span>
-<span class="fc" id="L31">    JsonAdapter&lt;Map&lt;String, Object&gt;&gt; adapter = moshi.adapter(responseMapType);</span>
-<span class="fc" id="L32">    return adapter.toJson(responseMap);</span>
-  }
-
+    responseMap.put(&quot;result&quot;, responseCode);
+    Moshi moshi = new Builder().build();
+<span class="nc" id="L28">    Type responseMapType = Types.newParameterizedType(Map.class, String.class, Object.class);</span>
+<span class="nc" id="L29">    JsonAdapter&lt;Map&lt;String, Object&gt;&gt; adapter = moshi.adapter(responseMapType);</span>
+<span class="nc" id="L30">    return adapter.toJson(responseMap);</span>
+<span class="nc" id="L31">  }</span>
+<span class="nc" id="L32"></span>
   /**
-   * Deserializes a buffer JSON into a Location record.
+   * Deserializes a buffer JSON into a SearchRecord.
    *
-   * @param JSON A Buffer representing the JSON of the NWS location endpoint.
-   * @return A Location record storing this JSON's attributes.
+   * @param buf A Buffer representing the JSON of the Search results
+   * @return A SearchRecord containing hte search results as objects
    * @throws DeserializeException If an exception has occurred in moshi's methods.
    */
-  public static Location deserializeLocation(Buffer JSON) throws DeserializeException {
+  public static SearchRecord deserializeSearch(Buffer buf) throws DeserializeException {
     try {
-<span class="fc" id="L44">      Moshi moshi = new Builder().build();</span>
-<span class="fc" id="L45">      Type locationType = Types.newParameterizedType(Location.class, LocationProperty.class);</span>
-<span class="fc" id="L46">      JsonAdapter&lt;Location&gt; locationDeserializer = moshi.adapter(locationType);</span>
-<span class="fc" id="L47">      return locationDeserializer.fromJson(JSON);</span>
-<span class="fc" id="L48">    } catch (Exception e) {</span>
-<span class="fc" id="L49">      throw new DeserializeException(&quot;Location deserialization problem: &quot; + e.getMessage());</span>
+      // make a new moshi adapter and
+      Moshi moshi = new Moshi.Builder().build();
+      JsonAdapter&lt;SearchRecord&gt; adapter =
+<span class="nc" id="L45">          moshi.adapter(</span>
+<span class="nc" id="L46">              Types.newParameterizedType(</span>
+<span class="nc" id="L47">                  SearchRecord.class,</span>
+<span class="nc" id="L48">                  Artists.class,</span>
+<span class="nc" id="L49">                  ArtistRecord.class,</span>
+<span class="nc" id="L50">                  Albums.class,</span>
+                  AlbumRecord.class,
+                  Tracks.class,
+                  TrackRecord.class,
+                  ImageRecord.class));
+      return adapter.fromJson(buf);
+    } catch (Exception e) {
+      throw new DeserializeException(e.getMessage());
     }
   }
 
   /**
-   * Deserializes an hourly forecast JSON into an HourlyForecast record.
+   * Deserializes a buffer JSON into a ArtistRecord.
    *
-   * @param JSON A Buffer representing the JSON of the NWS hourly forecast endpoint.
-   * @return An HourlyForecast record storing this JSON's attributes.
-   * @throws DeserializeException If an exception has occurred in moshi's methods.
-   */
-  public static HourlyForecast deserializeForecast(Buffer JSON) throws DeserializeException {
+<span class="nc" id="L64">   * @param buf A Buffer representing the JSON of the /get artist endpoitn results</span>
+<span class="nc" id="L65">   * @return A SearchRecord containing the artist record json as an object</span>
+<span class="nc" id="L66">   * @throws DeserializeException If an exception has occurred in moshi's methods.</span>
+<span class="nc" id="L67">   */</span>
+<span class="nc" id="L68">  public static ArtistRecord deserializeArtistRecord(Buffer buf) throws DeserializeException {</span>
+<span class="nc" id="L69">    try {</span>
+      // make a new moshi adapter and
+      Moshi moshi = new Moshi.Builder().build();
+      JsonAdapter&lt;ArtistRecord&gt; adapter =
+          moshi.adapter(Types.newParameterizedType(ArtistRecord.class, ImageRecord.class));
+      return adapter.fromJson(buf);
+<span class="nc" id="L75">    } catch (Exception e) {</span>
+<span class="nc" id="L76">      throw new DeserializeException(e.getMessage());</span>
+<span class="nc" id="L77">    }</span>
+<span class="nc" id="L78">  }</span>
+<span class="nc" id="L79"></span>
+<span class="nc" id="L80">  public static Albums deserializeUpdate(Buffer buf) throws DeserializeException {</span>
     try {
-<span class="fc" id="L62">      Moshi moshi = new Builder().build();</span>
-<span class="fc" id="L63">      Type forecastType =</span>
-<span class="fc" id="L64">          Types.newParameterizedType(HourlyForecast.class, HourlyProperty.class, Period.class);</span>
-<span class="fc" id="L65">      JsonAdapter&lt;HourlyForecast&gt; forecastDeserializer = moshi.adapter(forecastType);</span>
-<span class="fc" id="L66">      return forecastDeserializer.fromJson(JSON);</span>
-<span class="fc" id="L67">    } catch (Exception e) {</span>
-<span class="fc" id="L68">      throw new DeserializeException(&quot;Forecast deserialization problem: &quot; + e.getMessage());</span>
+      Moshi moshi = new Moshi.Builder().build();
+      JsonAdapter&lt;Albums&gt; adapter =
+          moshi.adapter(
+              Types.newParameterizedType(
+<span class="nc" id="L86">                  Albums.class, List.class, AlbumRecord.class, ImageRecord.class));</span>
+<span class="nc" id="L87">      return adapter.fromJson(buf);</span>
+<span class="nc" id="L88">    } catch (Exception e) {</span>
+<span class="nc" id="L89">      throw new DeserializeException(e.getMessage());</span>
+<span class="nc" id="L90">    }</span>
+<span class="nc" id="L91">  }</span>
+
+  public static Map&lt;String, String&gt; deserializeToken(Buffer buf) throws DeserializeException {
+    try {
+      Moshi moshi = new Moshi.Builder().build();
+      JsonAdapter&lt;Map&lt;String, String&gt;&gt; adapter =
+<span class="nc" id="L97">          moshi.adapter(Types.newParameterizedType(Map.class, String.class, String.class));</span>
+<span class="nc" id="L98">      return adapter.fromJson(buf);</span>
+<span class="nc" id="L99">    } catch (Exception e) {</span>
+<span class="nc" id="L100">      throw new DeserializeException(e.getMessage());</span>
+<span class="nc" id="L101">    }</span>
+<span class="nc" id="L102">  }</span>
+
+  public static ArtistFollowRecord deserializeArtistsFollow(Buffer buf)
+      throws DeserializeException {
+    try {
+      Moshi moshi = new Moshi.Builder().build();
+      JsonAdapter&lt;ArtistFollowRecord&gt; adapter =
+          moshi.adapter(
+              Types.newParameterizedType(
+                  ArtistFollowRecord.class, ArtistFollowRecord.ArtistsJSON.class, Artists.class));
+      return adapter.fromJson(buf);
+    } catch (Exception e) {
+      throw new DeserializeException(e.getMessage());
     }
   }
 }

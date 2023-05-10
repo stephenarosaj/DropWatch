@@ -1,9 +1,7 @@
 package edu.brown.cs.student.api.formats;
 
 import com.squareup.moshi.Json;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 /***
@@ -13,26 +11,28 @@ import java.util.Comparator;
  * @param release_date_precision "The precision with which release_date value is known."
  */
 public record DateRecord(
-        @Json(name = "release_date") String release_date,
-        @Json(name = "release_date_precision") String release_date_precision) {
+    @Json(name = "release_date") String release_date,
+    @Json(name = "release_date_precision") String release_date_precision) {
 
   /**
-   * Comparison function for dates. Returns an int indicating which date is more recent, or 0 if they are the same.
-   * If the precision are the same (for example, we have 1-2-3 and 4-5-6)
-   *    - (> 0) if left MORE RECENT than right
-   *    - (< 0) if left LESS RECENT than right
-   *    - (0) if left == right
-   * If the precisions are different, the date is filled in with 1's. For example, a date of "2023-04" (april 2023) becomes
-   * "2023-04-1", and "2020" would become "2020-01-01"
+   * Comparison function for dates. Returns an int indicating which date is more recent, or 0 if
+   * they are the same. If the precision are the same (for example, we have 1-2-3 and 4-5-6) - (> 0)
+   * if left MORE RECENT than right - (< 0) if left LESS RECENT than right - (0) if left == right If
+   * the precisions are different, the date is filled in with 1's. For example, a date of "2023-04"
+   * (april 2023) becomes "2023-04-1", and "2020" would become "2020-01-01"
+   *
    * @param left the first date to compare
    * @param right the second date to compare
    * @return int indicating which date is more recent. See above notes for explanation of returns!
    */
   public static int compareDates(DateRecord left, DateRecord right) {
     // error check inputs
-    if (left == null || right == null
-        || left.release_date == null || right.release_date == null
-        || left.release_date_precision == null || right.release_date_precision == null) {
+    if (left == null
+        || right == null
+        || left.release_date == null
+        || right.release_date == null
+        || left.release_date_precision == null
+        || right.release_date_precision == null) {
       // error!
       throw new NullPointerException("ERROR: called DateRecord.compareDates() with null values!");
     }
@@ -59,23 +59,27 @@ public record DateRecord(
 
   /**
    * method that filters down a list of artistDrops to the n most recent ones!
-   * @param artistDrops the drops of an artist to filter down - list of lists,
-   *                   where each inner list looks like:
-   *                   [first image, name of artist, name of album, album type, link, releaseDate, precision]
+   *
+   * @param artistDrops the drops of an artist to filter down - list of lists, where each inner list
+   *     looks like: [first image, name of artist, name of album, album type, link, releaseDate,
+   *     precision]
    * @param n how many drops we want to return from this artist, max
    * @return the (up to n) most recent drops from this artist
    */
-  public static ArrayList<ArrayList<String>> filterMostRecent(ArrayList<ArrayList<String>> artistDrops, int n) {
+  public static ArrayList<ArrayList<String>> filterMostRecent(
+      ArrayList<ArrayList<String>> artistDrops, int n) {
     // define a custom comparator to compare the release dates in the inner lists
-    Comparator<ArrayList<String>> dropComparator = new Comparator<ArrayList<String>>() {
-      @Override
-      public int compare(ArrayList<String> list1, ArrayList<String> list2) {
-        // lists are [first image, name of artist, name of album, album type, link, releaseDate, precision]
-        DateRecord left = new DateRecord(list1.get(5), list1.get(6));
-        DateRecord right = new DateRecord(list2.get(5), list2.get(6));
-        return DateRecord.compareDates(right, left);
-      }
-    };
+    Comparator<ArrayList<String>> dropComparator =
+        new Comparator<ArrayList<String>>() {
+          @Override
+          public int compare(ArrayList<String> list1, ArrayList<String> list2) {
+            // lists are [first image, name of artist, name of album, album type, link, releaseDate,
+            // precision]
+            DateRecord left = new DateRecord(list1.get(5), list1.get(6));
+            DateRecord right = new DateRecord(list2.get(5), list2.get(6));
+            return DateRecord.compareDates(right, left);
+          }
+        };
 
     // Sort the albums list using the custom comparator
     artistDrops.sort(dropComparator);

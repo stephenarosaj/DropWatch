@@ -1,133 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.endpointHandlers</a> &gt; <span class="el_source">SearchHandler.java</span></div><h1>SearchHandler.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api.endpointHandlers;
 
-import edu.brown.cs.student.CSVparser.*;
-import edu.brown.cs.student.CSVsearch.Searcher;
 import edu.brown.cs.student.api.MoshiUtil;
-import edu.brown.cs.student.api.exceptions.BadColumnException;
-import edu.brown.cs.student.rowCreation.FactoryFailureException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Reader;
+import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyAPIRequester;
+import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
+import edu.brown.cs.student.api.exceptions.APIRequestException;
+import edu.brown.cs.student.api.exceptions.DeserializeException;
+import edu.brown.cs.student.api.formats.SearchRecord;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import okio.Buffer;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
-/** The class that handles requests to search a previously loaded CSV. */
+/** Class for SearchHandler - handles searching spotify's api for artists, tracks, and albums! */
 public class SearchHandler implements Route {
 
-  LoadHandler loadHandler;
+  /** The spotify data source for this SearchHandler class - holds responses from the spotify API */
+  SpotifyDataSource SpotifyAPIRequester;
+
+  // EXAMPLE RESPONSES FROM SPOTIFY API CAN BE FOUND IN MOCKS!!!
 
   /**
-   * Creates a SearchHandler.
+   * Constructor for this class
    *
-   * @param inputLoadHandler The LoadHandler from which to get the CSV file.
+   * @param SpotifyAPIRequester the buffer that represents data incoming from spotify's API
    */
-<span class="nc" id="L28">  public SearchHandler(LoadHandler inputLoadHandler) {</span>
-<span class="nc" id="L29">    loadHandler = inputLoadHandler;</span>
-<span class="nc" id="L30">  }</span>
-
-  /**
-   * Handles requests to search a previously loaded CSV.
-   *
-   * @param request Browser HTTP request; should contain target value, whether the CSV has headers,
-   *     and optionally a column.
-   * @param response The response object providing functionality for modifying the response.
-   * @return A String JSON with success response, search parameters, and targetRows.
-   */
-  @Override
-  public Object handle(Request request, Response response) {
-<span class="nc" id="L42">    Map&lt;String, Object&gt; responseMap = new HashMap&lt;&gt;();</span>
-
-<span class="nc" id="L44">    String target = request.queryParams(&quot;target&quot;);</span>
-<span class="nc" id="L45">    String hasHeaders = request.queryParams(&quot;has_headers&quot;);</span>
-
-<span class="nc" id="L47">    responseMap.put(&quot;details&quot;, &quot;&quot;);</span>
-<span class="nc" id="L48">    responseMap.put(&quot;has_headers&quot;, &quot;&quot;);</span>
-<span class="nc" id="L49">    responseMap.put(&quot;data&quot;, &quot;&quot;);</span>
-<span class="nc" id="L50">    responseMap.put(&quot;target&quot;, &quot;&quot;);</span>
-
-    // error checking fields
-<span class="nc bnc" id="L53" title="All 2 branches missed.">    if (target == null) {</span>
-<span class="nc" id="L54">      responseMap.put(&quot;column&quot;, &quot;&quot;);</span>
-<span class="nc" id="L55">      responseMap.put(&quot;details&quot;, &quot;must have target value&quot;);</span>
-<span class="nc" id="L56">      return MoshiUtil.serialize(responseMap, &quot;error_bad_request&quot;);</span>
-    }
-
-<span class="nc bnc" id="L59" title="All 2 branches missed.">    if (hasHeaders == null) {</span>
-<span class="nc" id="L60">      responseMap.put(&quot;column&quot;, &quot;&quot;);</span>
-<span class="nc" id="L61">      responseMap.put(&quot;details&quot;, &quot;must specify whether the CSV has headers or not&quot;);</span>
-<span class="nc" id="L62">      return MoshiUtil.serialize(responseMap, &quot;error_bad_request&quot;);</span>
-    }
-
-<span class="nc bnc" id="L65" title="All 4 branches missed.">    if (!hasHeaders.equals(&quot;true&quot;) &amp;&amp; !hasHeaders.equals(&quot;false&quot;)) {</span>
-<span class="nc" id="L66">      responseMap.put(&quot;column&quot;, &quot;&quot;);</span>
-<span class="nc" id="L67">      responseMap.put(&quot;details&quot;, &quot;has_headers must be true or false&quot;);</span>
-<span class="nc" id="L68">      return MoshiUtil.serialize(responseMap, &quot;error_bad_request&quot;);</span>
-    }
-
-<span class="nc" id="L71">    String column = request.queryParams(&quot;column&quot;);</span>
-
-<span class="nc" id="L73">    return getTargetJSON(responseMap, target, hasHeaders, column);</span>
+  public SearchHandler(SpotifyDataSource SpotifyAPIRequester) {
+    this.SpotifyAPIRequester = SpotifyAPIRequester;
   }
 
   /**
-   * Searches the previously loaded CSV file and populates the responseMap according to results.
+   * Function that handles searching. Will take the users query params and use them to call the
+   * spotify API.
    *
-   * @param responseMap Response Map to add info to.
-   * @param target Target value to search for.
-   * @param hasHeaders Boolean representing whether the CSV has headers.
-   * @param column (Optional) Column to restrict search to.
-   * @return String JSON containing result, parameters, and targetRows.
-   */
-  private String getTargetJSON(
-      Map&lt;String, Object&gt; responseMap, String target, String hasHeaders, String column) {
-    Reader file;
-
-<span class="nc bnc" id="L89" title="All 2 branches missed.">    Boolean boolHeaders = hasHeaders.equals(&quot;true&quot;) ? true : false;</span>
-
-<span class="nc" id="L91">    Searcher searcher = new Searcher(target);</span>
+   * @param request the request made by the user to this endpoint
+<span class="nc" id="L38">   * @param response the response to the user via this endpoint</span>
+<span class="nc" id="L39">   */</span>
+<span class="nc" id="L40">  @Override</span>
+  public Object handle(Request request, Response response) {
+    // the return map, will be turned into JSON
+    Map&lt;String, Object&gt; ret = new HashMap&lt;String, Object&gt;();
+    // add our params to the map!
+    ret.put(&quot;params&quot;, request.queryMap().toMap());
 
     try {
-<span class="nc" id="L94">      file = loadHandler.getCSVfile();</span>
-<span class="nc" id="L95">    } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L96">      responseMap.put(&quot;details&quot;, &quot;no file loaded&quot;);</span>
-<span class="nc" id="L97">      return MoshiUtil.serialize(responseMap, &quot;error_datasource&quot;);</span>
-<span class="nc" id="L98">    }</span>
+      // grab input params
+      String rawQuery = request.queryParams(&quot;query&quot;);
+      String offset = request.queryParams(&quot;offset&quot;);
+<span class="nc" id="L51"></span>
+      // number of params
+<span class="nc" id="L53">      int nParams = request.queryParams().size();</span>
+      // error check params - we should have exactly 2
+      if (nParams != 2) {
+        // return error!
+<span class="nc" id="L57">        return MoshiUtil.serialize(</span>
+<span class="nc" id="L58">            ret, &quot;ERROR: /search endpoint requires exactly 2 params, but received &quot; + nParams);</span>
+      }
 
-    Parser&lt;List&lt;String&gt;&gt; parser;
-    try {
-<span class="nc" id="L102">      parser = new Parser&lt;&gt;(file, boolHeaders, searcher);</span>
-<span class="nc" id="L103">    } catch (IOException e) {</span>
-<span class="nc" id="L104">      responseMap.put(&quot;details&quot;, &quot;failed to read header line&quot;);</span>
-<span class="nc" id="L105">      return MoshiUtil.serialize(responseMap, &quot;error_parse&quot;);</span>
-<span class="nc" id="L106">    }</span>
+<span class="nc" id="L61">      // error check params - we should have rawQuery and offset</span>
+      if (rawQuery == null || offset == null) {
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        // return error!</span>
+        return MoshiUtil.serialize(
+<span class="nc" id="L65">            ret,</span>
+            &quot;ERROR: /search endpoint requires params 'query' and 'offset', but did not receive them both&quot;);
+      }
 
-<span class="nc bnc" id="L108" title="All 2 branches missed.">    if (column != null) {</span>
-<span class="nc" id="L109">      responseMap.put(&quot;column&quot;, column);</span>
+<span class="nc bnc" id="L69" title="All 4 branches missed.">      // error check offset - should be an int!</span>
       try {
-<span class="nc" id="L111">        searcher.setCol(column, parser.getHeaders());</span>
-<span class="nc" id="L112">      } catch (BadColumnException e) {</span>
-<span class="nc" id="L113">        responseMap.put(&quot;details&quot;, e.getMessage());</span>
-<span class="nc" id="L114">        return MoshiUtil.serialize(responseMap, &quot;error_bad_column&quot;);</span>
-<span class="nc" id="L115">      }</span>
-    } else {
-<span class="nc" id="L117">      responseMap.put(&quot;column&quot;, &quot;&quot;);</span>
+<span class="nc" id="L71">        int parsedOffset = Integer.parseInt(offset);</span>
+        if (parsedOffset &lt; 0) {
+          throw new NumberFormatException(&quot;ERROR: parsedOffset &lt; 0 - we need a positive number!&quot;);
+        }
+      } catch (NumberFormatException e) {
+<span class="nc" id="L76">        // offset is not a number!</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        System.out.println(e.getMessage());</span>
+<span class="nc" id="L78">        return MoshiUtil.serialize(</span>
+            ret,
+<span class="nc" id="L80">            &quot;ERROR: /search endpoint requires param 'offset' to be a number &gt;= 0, but recevied '&quot;</span>
+                + offset
+<span class="nc" id="L82">                + &quot;'&quot;);</span>
+<span class="nc" id="L83">      }</span>
+<span class="nc" id="L84"></span>
+      // our params are safe - let's execute a search!
+      // can't use spaces, must use +
+      String query = rawQuery.replace(' ', '+');
+<span class="nc" id="L88"></span>
+      // make the request!
+      String urlString =
+<span class="nc" id="L91">          &quot;https://api.spotify.com/v1/search?&quot;</span>
+              + &quot;query=&quot;
+              + query
+              + &quot;&amp;type=artist,album,track&quot;
+              + &quot;&amp;market=US&quot;
+              + &quot;&amp;limit=8&quot;
+<span class="nc" id="L97">              + &quot;&amp;offset=&quot;</span>
+              + offset;
+      Buffer buf = this.SpotifyAPIRequester.getData(urlString);
+<span class="nc" id="L100"></span>
+      // deserialize the api's JSON response
+      SearchRecord searchResponse = MoshiUtil.deserializeSearch(buf);
+<span class="nc" id="L103"></span>
+      // add the data to our response map
+      ret.put(&quot;data&quot;, searchResponse);
+<span class="nc" id="L106"></span>
+<span class="nc" id="L107">      // return our response map!</span>
+<span class="nc" id="L108">      return MoshiUtil.serialize(ret, &quot;success&quot;);</span>
+<span class="nc" id="L109">    } catch (APIRequestException e) {</span>
+<span class="nc" id="L110">      return MoshiUtil.serialize(ret, &quot;ERROR (API Request to Search): &quot; + e.getMessage());</span>
+<span class="nc" id="L111">    } catch (DeserializeException e) {</span>
+<span class="nc" id="L112">      return MoshiUtil.serialize(ret, &quot;ERROR (Deserializing Search): &quot; + e.getMessage());</span>
     }
-
-    try {
-<span class="nc" id="L121">      parser.parse();</span>
-<span class="nc" id="L122">    } catch (IOException e) {</span>
-<span class="nc" id="L123">      responseMap.put(&quot;details&quot;, &quot;I/O exception ocurred while parsing&quot;);</span>
-<span class="nc" id="L124">      return MoshiUtil.serialize(responseMap, &quot;error_parse&quot;);</span>
-<span class="nc" id="L125">    } catch (FactoryFailureException e) {</span>
-<span class="nc" id="L126">      responseMap.put(&quot;details&quot;, &quot;factory failure in parsing: &quot; + e.getMessage());</span>
-<span class="nc" id="L127">      return MoshiUtil.serialize(responseMap, &quot;error_parse&quot;);</span>
-<span class="nc" id="L128">    }</span>
-<span class="nc" id="L129">    responseMap.put(&quot;data&quot;, searcher.getTargetRows());</span>
-<span class="nc" id="L130">    return MoshiUtil.serialize(responseMap, &quot;success&quot;);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

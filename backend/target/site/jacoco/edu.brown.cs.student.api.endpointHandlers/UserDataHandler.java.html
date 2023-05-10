@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDataHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.endpointHandlers</a> &gt; <span class="el_source">UserDataHandler.java</span></div><h1>UserDataHandler.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api.endpointHandlers;
+
+import edu.brown.cs.student.api.MoshiUtil;
+import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
+import edu.brown.cs.student.api.exceptions.APIRequestException;
+import edu.brown.cs.student.api.exceptions.DeserializeException;
+import edu.brown.cs.student.api.formats.ArtistFollowRecord;
+import java.util.HashMap;
+import java.util.Map;
+import okio.Buffer;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+
+/** The endpoint that servers user data (i.e., the user's following, playlists, etc.) */
+public class UserDataHandler implements Route {
+
+  SpotifyDataSource SpotifyAPIRequester;
+
+  /**
+   * Constructor that takes in an object that returns a SpotifyAPI buffer response.
+   *
+   * @param SpotifyAPIRequester Object that returns a SpotifyAPI buffer response, for mocking
+   *     purposes.
+   */
+  public UserDataHandler(SpotifyDataSource SpotifyAPIRequester) {
+    this.SpotifyAPIRequester = SpotifyAPIRequester;
+<span class="nc" id="L28">  }</span>
+<span class="nc" id="L29"></span>
+<span class="nc" id="L30">  /**</span>
+   * Called whenever this endpoint is called.
+   *
+   * @param request HTTP URL request.
+   * @param response
+   * @return A JSON containing the user's followed spotify artists or an error message.
+   */
+  @Override
+  public Object handle(Request request, Response response) {
+    // the return map, will be turned into JSON
+    Map&lt;String, Object&gt; ret = new HashMap&lt;String, Object&gt;();
+<span class="nc" id="L41">    // add our params to the map!</span>
+    ret.put(&quot;params&quot;, request.queryMap().toMap());
+<span class="nc" id="L43">    try {</span>
+      // grab input params
+      String userToken = request.queryParams(&quot;user_token&quot;);
+<span class="nc" id="L46">      String urlString = &quot;https://api.spotify.com/v1/me/following?type=artist&amp;limit=10&quot;;</span>
+<span class="nc" id="L47"></span>
+      SpotifyAPIRequester.setAccessToken(userToken);
+<span class="nc" id="L49">      Buffer buf = this.SpotifyAPIRequester.getData(urlString);</span>
+<span class="nc" id="L50"></span>
+      // deserialize the api's JSON response
+      ArtistFollowRecord artistFollowResponse = MoshiUtil.deserializeArtistsFollow(buf);
+<span class="nc" id="L53"></span>
+      // add the data to our response map
+      ret.put(&quot;data&quot;, artistFollowResponse.artistsJSON().artists());
+<span class="nc" id="L56"></span>
+      // return our response map!
+      return MoshiUtil.serialize(ret, &quot;success&quot;);
+<span class="nc" id="L59">    } catch (APIRequestException e) {</span>
+<span class="nc" id="L60">      return MoshiUtil.serialize(</span>
+<span class="nc" id="L61">          ret, &quot;ERROR (API Request to User's Followed Artists): &quot; + e.getMessage());</span>
+<span class="nc" id="L62">    } catch (DeserializeException e) {</span>
+<span class="nc" id="L63">      return MoshiUtil.serialize(</span>
+<span class="nc" id="L64">          ret, &quot;ERROR (Deserializing User's Followed Artists): &quot; + e.getMessage());</span>
+<span class="nc" id="L65">    }</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
