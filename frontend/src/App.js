@@ -12,6 +12,7 @@ import Search from './components/Search';
 import SavedPlaylists from './components/SavedPlaylists';
 import Followed from './components/Followed';
 import artistData from "./data/artists.json";
+import track from './functions/track';
 
 const redirect_uri = "http://localhost:3000/callback"
 
@@ -29,9 +30,9 @@ function getCode(query) {
 }
 
 function App() {
-  const [refreshToken, setRefreshToken] = useState(null)
+  // const [refreshToken, setRefreshToken] = useState(null)
   const [username, setUsername] = useState(null)
-  const [artists, setArtists] = useState(artistData)
+  const [artists, setArtists] = useState([])
   const [drops, setDrops] = useState(artistData)
   const [isLoggedIn, setLogin] = useState(false)
   const[playlists, setPlaylists] = useState([])
@@ -45,7 +46,7 @@ function App() {
   function handleRedirect(query) {
     let code = getCode(query)
     console.log("code: " + code)
-    fetchAccessToken(code, setLogin, setRefreshToken, setUsername, setPlaylists, setFollowed)
+    fetchAccessToken(code, setLogin, setUsername, setPlaylists, setFollowed, setArtists)
     window.history.pushState("","", redirect_uri)
   }
 
@@ -113,7 +114,7 @@ function App() {
         </Container>
       </div>
       <Welcome isLoggedIn={isLoggedIn} username={username}/>
-      <DropWatch artists={artists} isLoggedIn={isLoggedIn}/>
+      <DropWatch artists={artists} isLoggedIn={isLoggedIn} setArtists={setArtists}/>
       {/* <RecentDrops drops={drops} isLoggedIn={isLoggedIn}/> */}
       <Search isLoggedIn={isLoggedIn}/>
       <SavedPlaylists isLoggedIn={isLoggedIn} playlists={playlists}/>

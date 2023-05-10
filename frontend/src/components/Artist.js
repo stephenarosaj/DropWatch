@@ -1,4 +1,5 @@
-import { Card, Col, Container, Image, Row} from "react-bootstrap";
+import { Card, Col, Container, Image, Row, Button} from "react-bootstrap";
+import track from "../functions/track";
 
 /**
  * Function to create Artist component
@@ -6,6 +7,14 @@ import { Card, Col, Container, Image, Row} from "react-bootstrap";
  * @returns an artist component that generates an image and name for an artist to be rendered
  */
 function Artist(props) {
+  async function handleTrack(operation) {
+    track(props.artist.id, operation)
+      .then(response => {
+        console.log(response)
+        props.setArtsits(response)
+      }
+      )
+  }
   return (
     <Container fluid>
       <Row xs={2}>
@@ -21,6 +30,8 @@ function Artist(props) {
             <Card.Text aria-label="Artist name">
               {props.artist.name}
             </Card.Text>
+            <Button onClick={() => handleTrack('add')}>Add Artist</Button>
+            <Button onClick={() => handleTrack('delete')}>Remove Artist</Button>
           </Card>
         </Col>
       </Row>

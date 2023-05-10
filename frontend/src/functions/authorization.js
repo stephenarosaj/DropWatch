@@ -1,6 +1,7 @@
 import { clientID, clientSecretID } from "../private/tokens";
 import { getPlaylists } from "./playlists";
-import { getFollowed, getUserInfo } from "./followed";
+import { getFollowed} from "./followed";
+import track from "./track";
 const redirect_uri = "http://localhost:3000/callback";
 const client_id = clientID;
 const client_secret = clientSecretID;
@@ -41,10 +42,10 @@ export function requestAuthorization() {
 export async function fetchAccessToken(
   code,
   setLogin,
-  setRefreshToken,
   setUsername,
   setPlaylists,
-  setFollowed
+  setFollowed,
+  setArtists
 ) {
   // builds the body of the Spotify api request
   let body = "grant_type=authorization_code";
@@ -77,12 +78,19 @@ export async function fetchAccessToken(
       }
       if (refresh_token !== undefined) {
         localStorage.setItem("refresh_token", refresh_token);
-        setRefreshToken(refresh_token);
       }
       setLogin(true);
       getUsername(setUsername);
       getPlaylists(setPlaylists);
       getFollowed(setFollowed);
+      track("random", "query")
+        .then(response => {
+          console.log("LOGIN: ")
+          console.log(response)
+          // setArtists([...response])
+          
+        }
+        )
     })
     .catch((error) => {
       console.error("Error:", error);

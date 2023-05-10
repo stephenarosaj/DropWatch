@@ -27,7 +27,7 @@ function DropWatch(props) {
           <Row xs={1} md={2} className="g-4">
             {props.artists.map((item, i) => (
               <Col key={i}>
-                <Artist artist={item} class='artist'/>
+                <Artist artist={item} class='artist' setArtists={props.setArtists}/>
               </Col>
             ))}
           </Row>
