@@ -9,8 +9,6 @@ export default async function track(artist_id, operation) {
                 if (results.data !== undefined) {
                   let artists = Object.values(results.data)
                   resolve(artists)
-                  // let artists = 
-                  // resolve(artists)
               } else {
                 resolve("Results undefined")
               }

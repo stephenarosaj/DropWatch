@@ -1,13 +1,32 @@
-import { Card, Col, Container, Image, Row} from "react-bootstrap";
+import { Card, Col, Container, Image, Row, Button} from "react-bootstrap";
+import track from "../functions/track";
+import { useState } from "react";
 
 
 function SearchResult(props) {
-  /* 
-    Change the following according to the Drop json properties from the backend:
-      1. Track image src line 16
-      2. artist name 
-      3. track name
-  */
+
+  async function handleTrack(operation) {
+    track(props.artist.id, operation)
+      .then(response => {
+        console.log("id: " + props.artist.id)
+        console.log("operation: " +operation)
+        console.log(response)
+        props.setArtists(response)
+      })
+  }
+
+  let button = <div></div>
+  if(props.type === 'artist') {
+    button = <div>
+      <Button className="track-button" onClick={() => handleTrack('delete')}>Untrack Artist</Button>
+      <Button onClick={() => handleTrack('add')}>Track Artist</Button>
+    </div>
+    // if(props.isTracked) {
+    //   setButton(<Button onClick={() => handleTrack('delete')}>Untrack Artist</Button>)
+    // } else {
+    //   setButton(<Button onClick={() => handleTrack('add')}>Track Artist</Button>)
+    // }
+  }
 
   return (
     <Container fluid>
@@ -19,7 +38,8 @@ function SearchResult(props) {
           <Card className="search-result-name">
               <p>{props.name}</p>
               <p>{props.type}</p>
-              <p>{props.artist}</p>
+              <p>{props.artist.name}</p>
+              {button}
           </Card>
         </Col>
       </Row>

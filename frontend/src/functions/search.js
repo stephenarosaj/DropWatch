@@ -10,6 +10,7 @@ export default async function search(query) {
         fetch("http://localhost:3232/search?query=" + query + "&offset=0")
             .then(response => response.json())
               .then(results => { 
+                console.log(results)
                 if (results.data !== undefined) {
                   let artists = results.data.artists.items
                   let tracks = results.data.tracks.items

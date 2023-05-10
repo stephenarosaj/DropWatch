@@ -6,19 +6,19 @@ import track from "../functions/track";
  * @param {prop} props - props containing the artist JSON object and css class for the component
  * @returns an artist component that generates an image and name for an artist to be rendered
  */
-function Artist(props) {
-  console.log(props)
+function FollowedArtist(props) {
   async function handleTrack(operation) {
-    console.log(props)
     track(props.id, operation)
-      .then(response => {
-        console.log(response)
-        props.setArtists(response)
-      }
-      )
+      .then(response => props.setArtists(response))
   }
 
-  // console.log(props.)
+  let button = null
+
+  if(props.isTracked) {
+    button = <Button onClick={() => handleTrack('delete')}>Untrack Artist</Button>
+  } else {
+    button = <Button onClick={() => handleTrack('add')}>Track Artist</Button>
+  }
   return (
     <Container fluid>
       <Row xs={2}>
@@ -34,7 +34,7 @@ function Artist(props) {
             <Card.Text aria-label="Artist name">
               {props.name}
             </Card.Text>
-            <Button onClick={() => handleTrack('delete')}>Untrack Artist</Button>
+            {button}
           </Card>
         </Col>
       </Row>
@@ -42,4 +42,4 @@ function Artist(props) {
   )
 }
 
-export default Artist
+export default FollowedArtist
