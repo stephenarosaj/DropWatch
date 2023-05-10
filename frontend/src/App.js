@@ -33,7 +33,6 @@ function App() {
   // const [refreshToken, setRefreshToken] = useState(null)
   const [username, setUsername] = useState(null)
   const [artists, setArtists] = useState([])
-  const [drops, setDrops] = useState({})
   const [isLoggedIn, setLogin] = useState(false)
   const[playlists, setPlaylists] = useState([])
   const [followed, setFollowed] = useState([])
@@ -46,7 +45,7 @@ function App() {
   function handleRedirect(query) {
     let code = getCode(query)
     console.log("code: " + code)
-    fetchAccessToken(code, setLogin, setUsername, setPlaylists, setFollowed, setArtists, setDrops)
+    fetchAccessToken(code, setLogin, setUsername, setPlaylists, setFollowed, setArtists)
     window.history.pushState("","", redirect_uri)
   }
 
@@ -115,7 +114,7 @@ function App() {
       </div>
       <Welcome isLoggedIn={isLoggedIn} username={username}/>
       <DropWatch artists={artists} isLoggedIn={isLoggedIn} setArtists={setArtists}/>
-      <RecentDrops drops={drops} isLoggedIn={isLoggedIn}/>
+      {/* <RecentDrops drops={drops} isLoggedIn={isLoggedIn}/> */}
       <Search isLoggedIn={isLoggedIn} trackedArtists={artists} setArtists={setArtists}/>
       <SavedPlaylists isLoggedIn={isLoggedIn} playlists={playlists}/>
       <Followed 
