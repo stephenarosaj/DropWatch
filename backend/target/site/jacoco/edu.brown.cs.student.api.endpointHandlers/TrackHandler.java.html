@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrackHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.endpointHandlers</a> &gt; <span class="el_source">TrackHandler.java</span></div><h1>TrackHandler.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api.endpointHandlers;
+
+import static java.lang.System.exit;
+
+import edu.brown.cs.student.api.MoshiUtil;
+import edu.brown.cs.student.api.database.DropWatchDB;
+import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
+import edu.brown.cs.student.api.formats.AlbumRecord;
+import edu.brown.cs.student.api.formats.DateRecord;
+import java.io.File;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+
+/**
+ * Class for TrackHandler - handles tracking/untracking artists! - a user tracks a new artist - the
+ * tracking table is updated with a new (user_id, artist_id) entry - a user untracks an artist - if
+ * the user is tracking that artist (a user_id, artist_id entry exists), that entry is removed from
+ * the table
+ */
+public class TrackHandler implements Route {
+  /** The spotify data source for this UpdateHandler class - holds responses from the spotify API */
+  private SpotifyDataSource SpotifyAPIRequester;
+
+  /** The filepath for our DropWatchDB! */
+  private String filepath = &quot;data/DropWatchDB.db&quot;;
+
+  /** The db we use to store stuff! */
+  private DropWatchDB db;
+
+  /** A few helper methods in this util! */
+  private HandlerUtil util;
+<span class="nc" id="L37"></span>
+  /** Constructor for this class */
+  public TrackHandler() {
+    try {
+      // check for mac or windows file path
+      if (new File(filepath).exists()) {
+        // windows project root = .../DropWatch/backend
+        this.db = new DropWatchDB(filepath);
+      } else if (new File(&quot;backend/&quot; + filepath).exists()) {
+        // mac project root = .../DropWatch
+        this.db = new DropWatchDB(&quot;backend/&quot; + filepath);
+      } else {
+        throw new SQLException(&quot;ERROR: Couldn't find DropWatchDB.db file!&quot;);
+      }
+      // give our handler this db!
+<span class="nc" id="L52">      this.util = new HandlerUtil(this.db);</span>
+    } catch (Exception e) {
+      System.out.println(
+<span class="nc bnc" id="L55" title="All 2 branches missed.">          &quot;CRITICAL ERROR: COULD NOT SET UP CONNECTION TO DB '&quot;</span>
+              + filepath
+<span class="nc" id="L57">              + &quot;', ABORTING TrackHandler()!\n&quot;);</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">      System.out.println(e.getMessage());</span>
+      exit(1);
+<span class="nc" id="L60">    }</span>
+  }
+<span class="nc" id="L62"></span>
+  /***
+   * Handles calls to track endpoint. adds or deletes a tracking entry from the db,
+<span class="nc" id="L65">   * return a JSON with a &quot;tracked artists&quot; field which details the tracked artists</span>
+<span class="nc" id="L66">   * after the change!</span>
+<span class="nc" id="L67">   * @param request - Request received from user.</span>
+<span class="nc" id="L68">   * @param response -</span>
+<span class="nc" id="L69">   */</span>
+<span class="nc" id="L70">  @Override</span>
+<span class="nc" id="L71">  public Object handle(Request request, Response response) {</span>
+    // the return map, will be turned into JSON
+    Map&lt;String, Object&gt; ret = new HashMap&lt;String, Object&gt;();
+    // add our params to the map!
+    ret.put(&quot;params&quot;, request.queryMap().toMap());
+
+    try {
+      // grab input params
+      String user_id = request.queryParams(&quot;user_id&quot;);
+      String artist_id = request.queryParams(&quot;artist_id&quot;);
+      String operation = request.queryParams(&quot;operation&quot;);
+
+<span class="nc" id="L83">      // number of params</span>
+      int nParams = request.queryParams().size();
+<span class="nc" id="L85">      // error check params - we should have exactly 2</span>
+      if (nParams != 3) {
+        // return error!
+        return MoshiUtil.serialize(
+<span class="nc" id="L89">            ret, &quot;ERROR: /track endpoint requires exactly 3 params, but received &quot; + nParams);</span>
+<span class="nc" id="L90">      }</span>
+<span class="nc" id="L91"></span>
+      // error check params - we should have user_id, artist_id, and operation
+      if (user_id == null || artist_id == null || operation == null) {
+<span class="nc" id="L94">        // return error!</span>
+        return MoshiUtil.serialize(
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            ret,</span>
+            &quot;ERROR: /track endpoint requires params 'user_id', 'artist_id', and 'operation', but did not receive all of them&quot;);
+<span class="nc" id="L98">      }</span>
+
+      // figure out what our operation is and execute it / error checking operation
+      boolean add = operation.equals(&quot;add&quot;);
+<span class="nc bnc" id="L102" title="All 6 branches missed.">      boolean query = operation.equals(&quot;query&quot;);</span>
+      if (!add &amp;&amp; !operation.equals(&quot;delete&quot;) &amp;&amp; !query) {
+<span class="nc" id="L104">        return MoshiUtil.serialize(</span>
+            ret,
+            &quot;ERROR: /track endpoint requires param 'operation' to have value 'add', 'delete', or 'query', but received '&quot;
+                + operation
+<span class="nc" id="L108">                + &quot;'&quot;);</span>
+<span class="nc" id="L109">      }</span>
+<span class="nc bnc" id="L110" title="All 6 branches missed."></span>
+<span class="nc" id="L111">      // find out what artists we're already tracking</span>
+      ArrayList&lt;String&gt; currentArtist_ids = this.db.queryTracking(user_id, true);
+      // map of (artist_id, [link, first image, name of artist]) pairs
+      HashMap&lt;String, ArrayList&lt;String&gt;&gt; currentArtistInfo =
+<span class="nc" id="L115">          this.db.queryMultipleArtists(currentArtist_ids);</span>
+
+<span class="nc" id="L117">      // if just querying, return these artists' info</span>
+      if (query) {
+        ret.put(&quot;data&quot;, currentArtistInfo);
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        return MoshiUtil.serialize(ret, &quot;success&quot;);</span>
+<span class="nc" id="L121">      }</span>
+<span class="nc" id="L122"></span>
+      // check if we already track this artist!
+      boolean alreadyTracking = currentArtist_ids.contains(artist_id);
+
+<span class="nc" id="L126">      if (alreadyTracking &amp;&amp; add) {</span>
+        // add &amp;&amp; alreadyTracking
+<span class="nc bnc" id="L128" title="All 4 branches missed.">        // shouldn't add an artist we're already tracking - just return our tracked artists</span>
+        ret.put(&quot;data&quot;, currentArtistInfo);
+        // return success!
+<span class="nc" id="L131">        return MoshiUtil.serialize(ret, &quot;success&quot;);</span>
+      } else if (add) {
+<span class="nc" id="L133">        // add &amp;&amp; !alreadyTracking</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        // add to db</span>
+        this.db.addTracking(user_id, artist_id);
+        // now check new releases for this artist
+<span class="nc" id="L137">        ArrayList&lt;AlbumRecord&gt; artistDrops = new ArrayList&lt;&gt;();</span>
+        if (this.db.queryArtists(artist_id).size() == 0) {
+<span class="nc" id="L139">          // we don't have this artist in our db yet - need to look at all music as new</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">          artistDrops = util.checkNewRelease(artist_id, new DateRecord(&quot;0000-00-00&quot;, &quot;day&quot;));</span>
+        } else {
+<span class="nc" id="L142">          // this artist already in our db - new music is only from after stored latest release</span>
+          artistDrops = util.checkNewRelease(artist_id, this.db.findLatestRelease(artist_id));
+        }
+<span class="nc" id="L145">        // if not empty, add their releases to our db!</span>
+        for (AlbumRecord drop : artistDrops) {
+          this.db.addNewAlbum(
+<span class="nc bnc" id="L148" title="All 2 branches missed.">              drop.artists(),</span>
+<span class="nc bnc" id="L149" title="All 4 branches missed.">              drop.id(),</span>
+<span class="nc" id="L150">              drop.release_date(),</span>
+              drop.release_date_precision(),
+<span class="nc" id="L152">              drop.href(),</span>
+              (drop.images() == null || drop.images().length == 0 ? null : drop.images()[0].url()),
+<span class="nc" id="L154">              drop.name(),</span>
+<span class="nc" id="L155">              drop.album_type());</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        }</span>
+        // commit changes and return
+        this.db.commit();
+<span class="nc" id="L159">        // return success!</span>
+<span class="nc" id="L160">        ret.put(&quot;data&quot;, this.db.queryMultipleArtists(this.db.queryTracking(user_id, true)));</span>
+        return MoshiUtil.serialize(ret, &quot;success&quot;);
+      } else if (alreadyTracking) {
+<span class="nc" id="L163">        // !add &amp;&amp; alreadyTracking</span>
+<span class="nc" id="L164">        // should delete!</span>
+        this.db.removeTracking(user_id, artist_id);
+        this.db.commit();
+        // return success!
+<span class="nc" id="L168"></span>
+<span class="nc" id="L169">        ret.put(&quot;data&quot;, this.db.queryMultipleArtists(this.db.queryTracking(user_id, true)));</span>
+        return MoshiUtil.serialize(ret, &quot;success&quot;);
+<span class="nc" id="L171">      } else {</span>
+<span class="nc" id="L172">        // !add &amp;&amp; !alreadyTracking</span>
+<span class="nc" id="L173">        // shouldn't delete an artist we're not tracking - just return our tracked artists</span>
+        ret.put(&quot;data&quot;, currentArtistInfo);
+        return MoshiUtil.serialize(ret, &quot;success&quot;);
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return MoshiUtil.serialize(ret, &quot;ERROR: &quot; + e.getMessage());
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: edu.brown.cs.student.api.SQLiteDBUnitTest
+-------------------------------------------------------------------------------
+Tests run: 20, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.99 s - in edu.brown.cs.student.api.SQLiteDBUnitTest

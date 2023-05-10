@@ -1,0 +1,861 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DropWatchDB.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.database</a> &gt; <span class="el_source">DropWatchDB.java</span></div><h1>DropWatchDB.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api.database;
+
+import edu.brown.cs.student.api.formats.ArtistRecord;
+import edu.brown.cs.student.api.formats.DateRecord;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import org.testng.internal.collections.Pair;
+
+/**
+ * Class that is the database controller for our actual database. It's like a wrapper around the
+ * sqliteDB class! This database will store information on what artists are being tracked by which
+ * users, what artists' most recent release dates are, and more!
+ */
+public class DropWatchDB {
+
+  /** The actual sqliteDB Object that this class wraps - the real connection to the database! */
+  private sqliteDB db = new sqliteDB();
+
+  /**
+   * The relative filepath of the database we are connecting to (during use, should always be
+<span class="fc" id="L25">   * &quot;data/DropWatchDB.db&quot;, but during testing this will change)</span>
+   */
+  private String filepath;
+
+  /** tables map! maps table names in the DB to their schema! */
+  public HashMap&lt;String, String&gt; tables;
+
+  /**
+   * Constructor for this class!
+   *
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not connect to DB
+   */
+  public DropWatchDB(String filepath) throws SQLException, ClassNotFoundException {
+    // set up fields and connect to db
+    this.filepath = filepath;
+    this.db.connectDB(this.filepath);
+    this.tables = new HashMap&lt;&gt;();
+<span class="fc" id="L43"></span>
+    // setup!
+<span class="fc" id="L45">    initializeDB();</span>
+<span class="fc" id="L46">    this.db.commit();</span>
+<span class="fc" id="L47">  }</span>
+
+  /**
+<span class="fc" id="L50">   * Method to close our DB connection!</span>
+<span class="fc" id="L51">   *</span>
+<span class="fc" id="L52">   * @throws ClassNotFoundException if could not load SQLite JDBC driver</span>
+   * @throws SQLException if could not commit :(
+   */
+  public boolean closeDB() throws SQLException, ClassNotFoundException {
+    return this.db.closeDB();
+  }
+
+  /**
+<span class="fc" id="L60">   * Method to check our DB's conn!</span>
+   *
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not commit :(
+   */
+  public boolean connIsNull() throws SQLException, ClassNotFoundException {
+    return this.db.connIsNull();
+  }
+
+<span class="fc" id="L69">  /**</span>
+   * Method to commit our DB's changes!
+   *
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not commit :(
+   */
+  public boolean commit() throws SQLException, ClassNotFoundException {
+    return this.db.commit();
+  }
+<span class="nc" id="L78"></span>
+  /**
+   * method to initialize our DB with the right tables
+   *
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not create tables/check for them
+   */
+  private void initializeDB() throws ClassNotFoundException, SQLException {
+    // CREATE TABLES!
+    createTracking();
+<span class="fc" id="L88">    createArtists();</span>
+<span class="fc" id="L89">    createAlbums();</span>
+<span class="fc" id="L90">    createArtistAlbums();</span>
+<span class="fc" id="L91">  }</span>
+<span class="fc" id="L92"></span>
+  /**
+   * Helper to create the tracking table. this table is for keeping track of the art users tracking
+   * an artist! EXAMPLE: tracking user_id | artist_id 1 | JID 1 | Smino 2 | JID 2 | Tyler 3 | Smino
+   * 3 | Tyler tracking(user_id = 3) --&gt; [Smino, Tyler] tracking(artist_id = JID) --&gt; [1, 2]
+   *
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not check for/create tracking table
+   */
+  private void createTracking() throws SQLException, ClassNotFoundException {
+    // make the table in the db (if it doesn't exist)
+    String trackingName = &quot;tracking&quot;;
+    String trackingSchema =
+        &quot;&quot;
+            + &quot;user_id VARCHAR(100),&quot;
+            + // user_id - the unique spotify id of the user
+            &quot;artist_id VARCHAR(100),&quot;
+            + // artist_id - the unique spotify id of the artist
+            &quot;PRIMARY KEY (user_id, artist_id)&quot;; // our primary key is the tuple of these two
+    if (!db.tableExists(trackingName)) {
+      db.createNewTable(trackingName, trackingSchema);
+<span class="fc" id="L113">    }</span>
+<span class="fc" id="L114">    // update tables field</span>
+    this.tables.put(trackingName, trackingSchema);
+  }
+
+<span class="fc bfc" id="L118" title="All 2 branches covered.">  /**</span>
+<span class="fc" id="L119">   * Helper to create the artists table. this table is for keeping track of artists, EXAMPLE:</span>
+   * artists artist_id | link | image | name JID | a.com | a.net | a Smino | b.com | b.net | b Tyler
+   * | c.com | c.net | c artists(artist_id = JID) --&gt; (2022-10, month, a)
+<span class="fc" id="L122">   *</span>
+<span class="fc" id="L123">   * @throws ClassNotFoundException if could not load SQLite JDBC driver</span>
+   * @throws SQLException if could not check for/create tracking table
+   */
+  private void createArtists() throws SQLException, ClassNotFoundException {
+    // make the table in the db (if it doesn't exist)
+    String artistsName = &quot;artists&quot;;
+    String artistsSchema =
+        &quot;&quot;
+            + &quot;artist_id VARCHAR(100) PRIMARY KEY,&quot;
+            + // artist_id - the unique spotify id of the artist - our primary key
+            &quot;link VARCHAR(100),&quot;
+            + // link - the link to grab more data on an artist
+            &quot;image VARCHAR(100),&quot;
+            + // image - the link to first image for artist
+            &quot;name VARCHAR(100)&quot;; // name - the name of the artist
+    if (!db.tableExists(artistsName)) {
+<span class="fc" id="L139">      db.createNewTable(artistsName, artistsSchema);</span>
+<span class="fc" id="L140">    }</span>
+    // update tables field
+    this.tables.put(artistsName, artistsSchema);
+  }
+
+<span class="fc bfc" id="L145" title="All 2 branches covered.">  /**</span>
+<span class="fc" id="L146">   * Helper to create the albums table. this table is for keeping track of albums artists release</span>
+   * EXAMPLE: albums album_id | releaseDate | precision | link | image | type 1 | 2020-10-06 | day |
+   * a.com | a.net | single 2 | 04-05 | month | b.com | b.net | album 3 | 2021 | year | c.com | NULL
+<span class="fc" id="L149">   * | single albums(album_id = 1) --&gt; (2020-10-06, day, a)</span>
+<span class="fc" id="L150">   *</span>
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not check for/create tracking table
+   */
+  private void createAlbums() throws SQLException, ClassNotFoundException {
+    // make the table in the db (if it doesn't exist)
+    String albumsName = &quot;albums&quot;;
+    String albumsSchema =
+        &quot;&quot;
+            + &quot;album_id VARCHAR(100) PRIMARY KEY,&quot;
+            + // album_id - the unique spotify id of the album
+            &quot;releaseDate VARCHAR(10),&quot;
+            + // releaseDate - the latest release date for this artist
+            &quot;precision VARCHAR(5),&quot;
+            + // precision - the precision of the latest release date - year, month, or day
+            &quot;link VARCHAR(100),&quot;
+            + // link - the link to get more info about an album
+<span class="fc" id="L167">            &quot;image VARCHAR(100),&quot;</span>
+<span class="fc" id="L168">            + // image - link to first image of album (null if none)</span>
+            &quot;name VARCHAR(100),&quot;
+            + // name - first name on album
+            &quot;type VARCHAR(11)&quot;; // type - type of album - single or album
+    if (!db.tableExists(albumsName)) {
+      db.createNewTable(albumsName, albumsSchema);
+    }
+    // update tables field
+<span class="fc bfc" id="L176" title="All 2 branches covered.">    this.tables.put(albumsName, albumsSchema);</span>
+<span class="fc" id="L177">  }</span>
+
+  /**
+<span class="fc" id="L180">   * Helper to create the artistAlbums table. this table is for keeping track of the relationship</span>
+<span class="fc" id="L181">   * between artists and albums (releasing albums) EXAMPLE: artistAlbums artist_id | album_id 4 | 1</span>
+   * 5 | 2 6 | 3
+   *
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not check for/create tracking table
+   */
+  private void createArtistAlbums() throws SQLException, ClassNotFoundException {
+    // make the table in the db (if it doesn't exist)
+    String artistAlbumsName = &quot;artistAlbums&quot;;
+    String artistAlbumsSchema =
+        &quot;&quot;
+            + &quot;artist_id VARCHAR(100),&quot;
+            + // artist_id - the unique spotify id of the artist
+            &quot;album_id VARCHAR(100),&quot;
+            + // album_id - the unique spotify id of the album
+            &quot;PRIMARY KEY (artist_id, album_id),&quot;
+<span class="fc" id="L197">            + // primary key is tuple of columns</span>
+<span class="fc" id="L198">            &quot;FOREIGN KEY (artist_id) REFERENCES artists(artist_id),&quot;</span>
+            + // ids are from other tables!
+            &quot;FOREIGN KEY (album_id) REFERENCES albums(album_id)&quot;; // ids are from other tables!
+    if (!db.tableExists(artistAlbumsName)) {
+      db.createNewTable(artistAlbumsName, artistAlbumsSchema);
+    }
+<span class="fc bfc" id="L204" title="All 2 branches covered.">    // update tables field</span>
+<span class="fc" id="L205">    this.tables.put(artistAlbumsName, artistAlbumsSchema);</span>
+  }
+
+<span class="fc" id="L208">  /**</span>
+<span class="fc" id="L209">   * method that queries the db to see if a specific user follows a specific artist</span>
+   *
+   * @param user_id the user to look up in the db
+   * @param artist_id the artist to look up in the db
+   * @return boolean indicating if user follows artist
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not check if user is tracking artist
+   */
+  public boolean isUserTrackingArtist(String user_id, String artist_id)
+      throws SQLException, ClassNotFoundException {
+    // execute our query!
+    String sqlQuery =
+<span class="fc" id="L221">        &quot;&quot;</span>
+            + &quot;SELECT * FROM tracking WHERE user_id = \&quot;&quot;
+<span class="fc" id="L223">            + user_id</span>
+            + &quot;\&quot; AND artist_id = \&quot;&quot;
+<span class="fc" id="L225">            + artist_id</span>
+            + &quot;\&quot;&quot;;
+<span class="fc" id="L227">    try (ResultSet result = db.executeSQLQuery(sqlQuery)) {</span>
+<span class="fc" id="L228">      // return whether there is a single entry of this user_id tracking this artist_id</span>
+      boolean ret = result.next();
+      // close results!
+      result.close();
+      return ret;
+    }
+  }
+
+  /**
+   * method that queries the db for one of two things: - the artists a user is tracking, returning
+   * their artist_ids as a list - the users tracking an artist, returning their user_ids as a list
+   *
+   * @param id the artist/user to look up in the db
+   * @param isUser_id indicates whether we're selecting users (true) or artists (false)
+   * @return a map of (artist_id, [first image, name of artist, link]) pairs (empty if none)
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not query tracking table
+<span class="fc bfc" id="L245" title="All 2 branches covered.">   */</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">  public ArrayList&lt;String&gt; queryTracking(String id, boolean isUser_id)</span>
+<span class="fc" id="L247">      throws SQLException, ClassNotFoundException {</span>
+    // execute our query!
+<span class="fc" id="L249">    String sqlQuery =</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        &quot;&quot;</span>
+<span class="fc" id="L251">            + &quot;SELECT &quot;</span>
+            + (isUser_id ? &quot;artist_id&quot; : &quot;user_id&quot;)
+            + &quot; FROM tracking &quot;
+<span class="fc" id="L254">            + &quot;WHERE &quot;</span>
+<span class="fc" id="L255">            + (isUser_id ? &quot;user_id&quot; : &quot;artist_id&quot;)</span>
+            + &quot; = \&quot;&quot;
+            + id
+            + &quot;\&quot;;&quot;;
+    try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
+      // collect the results as a list
+      ArrayList&lt;String&gt; ret = new ArrayList&lt;&gt;();
+      while (result.next()) {
+        ret.add(result.getString(1));
+      }
+      // return our results!
+      result.close();
+      return ret;
+    }
+  }
+
+<span class="fc" id="L271">  /**</span>
+   * method that adds a new (user_id, artist_id) pair into the tracking table! NOTE: since the
+   * primary key of the tracking table is a tuple (user_id, artist_id), if you try to enter the same
+   * pair, an error will occur
+   *
+   * @param user_id the user who is tracking the artist
+<span class="fc" id="L277">   * @param artist_id the artist who is being tracked</span>
+<span class="pc bpc" id="L278" title="2 of 4 branches missed.">   * @return an array list of artist_ids that the user is tracking (empty if none)</span>
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+<span class="nc" id="L280">   * @throws SQLException if could not insert into tracking table</span>
+<span class="nc" id="L281">   */</span>
+  public boolean addTracking(String user_id, String artist_id)
+      throws SQLException, ClassNotFoundException {
+<span class="fc" id="L284">    // make our statement!</span>
+<span class="fc" id="L285">    String SQLStatement =</span>
+        &quot;&quot; + &quot;INSERT INTO tracking VALUES (&quot; + &quot;\&quot;&quot; + user_id + &quot;\&quot;, \&quot;&quot; + artist_id + &quot;\&quot;);&quot;;
+
+    // execute our statement!
+    Pair&lt;Boolean, Statement&gt; ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+        // result set returned or wrong number for updateCount - ERROR!
+        statement.close();
+        throw new SQLException(
+            &quot;ERROR: Insert into DropWatchDB tracking table ('&quot;
+                + user_id
+                + &quot;', '&quot;
+                + artist_id
+                + &quot;') FAILED&quot;);
+<span class="fc bfc" id="L300" title="All 2 branches covered.">      }</span>
+<span class="fc" id="L301">      // executed successfully</span>
+      statement.close();
+      return true;
+    }
+<span class="fc" id="L305">  }</span>
+
+  /**
+   * method that removes a (user_id, artist_id) row from the tracking table!
+   *
+   * @param user_id the user who is tracking the artist
+<span class="fc" id="L311">   * @param artist_id the artist who is being tracked</span>
+<span class="pc bpc" id="L312" title="2 of 4 branches missed.">   * @return boolean indicating successful removal - true means it was present and removed, false</span>
+   *     means it was not present and thus not removed
+<span class="nc" id="L314">   * @throws ClassNotFoundException if could not load SQLite JDBC driver</span>
+<span class="nc" id="L315">   * @throws SQLException if could not delete row from tracking table</span>
+   */
+  public boolean removeTracking(String user_id, String artist_id)
+<span class="fc" id="L318">      throws SQLException, ClassNotFoundException {</span>
+<span class="fc" id="L319">    // check that this entry is even actually there</span>
+    if (!isUserTrackingArtist(user_id, artist_id)) {
+      return false;
+    }
+
+    // make our statement!
+    String SQLStatement =
+        &quot;&quot;
+            + &quot;DELETE FROM tracking WHERE &quot;
+            + &quot;user_id = \&quot;&quot;
+            + user_id
+            + &quot;\&quot; AND artist_id = \&quot;&quot;
+            + artist_id
+<span class="fc" id="L332">            + &quot;\&quot;;&quot;;</span>
+
+    // execute our statement!
+<span class="fc" id="L335">    Pair&lt;Boolean, Statement&gt; ret;</span>
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+<span class="fc bfc" id="L338" title="All 2 branches covered.">        // result set returned or wrong number for updateCount - ERROR!</span>
+        statement.close();
+<span class="fc" id="L340">        throw new SQLException(</span>
+<span class="fc" id="L341">            &quot;ERROR: Delete from DropWatchDB tracking table ('&quot;</span>
+<span class="fc" id="L342">                + user_id</span>
+<span class="fc" id="L343">                + &quot;', '&quot;</span>
+<span class="fc" id="L344">                + artist_id</span>
+<span class="fc" id="L345">                + &quot;') FAILED&quot;);</span>
+<span class="fc" id="L346">      }</span>
+      // executed successfully
+      statement.close();
+<span class="fc" id="L349">      return true;</span>
+    }
+  }
+<span class="fc" id="L352"></span>
+<span class="fc" id="L353">  /**</span>
+   * method that queries the db for albums by searching album_id
+   *
+   * @param album_id the album_id to look up in the db
+   * @return an arrayList of [releaseDate, precision, link, image, name] lists (empty if none)
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not query tracking table
+   */
+  public String[] queryAlbums(String album_id) throws SQLException, ClassNotFoundException {
+    // execute our query!
+    String sqlQuery =
+        &quot;&quot;
+            + &quot;SELECT releaseDate, precision, link, image, name, type FROM albums &quot;
+            + &quot;WHERE album_id  = \&quot;&quot;
+<span class="fc bfc" id="L367" title="All 2 branches covered.">            + album_id</span>
+<span class="fc" id="L368">            + &quot;\&quot;;&quot;;</span>
+    try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
+      // collect the results as an array
+      String[] ret;
+<span class="fc" id="L372">      if (result.next()) {</span>
+        // we have resulst!
+        ret = new String[6];
+        ret[0] = result.getString(1);
+        ret[1] = result.getString(2);
+        ret[2] = result.getString(3);
+<span class="fc" id="L378">        ret[3] = result.getString(4);</span>
+<span class="pc bpc" id="L379" title="2 of 4 branches missed.">        ret[4] = result.getString(5);</span>
+        ret[5] = result.getString(6);
+<span class="nc" id="L381">      } else {</span>
+<span class="nc" id="L382">        // we don't have results!</span>
+        ret = new String[0];
+      }
+<span class="fc" id="L385">      // return our result!</span>
+<span class="fc" id="L386">      result.close();</span>
+      return ret;
+    }
+  }
+
+  /**
+   * method that removes an album row from the albums table!
+   *
+   * @param album_id the album we want to remove
+   * @return boolean indicating successful removal - true means it was present and removed, false
+   *     means it was not present and thus not removed
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not delete album from albums table
+   */
+  public boolean removeAlbums(String album_id) throws SQLException, ClassNotFoundException {
+    // make sure entry exists
+    if (queryAlbums(album_id).length == 0) {
+      return false;
+    }
+<span class="fc" id="L405"></span>
+    // make our statement!
+<span class="pc bpc" id="L407" title="1 of 2 branches missed.">    String SQLStatement = &quot;&quot; + &quot;DELETE FROM albums WHERE &quot; + &quot;album_id = \&quot;&quot; + album_id + &quot;\&quot;;&quot;;</span>
+
+    // execute our statement!
+    Pair&lt;Boolean, Statement&gt; ret;
+<span class="fc" id="L411">    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {</span>
+<span class="pc bpc" id="L412" title="2 of 4 branches missed.">      if (ret.first() || (statement.getUpdateCount() != 1)) {</span>
+        // result set returned or wrong number for updateCount - ERROR!
+<span class="nc" id="L414">        statement.close();</span>
+<span class="nc bnc" id="L415" title="All 2 branches missed.">        throw new SQLException(</span>
+            &quot;ERROR: Delete from DropWatchDB albums table '&quot; + album_id + &quot;' FAILED&quot;);
+      }
+<span class="fc" id="L418">      // executed successfully</span>
+<span class="fc" id="L419">      statement.close();</span>
+      return true;
+    }
+  }
+
+  /**
+   * method to update the albums table
+   *
+   * @param album_id the album_id of the album whose data we're adding
+   * @param releaseDate the release date
+   * @param precision the precision of the release date - &quot;day&quot;, &quot;month&quot;, or &quot;year&quot;
+   * @param link the link to get more info about the album
+   * @param image the link to the first image of the album (null if none)
+<span class="fc" id="L432">   * @param name the first name on the album</span>
+   * @param type the type of the album
+   * @return a boolean indicating success or failure
+<span class="fc" id="L435">   * @throws ClassNotFoundException if could not load SQLite JDBC driver</span>
+   * @throws SQLException if could not insert into latest release table
+<span class="fc" id="L437">   */</span>
+<span class="fc bfc" id="L438" title="All 2 branches covered.">  public boolean insertOrReplaceAlbums(</span>
+<span class="fc" id="L439">      String album_id,</span>
+<span class="fc" id="L440">      String releaseDate,</span>
+<span class="fc" id="L441">      String precision,</span>
+      String link,
+      String image,
+      String name,
+<span class="fc" id="L445">      String type)</span>
+<span class="fc" id="L446">      throws SQLException, ClassNotFoundException {</span>
+    // make our statement!
+    String SQLStatement =
+        &quot;&quot;
+            + &quot;INSERT OR REPLACE INTO albums VALUES (&quot;
+            + &quot;\&quot;&quot;
+            + album_id
+            + &quot;\&quot;, \&quot;&quot;
+            + releaseDate
+            + &quot;\&quot;, \&quot;&quot;
+            + precision
+            + &quot;\&quot;, \&quot;&quot;
+<span class="nc" id="L458">            + link</span>
+            + &quot;\&quot;, \&quot;&quot;
+<span class="nc bnc" id="L460" title="All 2 branches missed.">            + (image == null ? &quot;null&quot; : image)</span>
+<span class="nc" id="L461">            + &quot;\&quot;, \&quot;&quot;</span>
+<span class="nc" id="L462">            + name</span>
+            + &quot;\&quot;, \&quot;&quot;
+<span class="nc" id="L464">            + type</span>
+            + &quot;\&quot;);&quot;;
+
+    // execute our statement!
+    Pair&lt;Boolean, Statement&gt; ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+        // result set returned or wrong number for updateCount - ERROR!
+        statement.close();
+        throw new SQLException(
+            &quot;ERROR: Insert into DropWatchDB albums table ('&quot;
+                + album_id
+                + &quot;', '&quot;
+<span class="fc bfc" id="L477" title="All 2 branches covered.">                + releaseDate</span>
+<span class="fc" id="L478">                + &quot;', '&quot;</span>
+                + precision
+                + &quot;', &quot;
+                + link
+<span class="fc" id="L482">                + &quot;', '&quot;</span>
+                + (image == null ? &quot;null&quot; : image)
+                + &quot;', '&quot;
+                + name
+                + &quot;', '&quot;
+                + type
+<span class="fc" id="L488">                + &quot;') FAILED&quot;);</span>
+<span class="pc bpc" id="L489" title="2 of 4 branches missed.">      }</span>
+      // executed successfully
+<span class="nc" id="L491">      statement.close();</span>
+<span class="nc" id="L492">      return true;</span>
+    }
+  }
+<span class="fc" id="L495"></span>
+<span class="fc" id="L496">  /**</span>
+   * method that queries the db for artists by searching artist_id
+   *
+   * @param artist_id the artist_id to look up in the db
+   * @return an ArrayList consisting of [link, first image, name of artist]
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not query artists table
+   */
+  public ArrayList&lt;String&gt; queryArtists(String artist_id)
+      throws SQLException, ClassNotFoundException {
+    // execute our query!
+    String sqlQuery =
+        &quot;&quot; + &quot;SELECT link, image, name FROM artists &quot; + &quot;WHERE artist_id  = \&quot;&quot; + artist_id + &quot;\&quot;;&quot;;
+    try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
+      // return results or empty if no results
+      ArrayList&lt;String&gt; artistInfo = new ArrayList&lt;&gt;();
+<span class="fc" id="L512">      if (result.next()) {</span>
+        artistInfo.add(result.getString(1));
+        artistInfo.add(result.getString(2));
+        artistInfo.add(result.getString(3));
+      }
+
+<span class="fc" id="L518">      // return our results!</span>
+<span class="pc bpc" id="L519" title="2 of 4 branches missed.">      result.close();</span>
+      return artistInfo;
+<span class="nc" id="L521">    }</span>
+<span class="nc" id="L522">  }</span>
+
+  /**
+<span class="fc" id="L525">   * method that queries the artists table for multiple artist_ids, return their data as a map of</span>
+<span class="fc" id="L526">   * (artist_id, [link, first image, name of artist]) pairs</span>
+   *
+   * @param artist_ids list of artist_ids to query
+   * @return map of (artist_id, [link, first image, name of artist]) pairs
+   */
+  public HashMap&lt;String, ArrayList&lt;String&gt;&gt; queryMultipleArtists(ArrayList&lt;String&gt; artist_ids)
+      throws SQLException, ClassNotFoundException {
+    // create map to return
+    HashMap&lt;String, ArrayList&lt;String&gt;&gt; ret = new HashMap&lt;&gt;();
+    // for each artist, query artists table and add their info to map, even if its empty
+    for (String artist_id : artist_ids) {
+      ret.put(artist_id, this.queryArtists(artist_id));
+    }
+    // return results!
+    return ret;
+<span class="fc bfc" id="L541" title="All 2 branches covered.">  }</span>
+<span class="fc bfc" id="L542" title="All 2 branches covered."></span>
+<span class="fc" id="L543">  /**</span>
+   * method that removes an artist row from the artists table!
+<span class="fc" id="L545">   *</span>
+<span class="fc bfc" id="L546" title="All 2 branches covered.">   * @param artist_id the artist we want to remove</span>
+<span class="fc" id="L547">   * @return boolean indicating successful removal - true means it was present and removed, false</span>
+   *     means it was not present and thus not removed
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+<span class="fc" id="L550">   * @throws SQLException if could not delete artist from artists table</span>
+<span class="fc" id="L551">   */</span>
+  public boolean removeArtists(String artist_id) throws SQLException, ClassNotFoundException {
+    // make sure entry exists
+    if (queryArtists(artist_id).isEmpty()) {
+      return false;
+    }
+
+    // make our statement!
+    String SQLStatement = &quot;&quot; + &quot;DELETE FROM artists WHERE &quot; + &quot;artist_id = \&quot;&quot; + artist_id + &quot;\&quot;;&quot;;
+
+    // execute our statement!
+    Pair&lt;Boolean, Statement&gt; ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+<span class="fc" id="L565">        // result set returned or wrong number for updateCount - ERROR!</span>
+        statement.close();
+        throw new SQLException(
+<span class="fc" id="L568">            &quot;ERROR: Delete from DropWatchDB artists table '&quot; + artist_id + &quot;' FAILED&quot;);</span>
+      }
+<span class="fc" id="L570">      // executed successfully</span>
+      statement.close();
+<span class="fc" id="L572">      return true;</span>
+<span class="fc" id="L573">    }</span>
+  }
+
+  /**
+   * method to update the artists table
+   *
+   * @param artist_id the artist_id of the artist whose data we're adding
+   * @param link the link to get more info about the artist
+   * @param image link to the first image of the artist
+   * @param name the name of the artist
+   * @return a boolean indicating success or failure
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not insert into latest release table
+   */
+  public boolean insertOrReplaceArtists(String artist_id, String link, String image, String name)
+<span class="fc bfc" id="L588" title="All 2 branches covered.">      throws SQLException, ClassNotFoundException {</span>
+<span class="fc" id="L589">    // make our statement!</span>
+    String SQLStatement =
+        &quot;&quot;
+            + &quot;INSERT OR REPLACE INTO artists VALUES (&quot;
+<span class="fc" id="L593">            + &quot;\&quot;&quot;</span>
+            + artist_id
+            + &quot;\&quot;, \&quot;&quot;
+            + link
+            + &quot;\&quot;, \&quot;&quot;
+            + image
+<span class="fc" id="L599">            + &quot;\&quot;, \&quot;&quot;</span>
+<span class="pc bpc" id="L600" title="2 of 4 branches missed.">            + name</span>
+            + &quot;\&quot;);&quot;;
+<span class="nc" id="L602"></span>
+<span class="nc" id="L603">    // execute our statement!</span>
+    Pair&lt;Boolean, Statement&gt; ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+<span class="fc" id="L606">      if (ret.first() || (statement.getUpdateCount() != 1)) {</span>
+<span class="fc" id="L607">        // result set returned or wrong number for updateCount - ERROR!</span>
+        statement.close();
+        throw new SQLException(
+            &quot;ERROR: Insert into DropWatchDB artists table ('&quot;
+                + artist_id
+                + &quot;', '&quot;
+                + link
+                + &quot;', '&quot;
+                + image
+                + &quot;', '&quot;
+                + name
+                + &quot;') FAILED&quot;);
+      }
+      // executed successfully
+<span class="fc" id="L621">      statement.close();</span>
+      return true;
+    }
+  }
+
+  /**
+<span class="fc" id="L627">   * method that queries the db for multiple artist-album relationships by searching for one</span>
+<span class="pc bpc" id="L628" title="2 of 4 branches missed.">   * artist_id/album_id</span>
+   *
+<span class="nc" id="L630">   * @param id the artist_id/album_id to look up in the db</span>
+<span class="nc" id="L631">   * @param isArtist_id indicates whether id is an artist_id or not (if not, it's album_id)</span>
+   * @return an arrayList of album_ids/artist_ids (empty if none)
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+<span class="fc" id="L634">   * @throws SQLException if could not query artists table</span>
+<span class="fc" id="L635">   */</span>
+  public ArrayList&lt;String&gt; queryArtistAlbums(String id, boolean isArtist_id)
+      throws SQLException, ClassNotFoundException {
+    // execute our query!
+    String sqlQuery =
+        &quot;&quot;
+            + &quot;SELECT &quot;
+            + (isArtist_id ? &quot;album_id&quot; : &quot;artist_id&quot;)
+            + &quot; FROM artistAlbums &quot;
+            + &quot;WHERE &quot;
+            + (isArtist_id ? &quot;artist_id&quot; : &quot;album_id&quot;)
+<span class="nc" id="L646">            + &quot;  = \&quot;&quot;</span>
+            + id
+<span class="nc bnc" id="L648" title="All 2 branches missed.">            + &quot;\&quot;;&quot;;</span>
+<span class="nc" id="L649">    try (ResultSet result = db.executeSQLQuery(sqlQuery)) {</span>
+      // collect the results as a list
+      ArrayList&lt;String&gt; ret = new ArrayList&lt;&gt;();
+      while (result.next()) {
+<span class="nc" id="L653">        ret.add(result.getString(1));</span>
+<span class="nc bnc" id="L654" title="All 2 branches missed.">      }</span>
+      // return our results!
+<span class="nc" id="L656">      result.close();</span>
+      return ret;
+<span class="nc bnc" id="L658" title="All 2 branches missed.">    }</span>
+<span class="nc" id="L659">  }</span>
+
+<span class="nc" id="L661">  /**</span>
+<span class="nc" id="L662">   * method that queries the db for one artist-album relationship by searching for an (artist_id,</span>
+   * album_id) pair
+   *
+<span class="nc" id="L665">   * @param artist_id the artist_id to look up in the DB</span>
+<span class="nc bnc" id="L666" title="All 2 branches missed.">   * @param album_id the album_id to look up in the DB</span>
+   * @return an arrayList of album_ids/artist_ids (empty if none)
+<span class="nc" id="L668">   * @throws ClassNotFoundException if could not load SQLite JDBC driver</span>
+   * @throws SQLException if could not query artists table
+<span class="nc bnc" id="L670" title="All 2 branches missed.">   */</span>
+  public boolean artistAlbumRelationshipExists(String artist_id, String album_id)
+<span class="nc" id="L672">      throws SQLException, ClassNotFoundException {</span>
+    // execute our query!
+<span class="nc" id="L674">    String sqlQuery =</span>
+<span class="nc" id="L675">        &quot;&quot;</span>
+            + &quot;SELECT * FROM artistAlbums &quot;
+            + &quot;WHERE artist_id = \&quot;&quot;
+            + artist_id
+            + &quot;\&quot; AND album_id = \&quot;&quot;
+            + album_id
+            + &quot;\&quot;;&quot;;
+    try (ResultSet result = db.executeSQLQuery(sqlQuery)) {
+      // collect the results as a list
+      boolean ret = result.next();
+      // return our results!
+      result.close();
+      return ret;
+    }
+  }
+
+  /**
+   * method that removes an artist-album relationship from the db (by pair)
+<span class="nc" id="L693">   *</span>
+   * @param artist_id the artist_id to remove
+   * @param album_id the album_id to remove
+<span class="nc bnc" id="L696" title="All 2 branches missed.">   * @return boolean indicating successful removal - true means it was present and removed, false</span>
+   *     means it was not present and thus not removed
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+<span class="nc bnc" id="L699" title="All 4 branches missed.">   * @throws SQLException if could not delete artist from artists table</span>
+   */
+<span class="nc" id="L701">  public boolean removeArtistAlbums(String artist_id, String album_id)</span>
+<span class="nc" id="L702">      throws SQLException, ClassNotFoundException {</span>
+<span class="nc" id="L703">    // make sure entry exists</span>
+    if (!artistAlbumRelationshipExists(artist_id, album_id)) {
+      return false;
+    }
+
+    // make our statement!
+    String SQLStatement =
+        &quot;&quot;
+            + &quot;DELETE FROM artistAlbums WHERE &quot;
+            + &quot;artist_id = \&quot;&quot;
+            + artist_id
+            + &quot;\&quot; AND album_id = \&quot;&quot;
+            + album_id
+            + &quot;\&quot;;&quot;;
+
+    // execute our statement!
+    Pair&lt;Boolean, Statement&gt; ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+        // result set returned or wrong number for updateCount - ERROR!
+        statement.close();
+        throw new SQLException(
+            &quot;ERROR: Delete from DropWatchDB artistAlbums table ('&quot;
+                + artist_id
+                + &quot;', '&quot;
+                + album_id
+                + &quot;') FAILED&quot;);
+      }
+      // executed successfully
+      statement.close();
+      return true;
+    }
+  }
+
+  /**
+   * method to update the artistAlbums table
+   *
+   * @param artist_id the artist_id of the artist whose data we're adding
+   * @param album_id the album_id of the album whose data we're adding
+   * @throws ClassNotFoundException if could not load SQLite JDBC driver
+   * @throws SQLException if could not insert into latest release table
+   */
+  public boolean insertOrReplaceArtistAlbums(String artist_id, String album_id)
+      throws SQLException, ClassNotFoundException {
+    // make our statement!
+    String SQLStatement =
+        &quot;&quot;
+            + &quot;INSERT OR REPLACE INTO artistAlbums VALUES (&quot;
+            + &quot;\&quot;&quot;
+            + artist_id
+            + &quot;\&quot;, \&quot;&quot;
+            + album_id
+            + &quot;\&quot;);&quot;;
+
+    // execute our statement!
+    Pair&lt;Boolean, Statement&gt; ret;
+    try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
+      if (ret.first() || (statement.getUpdateCount() != 1)) {
+        // result set returned or wrong number for updateCount - ERROR!
+        statement.close();
+        throw new SQLException(
+            &quot;ERROR: Insert into DropWatchDB artistAlbums table ('&quot;
+                + artist_id
+                + &quot;', '&quot;
+                + album_id
+                + &quot;') FAILED&quot;);
+      }
+      // executed successfully
+      statement.close();
+      return true;
+    }
+  }
+
+  /**
+   * method to find latest release date of an artist
+   *
+   * @param artist_id the artist whose latest release date we want to find
+   * @return a DateRecord containing the latest release date for thar artist
+   */
+  public DateRecord findLatestRelease(String artist_id)
+      throws SQLException, ClassNotFoundException {
+    // grab all album_ids of artist
+    ArrayList&lt;String&gt; album_ids = queryArtistAlbums(artist_id, true);
+    // if we have no albums, return null
+    if (album_ids.size() == 0) {
+      return null;
+    }
+
+    // grab all albums given by album_ids - [releaseDate, precision, link]
+    ArrayList&lt;String[]&gt; albums = new ArrayList&lt;&gt;();
+    for (String album_id : album_ids) {
+      // [releaseDate, precision, link, image, name]
+      String[] album = queryAlbums(album_id);
+      // if no results, continue, don't add!
+      if (album.length == 0) {
+        continue;
+      }
+      albums.add(album);
+    }
+
+    // hold the latest date in DateRecord!
+    DateRecord latestDate = new DateRecord(&quot;0000&quot;, &quot;year&quot;);
+    for (String[] album : albums) {
+      // make new DateRecord
+      DateRecord albumDate = new DateRecord(album[0], album[1]);
+      // compare dates!
+      if (DateRecord.compareDates(albumDate, latestDate) &gt; 0) {
+        // if newer, albumDate is new latestDate!
+        latestDate = albumDate;
+      }
+    }
+    return latestDate;
+  }
+
+  /**
+   * a method to add a new album to our database. this means adding it to our albums table and to
+   * our artistAlbums table
+   *
+   * @param artist_ids the artists who are on the album
+   * @param album_id the album_id of the album
+   * @param releaseDate the date the album was released
+   * @param releaseDatePrecision the precision of the releaseDate (&quot;day&quot;, &quot;month&quot;, or &quot;year&quot;)
+   * @param link a link to get more data about the album
+   * @param image a link to the first image of the album
+   * @param name the name of the first artist of the album
+   * @param type the type of the album
+   * @return boolean indicating success or failure
+   */
+  public boolean addNewAlbum(
+      List&lt;ArtistRecord&gt; artist_ids,
+      String album_id,
+      String releaseDate,
+      String releaseDatePrecision,
+      String link,
+      String image,
+      String name,
+      String type)
+      throws SQLException, ClassNotFoundException {
+    // add the album to our db!
+    insertOrReplaceAlbums(album_id, releaseDate, releaseDatePrecision, link, image, name, type);
+
+    // now add the artists to our db, and the relationship between this album and that artist!
+    for (ArtistRecord artist : artist_ids) {
+      // for each artist:
+      // add the artist to our db if it's not already there
+      insertOrReplaceArtists(
+          artist.id(),
+          artist.href(),
+          (artist.images() == null || artist.images().length == 0
+              ? null
+              : artist.images()[0].url()),
+          artist.name());
+      // add the artist to our relationship table if it's not already there
+      insertOrReplaceArtistAlbums(artist.id(), album_id);
+    }
+    return true;
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

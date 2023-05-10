@@ -2,7 +2,6 @@ package edu.brown.cs.student.api;
 
 import static spark.Spark.after;
 
-import edu.brown.cs.student.api.database.DropWatchDB;
 import edu.brown.cs.student.api.endpointHandlers.*;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyAPIRequester;
 import spark.Spark;

@@ -1,9 +1,8 @@
 package edu.brown.cs.student.api;
 
-import edu.brown.cs.student.api.database.sqliteDB;
-import org.junit.jupiter.api.*;
-import org.testng.internal.collections.Pair;
+import static org.junit.jupiter.api.Assertions.*;
 
+import edu.brown.cs.student.api.database.sqliteDB;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -12,36 +11,27 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Random;
+import org.junit.jupiter.api.*;
+import org.testng.internal.collections.Pair;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-/**
- * Unit tests for Database Class!
- */
+/** Unit tests for Database Class! */
 public class SQLiteDBUnitTest {
 
-  /**
-   * The Database Object we use for testing!
-   */
+  /** The Database Object we use for testing! */
   static sqliteDB db = null;
 
-  /**
-   * Path to our testing DBs!
-   */
+  /** Path to our testing DBs! */
   static String testDBFilepath = "src/test/java/edu/brown/cs/student/api/testDB.db";
 
   /**
-   *   this one is DB with some simple mock data:
-   *   TABLE "ageName": id INTEGER, name VARCHAR(10), age INTEGER
-   *   0,rosa,21
-   *   1,bry,21
-   *   2,aku,20
-   *   3,maia,19
+   * this one is DB with some simple mock data: TABLE "ageName": id INTEGER, name VARCHAR(10), age
+   * INTEGER 0,rosa,21 1,bry,21 2,aku,20 3,maia,19
    */
   static String mockDBFilePath = "data/mockedData/mockDB.db";
 
   /**
    * Helper function to make a new empty test DB for testing
+   *
    * @throws SQLException (shouldn't)
    * @throws ClassNotFoundException (shouldn't)
    */
@@ -64,6 +54,7 @@ public class SQLiteDBUnitTest {
 
   /**
    * Helper function to make a new empty test DB for testing
+   *
    * @throws SQLException (shouldn't)
    * @throws ClassNotFoundException (shouldn't)
    */
@@ -82,13 +73,15 @@ public class SQLiteDBUnitTest {
 
   /**
    * A set of sanity checks to check if the state of our testing objects is consistent
+   *
    * @param filepath the relativeFilepath of our databse
    * @param where the location (method) in which we are calling this sanity check from
    * @return a boolean indicating whether there is any DB currently connected (in a consistent way)
-   *         in other words, a true indicates a database is connected, and in a consistent way, while a false indicates
-   *         a database is not connected, and in a consistent way. All other states result in exceptions due to inconsistency
-   * @throws Exception Throws when state is inconsistent.
-   *                   Ex: db.relativeFilepath != null, but File(db.relativeFilepath).exists() == false!
+   *     in other words, a true indicates a database is connected, and in a consistent way, while a
+   *     false indicates a database is not connected, and in a consistent way. All other states
+   *     result in exceptions due to inconsistency
+   * @throws Exception Throws when state is inconsistent. Ex: db.relativeFilepath != null, but
+   *     File(db.relativeFilepath).exists() == false!
    */
   public static boolean sanityChecks(String filepath, String where) throws Exception {
     // clear DB if it exists!
@@ -99,26 +92,26 @@ public class SQLiteDBUnitTest {
         // all set!
         return false;
       }
-      throw new Exception("SANITYCHECK FAILED: relativeFilepath == null && conn != null in " + where);
+      throw new Exception(
+          "SANITYCHECK FAILED: relativeFilepath == null && conn != null in " + where);
     }
     // we do have a filepath - make sure file exists
     File file = new File(filepath);
     if (!file.exists()) {
       // file doesn't exist...
-      throw new Exception("SANITYCHECK FAILED: file doesn't exist && relativeFilepath != null in " + where);
+      throw new Exception(
+          "SANITYCHECK FAILED: file doesn't exist && relativeFilepath != null in " + where);
     }
     // file exists - check conn
     if (db.connIsNull()) {
       // conn is null!
-      throw new Exception("SANITYCHECK FAILED: relativePath != null && file exists && conn == null in " + where);
+      throw new Exception(
+          "SANITYCHECK FAILED: relativePath != null && file exists && conn == null in " + where);
     }
     return false;
   }
 
-
-  /**
-   * Before all tests, make a new database object
-   */
+  /** Before all tests, make a new database object */
   @BeforeAll
   public static void setup_before_everything() {
     try {
@@ -192,7 +185,7 @@ public class SQLiteDBUnitTest {
 
       // make sure conn was successfully made!
       assertFalse(db.connIsNull());
-   } catch (Exception e) {
+    } catch (Exception e) {
       // shouldn't error...
       fail(e.getMessage());
     }
@@ -217,9 +210,15 @@ public class SQLiteDBUnitTest {
       assertTrue(new File(testDBFilepath).exists());
       assertFalse(db.connIsNull());
       // now, try to create same DB again
-      assertThrows(SQLException.class, () -> {
-        db.createDB(testDBFilepath);
-      }, "ERROR: new SQLiteDB could not be created\n:" + "database '" + testDBFilepath + "' already exists!");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.createDB(testDBFilepath);
+          },
+          "ERROR: new SQLiteDB could not be created\n:"
+              + "database '"
+              + testDBFilepath
+              + "' already exists!");
     } catch (Exception e) {
       // shouldn't error...
       fail(e.getMessage());
@@ -251,9 +250,12 @@ public class SQLiteDBUnitTest {
       // close normally
       assertTrue(db.closeDB());
       // now, try to close again (fail)
-      assertThrows(SQLException.class, () -> {
-        db.closeDB();
-      }, "ERROR: Connection to SQLite DB couldn't be closed:\n" + "this.conn == null");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.closeDB();
+          },
+          "ERROR: Connection to SQLite DB couldn't be closed:\n" + "this.conn == null");
       assertTrue(new File(testDBFilepath).exists());
     } catch (Exception e) {
       // shouldn't error...
@@ -285,9 +287,12 @@ public class SQLiteDBUnitTest {
       // close DB and then delete it
       assertTrue(db.closeDB());
       assertTrue(db.connIsNull());
-      assertThrows(SQLException.class, () -> {
-        db.deleteDB();
-      }, "ERROR: Couldn't delete SQLiteDB:\n" + "this.conn == null");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.deleteDB();
+          },
+          "ERROR: Couldn't delete SQLiteDB:\n" + "this.conn == null");
 
       // now connect to the db again
       assertTrue(db.connectDB(testDBFilepath));
@@ -297,9 +302,17 @@ public class SQLiteDBUnitTest {
       // verify it doesn't exist anymore
       assertFalse(new File(testDBFilepath).exists());
       // delete DB again!
-      assertThrows(SQLException.class, () -> {
-        db.deleteDB();
-      }, "ERROR: Couldn't delete SQLiteDB:\n" + "File.delete() failed on '" + System.getProperty("user.dir") + "/" + testDBFilepath + "'");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.deleteDB();
+          },
+          "ERROR: Couldn't delete SQLiteDB:\n"
+              + "File.delete() failed on '"
+              + System.getProperty("user.dir")
+              + "/"
+              + testDBFilepath
+              + "'");
       // verify it doesn't exist anymore!
       assertFalse(new File(testDBFilepath).exists());
     } catch (Exception e) {
@@ -364,16 +377,27 @@ public class SQLiteDBUnitTest {
       createEmptyTestDB();
       // grab schema and throw error
       String tableName = "anyTableName";
-      assertThrows(SQLException.class, () -> {
-        db.grabTableSchema(tableName);
-      }, "ERROR: Couldn't grab schema of table '" + tableName + "':\n" + "table '" + tableName + "' does not exist!");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.grabTableSchema(tableName);
+          },
+          "ERROR: Couldn't grab schema of table '"
+              + tableName
+              + "':\n"
+              + "table '"
+              + tableName
+              + "' does not exist!");
 
       // disconnect db!
       assertTrue(db.closeDB());
       // grab schema and throw error
-      assertThrows(SQLException.class, () -> {
-        db.grabTableSchema(tableName);
-      }, "ERROR: Couldn't grab schema of table '" + tableName + "':\n" + "this.conn == null");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.grabTableSchema(tableName);
+          },
+          "ERROR: Couldn't grab schema of table '" + tableName + "':\n" + "this.conn == null");
     } catch (Exception e) {
       // shouldn't error...
       fail(e.getMessage());
@@ -414,15 +438,26 @@ public class SQLiteDBUnitTest {
       // verify it exists
       assertTrue(db.tableExists(tableName));
       // create another table same name
-      assertThrows(SQLException.class, () -> {
-        db.createNewTable(tableName, "id INTEGER");
-      }, "ERROR: Couldn't create new table '" + tableName + "':\n" + "table '" + tableName + "' already exists!");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.createNewTable(tableName, "id INTEGER");
+          },
+          "ERROR: Couldn't create new table '"
+              + tableName
+              + "':\n"
+              + "table '"
+              + tableName
+              + "' already exists!");
       // disconnect db
       assertTrue(db.closeDB());
       // create table with no db connected
-      assertThrows(SQLException.class, () -> {
-        db.createNewTable(tableName, "id INTEGER");
-      }, "ERROR: Couldn't create new table '" + tableName + "':\n" + "this.conn == null");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.createNewTable(tableName, "id INTEGER");
+          },
+          "ERROR: Couldn't create new table '" + tableName + "':\n" + "this.conn == null");
     } catch (Exception e) {
       // shouldn't error...
       fail(e.getMessage());
@@ -439,9 +474,12 @@ public class SQLiteDBUnitTest {
       assertTrue(db.closeDB());
       // create table with no db connected
       String tableName = "test";
-      assertThrows(SQLException.class, () -> {
-        db.tableExists(tableName);
-      }, "ERROR: Couldn't check if table '" + tableName + "' exists:\n" + "this.conn == null");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.tableExists(tableName);
+          },
+          "ERROR: Couldn't check if table '" + tableName + "' exists:\n" + "this.conn == null");
     } catch (Exception e) {
       // shouldn't error...
       fail(e.getMessage());
@@ -507,18 +545,29 @@ public class SQLiteDBUnitTest {
       createEmptyTestDB();
       // drop non-existent table
       String tableName = "test";
-      assertThrows(SQLException.class, () -> {
-        db.dropTable(tableName);
-      }, "ERROR: Couldn't drop table '" + tableName + "':\n" + "table '" + tableName + "' does not exist!");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.dropTable(tableName);
+          },
+          "ERROR: Couldn't drop table '"
+              + tableName
+              + "':\n"
+              + "table '"
+              + tableName
+              + "' does not exist!");
       // create table and verify it exists
       assertTrue(db.createNewTable(tableName, "id INTEGER"));
       assertTrue(db.tableExists(tableName));
       // disconnect db
       assertTrue(db.closeDB());
       // drop table with no db connected
-      assertThrows(SQLException.class, () -> {
-        db.dropTable(tableName);
-      }, "ERROR: Couldn't drop table '" + tableName + "':\n" + "this.conn == null");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.dropTable(tableName);
+          },
+          "ERROR: Couldn't drop table '" + tableName + "':\n" + "this.conn == null");
     } catch (Exception e) {
       // shouldn't error...
       fail(e.getMessage());
@@ -575,12 +624,16 @@ public class SQLiteDBUnitTest {
       assertEquals(1, rs.findColumn("age"));
       // make sure some rows AREN'T there
       ResultSet copy1 = rs;
-      assertThrows(SQLException.class, () -> {
-        copy1.findColumn("id");
-      });
-      assertThrows(SQLException.class, () -> {
-        copy1.findColumn("name");
-      });
+      assertThrows(
+          SQLException.class,
+          () -> {
+            copy1.findColumn("id");
+          });
+      assertThrows(
+          SQLException.class,
+          () -> {
+            copy1.findColumn("name");
+          });
 
       // iterate through results for query, checking if they are accurate
       // get to first row, verify values
@@ -602,26 +655,33 @@ public class SQLiteDBUnitTest {
 
       // complex statement!!!!!!!!!
       // query through a statement: COMLPEX
-      SQLStatement = "WITH under21 AS (" +
-                        "SELECT name AS nameees, age AS ageees FROM \"ageName\" " +
-                        "WHERE age < 21) " +
-                      "SELECT nameees AS naaames, ageees AS aaages FROM under21 " +
-                      "ORDER BY aaages ASC;";
+      SQLStatement =
+          "WITH under21 AS ("
+              + "SELECT name AS nameees, age AS ageees FROM \"ageName\" "
+              + "WHERE age < 21) "
+              + "SELECT nameees AS naaames, ageees AS aaages FROM under21 "
+              + "ORDER BY aaages ASC;";
       rs = db.executeSQLQuery(SQLStatement);
 
       // check if all rows are there
       assertEquals(1, rs.findColumn("naaames"));
       assertEquals(2, rs.findColumn("aaages"));
       ResultSet copy2 = rs;
-      assertThrows(SQLException.class, () -> {
-        copy2.findColumn("id");
-      });
-      assertThrows(SQLException.class, () -> {
-        copy2.findColumn("name");
-      });
-      assertThrows(SQLException.class, () -> {
-        copy2.findColumn("age");
-      });
+      assertThrows(
+          SQLException.class,
+          () -> {
+            copy2.findColumn("id");
+          });
+      assertThrows(
+          SQLException.class,
+          () -> {
+            copy2.findColumn("name");
+          });
+      assertThrows(
+          SQLException.class,
+          () -> {
+            copy2.findColumn("age");
+          });
       // iterate through results for query, checking if they are accurate
       // get to first row, verify values
       assertTrue(rs.next());
@@ -644,12 +704,16 @@ public class SQLiteDBUnitTest {
       assertEquals(1, rs.findColumn("id"));
       // make sure some rows AREN'T there
       ResultSet copy3 = rs;
-      assertThrows(SQLException.class, () -> {
-        copy3.findColumn("name");
-      });
-      assertThrows(SQLException.class, () -> {
-        copy3.findColumn("age");
-      });
+      assertThrows(
+          SQLException.class,
+          () -> {
+            copy3.findColumn("name");
+          });
+      assertThrows(
+          SQLException.class,
+          () -> {
+            copy3.findColumn("age");
+          });
 
       // iterate through results for query, checking if they are accurate
       // should be no more 1st row
@@ -677,17 +741,21 @@ public class SQLiteDBUnitTest {
       createEmptyTestDB();
       // input malformed command
       String SQLStatement1 = "HIJKLMNOP?";
-      assertThrows(SQLException.class, () -> {
-        ResultSet rs = db.executeSQLQuery(SQLStatement1);
-        rs.close();
-      });
+      assertThrows(
+          SQLException.class,
+          () -> {
+            ResultSet rs = db.executeSQLQuery(SQLStatement1);
+            rs.close();
+          });
 
       // input malformed command
       String SQLStatement2 = "SELECT ** FROM \"test\"";
-      assertThrows(SQLException.class, () -> {
-        ResultSet rs = db.executeSQLQuery(SQLStatement2);
-        rs.close();
-      });
+      assertThrows(
+          SQLException.class,
+          () -> {
+            ResultSet rs = db.executeSQLQuery(SQLStatement2);
+            rs.close();
+          });
     } catch (Exception e) {
       // shouldn't error...
       fail(e.getMessage());
@@ -703,11 +771,8 @@ public class SQLiteDBUnitTest {
       createEmptyTestDB();
 
       // add a table through statement
-      String SQLStatement = "CREATE TABLE \"test\" (" +
-        "id INTEGER," +
-        "name VARCHAR(10)," +
-        "age INTEGER" +
-        ");";
+      String SQLStatement =
+          "CREATE TABLE \"test\" (" + "id INTEGER," + "name VARCHAR(10)," + "age INTEGER" + ");";
       // make auto-closable try statement! WOW!
       try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
         assertFalse(ret.first());
@@ -718,8 +783,7 @@ public class SQLiteDBUnitTest {
       }
 
       // now insert into rows
-      SQLStatement = "" +
-        "INSERT INTO \"test\" VALUES (0, \"rosa\", 21);";
+      SQLStatement = "" + "INSERT INTO \"test\" VALUES (0, \"rosa\", 21);";
       // make auto-closable try statement! WOW!
       try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
         assertFalse(ret.first());
@@ -736,8 +800,7 @@ public class SQLiteDBUnitTest {
       }
 
       // now remove added row
-      SQLStatement = "" +
-        "DELETE FROM \"test\" WHERE id = 0 AND name = \"rosa\" AND age = 21;";
+      SQLStatement = "" + "DELETE FROM \"test\" WHERE id = 0 AND name = \"rosa\" AND age = 21;";
       // make auto-closable try statement! WOW!
       try (Statement statement = (ret = db.executeSQLStatement(SQLStatement)).second()) {
         assertFalse(ret.first());
@@ -774,15 +837,25 @@ public class SQLiteDBUnitTest {
       createEmptyTestDB();
       // input malformed command
       String SQLStatement1 = "ABCDEFG!";
-      assertThrows(SQLException.class, () -> {
-          db.executeSQLStatement(SQLStatement1);
-        }, "ERROR: Couldn't execute SQLQuery\n" + "+'ABCDEFG!':\n" + "[SQLITE_ERROR] SQL error or missing database (near \"ABCDEFG\": syntax error)");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.executeSQLStatement(SQLStatement1);
+          },
+          "ERROR: Couldn't execute SQLQuery\n"
+              + "+'ABCDEFG!':\n"
+              + "[SQLITE_ERROR] SQL error or missing database (near \"ABCDEFG\": syntax error)");
 
       // input malformed command
       String SQLStatement2 = "DROP TABLES \"test\"";
-      assertThrows(SQLException.class, () -> {
-        db.executeSQLStatement(SQLStatement2);
-      }, "ERROR: Couldn't execute SQLQuery\n" + "+'DROP TABLES \"test\"':\n" + "[SQLITE_ERROR] SQL error or missing database (near \"TABLES\": syntax error)");
+      assertThrows(
+          SQLException.class,
+          () -> {
+            db.executeSQLStatement(SQLStatement2);
+          },
+          "ERROR: Couldn't execute SQLQuery\n"
+              + "+'DROP TABLES \"test\"':\n"
+              + "[SQLITE_ERROR] SQL error or missing database (near \"TABLES\": syntax error)");
     } catch (Exception e) {
       // shouldn't error...
       fail(e.getMessage());
@@ -791,6 +864,7 @@ public class SQLiteDBUnitTest {
 
   /**
    * helper method to build random sqlite3 name
+   *
    * @return the random name of random length
    */
   public String randomName() {
@@ -805,11 +879,11 @@ public class SQLiteDBUnitTest {
       if (charTypeSelector == 0) {
         // == 0 --> a-z
         int dist = random.nextInt(26);
-        character[0] = (char) ('a' +  dist);
+        character[0] = (char) ('a' + dist);
       } else if (charTypeSelector == 1) {
         // == 1 --> A-Z
         int dist = random.nextInt(26);
-        character[0] = (char) ('A' +  dist);
+        character[0] = (char) ('A' + dist);
       } else {
         // == 3 --> $ or _
         if (i == 0) {
@@ -831,9 +905,9 @@ public class SQLiteDBUnitTest {
   }
 
   /**
-   * generates a schema with a random # of columns, with random names, and
-   * random types (from preselected list)
-   * NOTE: the last column will always be a col named END$END$END with type NULL
+   * generates a schema with a random # of columns, with random names, and random types (from
+   * preselected list) NOTE: the last column will always be a col named END$END$END with type NULL
+   *
    * @return a string representing a random schema
    */
   public String randomSchema() {
@@ -898,7 +972,7 @@ public class SQLiteDBUnitTest {
     }
     // open file writer to write results
     try (FileWriter fileWriter = new FileWriter(randomCreateFilepath, false);
-         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)){
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
       // remove DB if it exists, then remake it, then check it really exists
       createEmptyTestDB();
       // create source of randomness
@@ -929,11 +1003,19 @@ public class SQLiteDBUnitTest {
           // write input and output!
           String formattedOutput = String.format("%1$-12s", (output == null ? "SUCCESS" : output));
           String formattedIndex = String.format("%1$-3s", i);
-          String toWrite = "\n---================================---\n\n" +
-                           formattedIndex + " - " + formattedOutput + "\n" +
-                           "    Name: " + tableName + "\n" +
-                           "    Schema: " + schema + "\n" +
-                           (errorMessage == null ? "" : "Error: " + errorMessage + "\n");
+          String toWrite =
+              "\n---================================---\n\n"
+                  + formattedIndex
+                  + " - "
+                  + formattedOutput
+                  + "\n"
+                  + "    Name: "
+                  + tableName
+                  + "\n"
+                  + "    Schema: "
+                  + schema
+                  + "\n"
+                  + (errorMessage == null ? "" : "Error: " + errorMessage + "\n");
           bufferedWriter.write(toWrite);
         }
       }

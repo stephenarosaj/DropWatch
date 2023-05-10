@@ -1,54 +1,41 @@
 package edu.brown.cs.student.api.endpointHandlers;
 
+import static java.lang.System.exit;
+
 import edu.brown.cs.student.api.MoshiUtil;
 import edu.brown.cs.student.api.database.DropWatchDB;
 import edu.brown.cs.student.api.endpointHandlers.ExternalAPI.SpotifyDataSource;
 import edu.brown.cs.student.api.formats.AlbumRecord;
 import edu.brown.cs.student.api.formats.DateRecord;
-import spark.Request;
-import spark.Response;
-import spark.Route;
-
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.lang.System.exit;
+import spark.Request;
+import spark.Response;
+import spark.Route;
 
 /**
- * Class for TrackHandler - handles tracking/untracking artists!
- *      - a user tracks a new artist
- *          - the tracking table is updated with a new (user_id, artist_id) entry
- *      - a user untracks an artist
- *          - if the user is tracking that artist (a user_id, artist_id entry exists),
- *            that entry is removed from the table
+ * Class for TrackHandler - handles tracking/untracking artists! - a user tracks a new artist - the
+ * tracking table is updated with a new (user_id, artist_id) entry - a user untracks an artist - if
+ * the user is tracking that artist (a user_id, artist_id entry exists), that entry is removed from
+ * the table
  */
 public class TrackHandler implements Route {
-  /**
-   * The spotify data source for this UpdateHandler class - holds responses from the spotify API
-   */
+  /** The spotify data source for this UpdateHandler class - holds responses from the spotify API */
   private SpotifyDataSource SpotifyAPIRequester;
 
-  /**
-   * The filepath for our DropWatchDB!
-   */
+  /** The filepath for our DropWatchDB! */
   private String filepath = "data/DropWatchDB.db";
 
-  /**
-   * The db we use to store stuff!
-   */
+  /** The db we use to store stuff! */
   private DropWatchDB db;
 
-  /**
-   * A few helper methods in this util!
-   */
+  /** A few helper methods in this util! */
   private HandlerUtil util;
 
-  /**
-   * Constructor for this class
-   */
+  /** Constructor for this class */
   public TrackHandler() {
     try {
       // check for mac or windows file path
@@ -64,7 +51,10 @@ public class TrackHandler implements Route {
       // give our handler this db!
       this.util = new HandlerUtil(this.db);
     } catch (Exception e) {
-      System.out.println("CRITICAL ERROR: COULD NOT SET UP CONNECTION TO DB '" + filepath + "', ABORTING TrackHandler()!\n");
+      System.out.println(
+          "CRITICAL ERROR: COULD NOT SET UP CONNECTION TO DB '"
+              + filepath
+              + "', ABORTING TrackHandler()!\n");
       System.out.println(e.getMessage());
       exit(1);
     }
@@ -95,26 +85,34 @@ public class TrackHandler implements Route {
       // error check params - we should have exactly 2
       if (nParams != 3) {
         // return error!
-        return MoshiUtil.serialize(ret, "ERROR: /track endpoint requires exactly 3 params, but received " + nParams);
+        return MoshiUtil.serialize(
+            ret, "ERROR: /track endpoint requires exactly 3 params, but received " + nParams);
       }
 
       // error check params - we should have user_id, artist_id, and operation
       if (user_id == null || artist_id == null || operation == null) {
         // return error!
-        return MoshiUtil.serialize(ret, "ERROR: /track endpoint requires params 'user_id', 'artist_id', and 'operation', but did not receive all of them");
+        return MoshiUtil.serialize(
+            ret,
+            "ERROR: /track endpoint requires params 'user_id', 'artist_id', and 'operation', but did not receive all of them");
       }
 
       // figure out what our operation is and execute it / error checking operation
       boolean add = operation.equals("add");
       boolean query = operation.equals("query");
       if (!add && !operation.equals("delete") && !query) {
-        return MoshiUtil.serialize(ret, "ERROR: /track endpoint requires param 'operation' to have value 'add', 'delete', or 'query', but received '" + operation + "'");
+        return MoshiUtil.serialize(
+            ret,
+            "ERROR: /track endpoint requires param 'operation' to have value 'add', 'delete', or 'query', but received '"
+                + operation
+                + "'");
       }
 
       // find out what artists we're already tracking
       ArrayList<String> currentArtist_ids = this.db.queryTracking(user_id, true);
       // map of (artist_id, [link, first image, name of artist]) pairs
-      HashMap<String, ArrayList<String>> currentArtistInfo = this.db.queryMultipleArtists(currentArtist_ids);
+      HashMap<String, ArrayList<String>> currentArtistInfo =
+          this.db.queryMultipleArtists(currentArtist_ids);
 
       // if just querying, return these artists' info
       if (query) {
@@ -145,8 +143,16 @@ public class TrackHandler implements Route {
           artistDrops = util.checkNewRelease(artist_id, this.db.findLatestRelease(artist_id));
         }
         // if not empty, add their releases to our db!
-        for (AlbumRecord drop: artistDrops) {
-          this.db.addNewAlbum(drop.artists(), drop.id(), drop.release_date(), drop.release_date_precision(), drop.href(), (drop.images() == null || drop.images().length == 0 ? null : drop.images()[0].url()), drop.name(), drop.album_type());
+        for (AlbumRecord drop : artistDrops) {
+          this.db.addNewAlbum(
+              drop.artists(),
+              drop.id(),
+              drop.release_date(),
+              drop.release_date_precision(),
+              drop.href(),
+              (drop.images() == null || drop.images().length == 0 ? null : drop.images()[0].url()),
+              drop.name(),
+              drop.album_type());
         }
         // commit changes and return
         this.db.commit();

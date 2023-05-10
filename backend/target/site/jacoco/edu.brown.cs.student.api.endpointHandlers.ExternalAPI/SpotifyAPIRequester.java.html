@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpotifyAPIRequester.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">s0</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.student.api.endpointHandlers.ExternalAPI</a> &gt; <span class="el_source">SpotifyAPIRequester.java</span></div><h1>SpotifyAPIRequester.java</h1><pre class="source lang-java linenums">package edu.brown.cs.student.api.endpointHandlers.ExternalAPI;
+
+import edu.brown.cs.student.api.MoshiUtil;
+import edu.brown.cs.student.api.exceptions.APIRequestException;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Map;
+import okio.Buffer;
+
+/** The class that wraps requests to the Spotify API. */
+public class SpotifyAPIRequester implements SpotifyDataSource {
+
+  private String accessToken;
+
+  /**
+   * Constructor that sets the access token to the basic general access token available for
+   * developers.
+   */
+  public SpotifyAPIRequester() {
+    this.accessToken = this.getAccessMap().get(&quot;access_token&quot;);
+<span class="nc" id="L23">  }</span>
+<span class="nc" id="L24"></span>
+<span class="nc" id="L25">  /***</span>
+   * Retrieves the token. The token is required to make any API Call.
+   * @return - access token
+   */
+  private Map&lt;String, String&gt; getAccessMap() {
+    String client_id = &quot;1be4c1544f31438693f0c3b488f9ceee&quot;;
+    String client_secret = &quot;c44a4bd0073440178a7c3477202b7a74&quot;;
+<span class="nc" id="L32">    // https://stackoverflow.com/questions/65750837/how-to-use-this-curl-post-request-in-java-spotify-api</span>
+<span class="nc" id="L33">    try {</span>
+      URL url = new URL(&quot;https://accounts.spotify.com/api/token&quot;);
+      URLConnection urlc = url.openConnection();
+<span class="nc" id="L36"></span>
+<span class="nc" id="L37">      urlc.setDoOutput(true);</span>
+      urlc.setRequestProperty(&quot;Content-Type&quot;, &quot;application/x-www-form-urlencoded&quot;);
+<span class="nc" id="L39"></span>
+<span class="nc" id="L40">      OutputStreamWriter writer = new OutputStreamWriter(urlc.getOutputStream());</span>
+
+<span class="nc" id="L42">      writer.write(</span>
+          &quot;grant_type=client_credentials&amp;client_id=&quot;
+<span class="nc" id="L44">              + client_id</span>
+<span class="nc" id="L45">              + &quot;&amp;client_secret=&quot;</span>
+              + client_secret);
+<span class="nc" id="L47">      writer.flush();</span>
+
+<span class="nc" id="L49">      Buffer buf = new Buffer().readFrom(urlc.getInputStream());</span>
+
+<span class="nc" id="L51">      writer.close();</span>
+<span class="nc" id="L52"></span>
+<span class="nc" id="L53">      return MoshiUtil.deserializeToken(buf);</span>
+<span class="nc" id="L54">    } catch (Exception e) {</span>
+      System.out.println(e.getMessage());
+      return null;
+    }
+  }
+
+  /**
+   * A mutator for the access token; can be used to change the access token to user tokens, if the
+   * request is of a more private scope.
+   *
+   * @param token String that represents the user's access token.
+   */
+<span class="nc" id="L66">  @Override</span>
+<span class="nc" id="L67">  public void setAccessToken(String token) {</span>
+    // allows us to differentiate between a general access token and a user access token
+    this.accessToken = token;
+  }
+
+  /**
+   * Calls the Spotify API and returns the JSON response.
+   *
+   * @param urlString API endpoint to request.
+   * @return Buffer containing the JSON response.
+   * @throws APIRequestException If there was an error with the API response.
+<span class="nc" id="L78">   */</span>
+  @Override
+<span class="nc" id="L80">  public Buffer getData(String urlString) throws APIRequestException {</span>
+    try {
+<span class="nc" id="L82">      URL url = new URL(urlString);</span>
+
+<span class="nc" id="L84">      URLConnection urls = url.openConnection();</span>
+
+      urls.setDoOutput(true);
+<span class="nc" id="L87">      // set access token before reading input stream</span>
+<span class="nc" id="L88">      urls.setRequestProperty(&quot;Authorization&quot;, &quot;Bearer  &quot; + this.accessToken);</span>
+<span class="nc" id="L89"></span>
+      return new Buffer().readFrom(urls.getInputStream());
+    } catch (IOException e) {
+      throw new APIRequestException(e.getMessage());
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
